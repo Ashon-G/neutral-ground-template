@@ -1,22 +1,21 @@
 import { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/components/auth/AuthProvider";
-import { Message, ChatUser } from "@/types/chat";
 import { MessageList } from "./chat/MessageList";
 import { MessageInput } from "./chat/MessageInput";
 import { UserList } from "./chat/UserList";
 import { Loader2, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useAvailableUsers } from "./chat/hooks/useAvailableUsers";
+import { useMessages } from "./chat/hooks/useMessages";
+import { useSendMessage } from "./chat/hooks/useSendMessage";
 
 export const Chat = () => {
   const [message, setMessage] = useState("");
   const [selectedUser, setSelectedUser] = useState("");
   const [showUserList, setShowUserList] = useState(true);
   const { session } = useAuth();
-  const { toast } = useToast();
-  const queryClient = useQueryClient();
 
   const { data: userProfile } = useQuery({
     queryKey: ["userProfile"],
@@ -32,126 +31,9 @@ export const Chat = () => {
     },
   });
 
-  const { data: availableUsers } = useQuery<ChatUser[]>({
-    queryKey: ["availableUsers", session?.user.id],
-    queryFn: async () => {
-      if (!userProfile?.user_type) return [];
-
-      if (userProfile.user_type === 'admin') {
-        // Admins can see all founders and mavens
-        const { data: users } = await supabase
-          .from("profiles")
-          .select("id, full_name, user_type, avatar_url")
-          .in("user_type", ['founder', 'maven'])
-          .neq("id", session?.user.id);
-        return users || [];
-      }
-
-      // For founders and mavens, keep existing logic
-      let query;
-      if (userProfile.user_type === "founder") {
-        query = supabase
-          .from("founder_maven_assignments")
-          .select(
-            `maven:profiles!founder_maven_assignments_maven_id_fkey(id, full_name, user_type, avatar_url)`
-          )
-          .eq("founder_id", session?.user.id);
-      } else if (userProfile.user_type === "maven") {
-        query = supabase
-          .from("founder_maven_assignments")
-          .select(
-            `founder:profiles!founder_maven_assignments_founder_id_fkey(id, full_name, user_type, avatar_url)`
-          )
-          .eq("maven_id", session?.user.id);
-      }
-
-      const { data: admins } = await supabase
-        .from("profiles")
-        .select("id, full_name, user_type, avatar_url")
-        .eq("user_type", "admin");
-
-      const { data: assignments } = await query;
-      const users = assignments?.map((a) => a.maven || a.founder) || [];
-      return [...users, ...(admins || [])] as ChatUser[];
-    },
-    enabled: !!userProfile,
-  });
-
-  const { data: messages, isLoading } = useQuery<Message[]>({
-    queryKey: ["messages", selectedUser],
-    queryFn: async () => {
-      if (!selectedUser) return [];
-
-      const { data, error } = await supabase
-        .from("messages")
-        .select(
-          `
-          id,
-          content,
-          created_at,
-          sender_id,
-          receiver_id,
-          sender:profiles!sender_id(
-            full_name
-          ),
-          receiver:profiles!receiver_id(
-            full_name
-          )
-        `
-        )
-        .or(
-          `and(sender_id.eq.${session?.user.id},receiver_id.eq.${selectedUser}),and(sender_id.eq.${selectedUser},receiver_id.eq.${session?.user.id})`
-        )
-        .order("created_at", { ascending: true });
-
-      if (error) throw error;
-
-      return (data || []).map(msg => ({
-        ...msg,
-        sender: Array.isArray(msg.sender) ? msg.sender[0] : msg.sender,
-        receiver: Array.isArray(msg.receiver) ? msg.receiver[0] : msg.receiver,
-      })) as Message[];
-    },
-    enabled: !!selectedUser,
-  });
-
-  const sendMessage = useMutation({
-    mutationFn: async () => {
-      if (!session?.user.id || !selectedUser) throw new Error("No user selected");
-
-      const { error: messageError } = await supabase.from("messages").insert({
-        content: message,
-        sender_id: session.user.id,
-        receiver_id: selectedUser,
-      });
-
-      if (messageError) throw messageError;
-
-      // Send notification
-      const { error: notificationError } = await supabase.functions.invoke("send-message-notification", {
-        body: {
-          to: selectedUser,
-          senderName: userProfile?.full_name || "Someone",
-          messageContent: message,
-        },
-      });
-
-      if (notificationError) {
-        console.error("Error sending notification:", notificationError);
-      }
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["messages"] });
-      setMessage("");
-    },
-    onError: (error) => {
-      toast({
-        title: "Error",
-        description: error.message,
-        variant: "destructive",
-      });
-    },
-  });
+  const { data: availableUsers } = useAvailableUsers(userProfile, session?.user.id);
+  const { data: messages, isLoading } = useMessages(selectedUser, session?.user.id);
+  const sendMessage = useSendMessage(session?.user.id, selectedUser, userProfile);
 
   if (isLoading) {
     return (
@@ -191,7 +73,10 @@ export const Chat = () => {
             <MessageInput
               message={message}
               setMessage={setMessage}
-              onSend={() => sendMessage.mutate()}
+              onSend={() => {
+                sendMessage.mutate(message);
+                setMessage("");
+              }}
               isPending={sendMessage.isPending}
             />
           </>
