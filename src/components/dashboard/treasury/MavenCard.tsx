@@ -1,8 +1,8 @@
+import { Profile } from "@/integrations/supabase/types/profile";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Profile } from "@/integrations/supabase/types/profile";
-import { MessageSquare, StarIcon } from "lucide-react";
+import { StarIcon, MessageSquare } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/components/auth/AuthProvider";
@@ -40,25 +40,24 @@ export const MavenCard = ({ maven }: MavenCardProps) => {
   };
 
   return (
-    <Card className="group w-[280px] shrink-0 cursor-pointer overflow-hidden transition-all hover:-translate-y-1">
+    <Card className="w-full overflow-hidden">
       <div className="relative">
         <img
           src={maven.avatar_url || "https://api.dicebear.com/7.x/avataaars/svg"}
           alt={maven.full_name || "Maven"}
           className="h-48 w-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
       </div>
       <CardContent className="p-4">
         <div className="flex items-start justify-between">
           <div>
-            <h3 className="font-medium text-lg text-foreground">
+            <h3 className="text-lg font-medium text-gray-900">
               {maven.full_name?.split(" ")[0]}
             </h3>
-            <div className="flex items-center gap-1 text-sm text-foreground">
-              <StarIcon className="h-4 w-4 fill-yellow-500" />
-              <span>5.0</span>
-              <span className="text-muted">(24)</span>
+            <div className="flex items-center gap-1 text-sm">
+              <StarIcon className="h-4 w-4 text-yellow-500 fill-yellow-500" />
+              <span className="text-gray-900">5.0</span>
+              <span className="text-gray-500">(24)</span>
             </div>
           </div>
           <Badge
@@ -68,15 +67,15 @@ export const MavenCard = ({ maven }: MavenCardProps) => {
             {maven.maven_skillset}
           </Badge>
         </div>
-        <p className="mt-3 text-sm text-foreground">
+        <p className="mt-3 text-sm text-gray-600 line-clamp-3">
           {maven.bio || "Maven on the platform"}
         </p>
         <div className="mt-4 flex items-center justify-between border-t pt-4">
-          <span className="text-sm text-foreground">Starting at</span>
-          <span className="font-medium text-foreground">$50/hr</span>
+          <span className="text-sm text-gray-600">Starting at</span>
+          <span className="font-medium text-gray-900">$50/hr</span>
         </div>
         <Button 
-          onClick={handleChatClick} 
+          onClick={handleChatClick}
           variant="secondary" 
           size="sm" 
           className="w-full mt-4"
