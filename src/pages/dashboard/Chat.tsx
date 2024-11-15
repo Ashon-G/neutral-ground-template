@@ -1,7 +1,7 @@
-import { Chat as ChatComponent } from "@/components/dashboard/Chat";
+import { ChatContainer } from "@/components/dashboard/chat/ChatContainer";
 
 const Chat = () => {
-  return <ChatComponent />;
+  return <ChatContainer />;
 };
 
 export default Chat;
