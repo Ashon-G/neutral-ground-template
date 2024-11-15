@@ -52,13 +52,13 @@ export const MavenCard = ({ maven }: MavenCardProps) => {
       <CardContent className="p-4">
         <div className="flex items-start justify-between">
           <div>
-            <h3 className="font-medium text-lg text-black">
+            <h3 className="font-medium text-lg text-foreground">
               {maven.full_name?.split(" ")[0]}
             </h3>
-            <div className="flex items-center gap-1 text-sm text-black">
-              <StarIcon className="h-4 w-4 fill-current" />
+            <div className="flex items-center gap-1 text-sm text-foreground">
+              <StarIcon className="h-4 w-4 fill-yellow-500" />
               <span>5.0</span>
-              <span className="text-muted-foreground">(24)</span>
+              <span className="text-muted">(24)</span>
             </div>
           </div>
           <Badge
@@ -68,18 +68,15 @@ export const MavenCard = ({ maven }: MavenCardProps) => {
             {maven.maven_skillset}
           </Badge>
         </div>
-        <p className="mt-3 text-sm text-muted-foreground line-clamp-3">
+        <p className="mt-3 text-sm text-foreground">
           {maven.bio || "Maven on the platform"}
         </p>
         <div className="mt-4 flex items-center justify-between border-t pt-4">
-          <span className="text-xs text-black">Starting at</span>
-          <span className="font-medium">$50/hr</span>
+          <span className="text-sm text-foreground">Starting at</span>
+          <span className="font-medium text-foreground">$50/hr</span>
         </div>
         <Button 
-          onClick={(e) => {
-            e.stopPropagation();
-            handleChatClick();
-          }} 
+          onClick={handleChatClick} 
           variant="secondary" 
           size="sm" 
           className="w-full mt-4"
