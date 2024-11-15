@@ -18,6 +18,9 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        sans: ["Inter", "sans-serif"],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -25,11 +28,11 @@ export default {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "hsl(var(--primary))",
+          DEFAULT: "#4F46E5",
           foreground: "hsl(var(--primary-foreground))",
         },
         secondary: {
-          DEFAULT: "hsl(var(--secondary))",
+          DEFAULT: "#7C3AED",
           foreground: "hsl(var(--secondary-foreground))",
         },
         destructive: {
@@ -53,24 +56,20 @@ export default {
           foreground: "hsl(var(--card-foreground))",
         },
       },
-      borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
-      },
       keyframes: {
-        "accordion-down": {
-          from: { height: "0" },
-          to: { height: "var(--radix-accordion-content-height)" },
-        },
-        "accordion-up": {
-          from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: "0" },
+        gradient: {
+          '0%, 100%': {
+            'background-size': '200% 200%',
+            'background-position': 'left center'
+          },
+          '50%': {
+            'background-size': '200% 200%',
+            'background-position': 'right center'
+          },
         },
       },
       animation: {
-        "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out",
+        gradient: 'gradient 15s ease infinite',
       },
     },
   },
