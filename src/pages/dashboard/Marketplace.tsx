@@ -2,7 +2,7 @@ import { MavenMarketplace } from "@/components/dashboard/treasury/MavenMarketpla
 
 const Treasury = () => {
   return (
-    <div className="container max-w-7xl mx-auto px-4">
+    <div className="container max-w-7xl mx-auto -mt-8">
       <MavenMarketplace />
     </div>
   );
