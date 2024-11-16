@@ -23,7 +23,7 @@ export const useAvailableUsers = (userProfile: any, currentUserId: string | unde
     queryFn: async () => {
       if (!userProfile?.user_type || !currentUserId) return [];
 
-      // Get users from actual message history
+      // Get users from actual message history with non-empty messages
       const { data: messageUsers } = await supabase
         .from("messages")
         .select(`
@@ -31,7 +31,8 @@ export const useAvailableUsers = (userProfile: any, currentUserId: string | unde
           receiver:profiles!messages_receiver_id_fkey(id, full_name, user_type, avatar_url)
         `)
         .or(`sender_id.eq.${currentUserId},receiver_id.eq.${currentUserId}`)
-        .not('content', 'eq', ''); // Ensure there's actual message content
+        .neq('content', '') // Exclude empty messages
+        .not('content', 'is', null); // Exclude null messages
 
       if (!messageUsers) return [];
 
