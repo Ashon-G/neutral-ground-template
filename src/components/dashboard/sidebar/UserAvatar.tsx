@@ -46,7 +46,7 @@ export const UserAvatar = () => {
             </AvatarFallback>
           </Avatar>
           <span className="text-sm text-neutral-700 dark:text-neutral-200">
-            Profile
+            {profile?.full_name || session?.user.email}
           </span>
         </div>
       </DropdownMenuTrigger>
