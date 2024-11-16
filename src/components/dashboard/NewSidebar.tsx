@@ -64,7 +64,27 @@ export const DesktopSidebar = ({
       onMouseEnter={() => setOpen(true)}
       onMouseLeave={() => setOpen(false)}
     >
-      {children}
+      <div className="flex flex-col gap-8">
+        <motion.div 
+          className="flex items-center gap-3"
+          animate={{
+            justifyContent: animate ? (open ? "flex-start" : "center") : "flex-start",
+          }}
+        >
+          <img src="/logo.svg" alt="Maven Logo" className="h-8 w-8" />
+          <motion.span
+            className="font-bold text-lg"
+            initial={false}
+            animate={{
+              opacity: animate ? (open ? 1 : 0) : 1,
+              display: animate ? (open ? "block" : "none") : "block",
+            }}
+          >
+            Maven
+          </motion.span>
+        </motion.div>
+        {children}
+      </div>
     </motion.div>
   );
 };
