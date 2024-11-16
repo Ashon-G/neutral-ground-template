@@ -88,10 +88,6 @@ export const MavenCard = ({ maven }: MavenCardProps) => {
           <p className="mt-3 text-sm text-gray-600 line-clamp-3">
             {maven.bio || "Maven on the platform"}
           </p>
-          <div className="mt-4 flex items-center justify-between border-t pt-4">
-            <span className="text-sm text-gray-600">Starting at</span>
-            <span className="font-medium text-gray-900">$50/hr</span>
-          </div>
           <Button 
             onClick={handleChatClick}
             variant="secondary" 
