@@ -1,7 +1,12 @@
 import { Badge } from "@/components/ui/badge";
 
+interface Skill {
+  skill_type: string;
+  skill_name: string;
+}
+
 interface MavenSkillsProps {
-  skills: any[];
+  skills: Skill[] | null;
 }
 
 export const MavenSkills = ({ skills }: MavenSkillsProps) => {
