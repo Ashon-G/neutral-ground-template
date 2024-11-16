@@ -42,7 +42,6 @@ export const MavenExperience = ({ experience }: MavenExperienceProps) => {
                   {exp.end_date ? format(new Date(exp.end_date), ' MMM yyyy') : ' Present'}
                 </p>
               </div>
-              <span className="text-xs text-gray-500">ID: {exp.id}</span>
             </div>
             
             {exp.responsibilities && (
@@ -59,7 +58,8 @@ export const MavenExperience = ({ experience }: MavenExperienceProps) => {
               </div>
             )}
 
-            <div className="mt-3 pt-3 border-t border-gray-200">
+            <div className="mt-3 pt-3 border-t border-gray-200 space-y-2">
+              <p className="text-xs text-gray-500">Experience ID: {exp.id}</p>
               <p className="text-xs text-gray-500">Maven ID: {exp.maven_id}</p>
             </div>
           </div>

@@ -35,14 +35,14 @@ export const MavenSkills = ({ skills }: MavenSkillsProps) => {
             <p className="text-sm font-medium mb-2 text-gray-800">{type}</p>
             <div className="flex flex-wrap gap-2">
               {skills.map((skill) => (
-                <div key={skill.id} className="group relative">
-                  <Badge variant="secondary">
+                <div key={skill.id} className="relative">
+                  <Badge variant="secondary" className="hover:bg-secondary/20">
                     {skill.skill_name}
                   </Badge>
-                  <div className="hidden group-hover:block absolute bottom-full left-0 mb-2 bg-gray-800 text-white text-xs rounded p-1 whitespace-nowrap">
-                    ID: {skill.id}
-                    <br />
-                    Maven ID: {skill.maven_id}
+                  <div className="absolute bottom-full left-0 mb-2 bg-gray-800 text-white text-xs rounded p-2 whitespace-nowrap">
+                    <p>Skill ID: {skill.id}</p>
+                    <p>Maven ID: {skill.maven_id}</p>
+                    <p>Type: {skill.skill_type}</p>
                   </div>
                 </div>
               ))}

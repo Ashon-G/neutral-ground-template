@@ -30,7 +30,6 @@ export const MavenAvailability = ({ availability }: MavenAvailabilityProps) => {
             </div>
             <p className="font-medium text-gray-800">{availability.role_type}</p>
           </div>
-          <span className="text-xs text-gray-500">ID: {availability.id}</span>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -44,8 +43,11 @@ export const MavenAvailability = ({ availability }: MavenAvailabilityProps) => {
           </div>
         </div>
 
-        <div className="pt-2 border-t border-gray-200">
+        <div className="pt-3 border-t border-gray-200 space-y-2">
+          <p className="text-xs text-gray-500">Availability ID: {availability.id}</p>
           <p className="text-xs text-gray-500">Maven ID: {availability.maven_id}</p>
+          <p className="text-xs text-gray-500">Role Type: {availability.role_type}</p>
+          <p className="text-xs text-gray-500">Location: {availability.location_preference}</p>
         </div>
       </div>
     </div>

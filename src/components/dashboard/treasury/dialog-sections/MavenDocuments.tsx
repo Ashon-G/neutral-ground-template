@@ -23,7 +23,7 @@ export const MavenDocuments = ({ documents }: MavenDocumentsProps) => {
       <div className="space-y-2">
         {documents.map((doc) => (
           <div key={doc.id} className="bg-secondary/10 rounded-lg p-4 hover:bg-secondary/20 transition-colors">
-            <div className="flex justify-between items-start mb-2">
+            <div className="space-y-2">
               <div>
                 <p className="font-medium text-gray-800">{doc.document_type}</p>
                 <a 
@@ -35,9 +35,13 @@ export const MavenDocuments = ({ documents }: MavenDocumentsProps) => {
                   View Document
                 </a>
               </div>
-              <span className="text-xs text-gray-500">ID: {doc.id}</span>
+              <div className="pt-2 space-y-1 text-xs text-gray-500">
+                <p>Document ID: {doc.id}</p>
+                <p>Maven ID: {doc.maven_id}</p>
+                <p>Type: {doc.document_type}</p>
+                <p className="break-all">URL: {doc.document_url}</p>
+              </div>
             </div>
-            <p className="text-xs text-gray-500 mt-2">Maven ID: {doc.maven_id}</p>
           </div>
         ))}
       </div>

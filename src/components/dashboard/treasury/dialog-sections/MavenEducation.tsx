@@ -27,15 +27,15 @@ export const MavenEducation = ({ education }: MavenEducationProps) => {
         <GraduationCap className="h-5 w-5" />
         Education
       </h3>
-      <div className="bg-secondary/10 rounded-lg p-4 space-y-3">
+      <div className="bg-secondary/10 rounded-lg p-4 space-y-4">
         <div className="space-y-2">
           <div className="flex justify-between items-start">
             <div>
               <p className="font-medium text-gray-800 text-lg">{education.universities?.name}</p>
               <p className="text-gray-700">{education.degree_program}</p>
             </div>
-            <span className="text-sm text-gray-600">ID: {education.id}</span>
           </div>
+          
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <p className="text-sm font-medium text-gray-600">Major</p>
@@ -65,10 +65,12 @@ export const MavenEducation = ({ education }: MavenEducationProps) => {
               <p className="text-gray-800">{education.gpa.toFixed(2)}</p>
             </div>
           )}
-          <div>
-            <p className="text-sm font-medium text-gray-600">University ID</p>
-            <p className="text-gray-800">{education.university_id}</p>
-          </div>
+        </div>
+
+        <div className="pt-3 border-t border-gray-200 space-y-2 text-xs text-gray-500">
+          <p>Education ID: {education.id}</p>
+          <p>Maven ID: {education.maven_id}</p>
+          <p>University ID: {education.university_id}</p>
         </div>
       </div>
     </div>
