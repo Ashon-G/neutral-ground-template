@@ -9,7 +9,7 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/components/auth/AuthProvider";
-import { ListTodo, MessageSquare, Wallet, User, Settings } from "lucide-react";
+import { ListTodo, MessageSquare, Wallet, User, Settings, Link as LinkIcon } from "lucide-react";
 
 const NUM_LINES = 30;
 
@@ -24,7 +24,8 @@ const AnimatedNavigation = () => {
     { position: 1, title: "Tasks", path: "/dashboard/tasks", icon: ListTodo },
     { position: 8, title: "Chat", path: "/dashboard/chat", icon: MessageSquare },
     { position: 15, title: "Marketplace", path: "/dashboard/marketplace", icon: Wallet },
-    { position: 22, title: "Profile", path: "/dashboard/profile", icon: User },
+    { position: 22, title: "Integrations", path: "/dashboard/integrations", icon: LinkIcon },
+    { position: 25, title: "Profile", path: "/dashboard/profile", icon: User },
     ...(isAdmin ? [{ position: 29, title: "Admin", path: "/dashboard/admin", icon: Settings }] : []),
   ];
 
