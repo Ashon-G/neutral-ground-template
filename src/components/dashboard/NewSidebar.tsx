@@ -103,7 +103,7 @@ export const MobileSidebar = ({
   return (
     <div
       className={cn(
-        "h-16 px-4 py-4 flex flex-row md:hidden items-center justify-between bg-neutral-100 dark:bg-neutral-800 w-full fixed bottom-0 left-0 right-0 z-50 border-t border-neutral-200 dark:border-neutral-700"
+        "h-10 px-4 py-4 flex flex-row md:hidden items-center justify-between bg-neutral-100 dark:bg-neutral-800 w-full fixed bottom-0 left-0 right-0 z-50"
       )}
     >
       <div className="flex justify-end z-20 w-full">
@@ -123,19 +123,20 @@ export const MobileSidebar = ({
               ease: "easeInOut",
             }}
             className={cn(
-              "fixed h-[calc(100vh-4rem)] w-full inset-0 bg-white dark:bg-neutral-900 p-6 z-[100] flex flex-col justify-between overflow-y-auto",
+              "fixed h-full w-full inset-0 bg-white dark:bg-neutral-900 p-10 z-[100] flex flex-col justify-between",
               className
             )}
           >
-            <div className="flex flex-col h-full">
+            <div>
               <div
-                className="absolute right-6 top-6 z-50 text-neutral-800 dark:text-neutral-200"
+                className="absolute right-10 top-10 z-50 text-neutral-800 dark:text-neutral-200"
                 onClick={() => setOpen(!open)}
               >
                 <X />
               </div>
               {children}
             </div>
+            <UserAvatar />
           </motion.div>
         )}
       </AnimatePresence>
