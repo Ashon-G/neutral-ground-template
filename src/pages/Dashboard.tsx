@@ -7,6 +7,7 @@ import { ListTodo, MessageSquare, Wallet, User, Settings as SettingsIcon, Link a
 import { useSidebar } from "@/components/dashboard/sidebar/SidebarContext";
 import { motion } from "framer-motion";
 import { SidebarProvider } from "@/components/dashboard/sidebar/SidebarContext";
+import { UserAvatar } from "@/components/dashboard/sidebar/UserAvatar";
 
 const DashboardContent = () => {
   const { session } = useAuth();
@@ -54,6 +55,7 @@ const DashboardContent = () => {
               />
             ))}
           </div>
+          <UserAvatar />
         </SidebarBody>
       </Sidebar>
 
