@@ -55,7 +55,7 @@ export const DesktopSidebar = ({
   return (
     <motion.div
       className={cn(
-        "fixed left-0 h-full px-4 py-4 hidden md:flex md:flex-col bg-neutral-100 dark:bg-neutral-800 w-[300px] flex-shrink-0 z-50 justify-between",
+        "fixed left-0 h-full px-4 py-4 hidden md:flex md:flex-col bg-neutral-100 dark:bg-neutral-800 w-[300px] flex-shrink-0 z-50",
         className
       )}
       animate={{
@@ -64,7 +64,7 @@ export const DesktopSidebar = ({
       onMouseEnter={() => setOpen(true)}
       onMouseLeave={() => setOpen(false)}
     >
-      <div className="flex flex-col gap-8">
+      <div className="flex flex-col h-full">
         <motion.div 
           className="flex items-center gap-3"
           animate={{
@@ -83,7 +83,14 @@ export const DesktopSidebar = ({
             Maven
           </motion.span>
         </motion.div>
-        {children}
+        
+        <div className="flex-grow mt-8">
+          {children}
+        </div>
+
+        <div className="mt-auto">
+          <UserAvatar />
+        </div>
       </div>
     </motion.div>
   );
