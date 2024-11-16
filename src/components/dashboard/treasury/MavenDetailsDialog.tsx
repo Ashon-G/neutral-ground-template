@@ -10,6 +10,7 @@ import { MavenExperience } from "./dialog-sections/MavenExperience";
 import { MavenSkills } from "./dialog-sections/MavenSkills";
 import { MavenAvailability } from "./dialog-sections/MavenAvailability";
 import { MavenDocuments } from "./dialog-sections/MavenDocuments";
+import { Separator } from "@/components/ui/separator";
 
 interface MavenDetailsDialogProps {
   maven: Profile;
@@ -105,33 +106,55 @@ export const MavenDetailsDialog = ({ maven, open, onOpenChange }: MavenDetailsDi
             </div>
           ) : (
             <div className="space-y-6 py-4">
-              <p className="text-gray-700 whitespace-pre-wrap">{maven.bio}</p>
-              {maven.linkedin_profile && (
-                <a 
-                  href={maven.linkedin_profile}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-500 hover:underline mt-2 inline-block"
-                >
-                  LinkedIn Profile
-                </a>
+              {maven.bio && (
+                <>
+                  <div className="space-y-2">
+                    <h3 className="text-lg font-semibold text-gray-900">About</h3>
+                    <p className="text-gray-700 whitespace-pre-wrap">{maven.bio}</p>
+                  </div>
+                  <Separator />
+                </>
               )}
 
               <MavenEducation education={education} />
+              <Separator />
+              
               <MavenExperience experience={experience} />
+              <Separator />
+              
               <MavenSkills skills={skills} />
+              <Separator />
+              
               <MavenAvailability availability={availability} />
+              <Separator />
+              
               <MavenDocuments documents={documents} />
+              <Separator />
 
-              <div className="mt-4 pt-4 border-t">
-                <p className="text-sm text-gray-600">
-                  Contact: {maven.phone_number}
-                </p>
-                {maven.location && (
-                  <p className="text-sm text-gray-600">
-                    Location: {maven.location}
-                  </p>
-                )}
+              <div className="space-y-2">
+                <h3 className="text-lg font-semibold text-gray-900">Contact Information</h3>
+                <div className="bg-secondary/10 rounded-lg p-4 space-y-2">
+                  {maven.phone_number && (
+                    <p className="text-gray-700">
+                      <span className="font-medium">Phone:</span> {maven.phone_number}
+                    </p>
+                  )}
+                  {maven.location && (
+                    <p className="text-gray-700">
+                      <span className="font-medium">Location:</span> {maven.location}
+                    </p>
+                  )}
+                  {maven.linkedin_profile && (
+                    <a 
+                      href={maven.linkedin_profile}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-500 hover:underline block"
+                    >
+                      LinkedIn Profile
+                    </a>
+                  )}
+                </div>
               </div>
             </div>
           )}

@@ -18,27 +18,29 @@ export const MavenExperience = ({ experience }: MavenExperienceProps) => {
       <div className="space-y-4">
         {experience.map((exp) => (
           <div key={exp.id} className="bg-secondary/10 rounded-lg p-4">
-            <div className="flex justify-between items-start">
+            <div className="flex justify-between items-start mb-2">
               <div>
-                <p className="font-medium text-gray-800">{exp.job_title}</p>
+                <p className="font-medium text-gray-800 text-lg">{exp.job_title}</p>
                 <p className="text-gray-700">{exp.company_name}</p>
                 <p className="text-sm text-gray-600">
                   {format(new Date(exp.start_date), 'MMM yyyy')} - 
                   {exp.end_date ? format(new Date(exp.end_date), ' MMM yyyy') : ' Present'}
                 </p>
               </div>
-              <Badge>{exp.experience_type}</Badge>
+              <Badge variant="secondary">{exp.experience_type}</Badge>
             </div>
+            
             {exp.responsibilities && (
-              <div className="mt-2">
-                <p className="font-medium text-sm text-gray-800">Responsibilities:</p>
-                <p className="text-sm text-gray-700">{exp.responsibilities}</p>
+              <div className="mt-3">
+                <p className="font-medium text-sm text-gray-800 mb-1">Responsibilities:</p>
+                <p className="text-sm text-gray-700 whitespace-pre-wrap">{exp.responsibilities}</p>
               </div>
             )}
+            
             {exp.achievements && (
-              <div className="mt-2">
-                <p className="font-medium text-sm text-gray-800">Key Achievements:</p>
-                <p className="text-sm text-gray-700">{exp.achievements}</p>
+              <div className="mt-3">
+                <p className="font-medium text-sm text-gray-800 mb-1">Key Achievements:</p>
+                <p className="text-sm text-gray-700 whitespace-pre-wrap">{exp.achievements}</p>
               </div>
             )}
           </div>
