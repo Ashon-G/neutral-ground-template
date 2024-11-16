@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
 import React, { useState, createContext, useContext } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, MotionProps } from "framer-motion";
 import { Menu, X } from "lucide-react";
 
 interface Links {
@@ -79,7 +79,7 @@ export const DesktopSidebar = ({
   className,
   children,
   ...props
-}: React.ComponentProps<"div">) => {
+}: React.ComponentProps<"div"> & MotionProps) => {
   const { open, setOpen, animate } = useSidebar();
   return (
     <>
