@@ -37,24 +37,12 @@ export const Chat = () => {
   const { data: messages, isLoading } = useMessages(selectedUser, session?.user.id);
   const sendMessage = useSendMessage(session?.user.id, selectedUser, userProfile);
 
+  // Show modal when component mounts if user is a founder
   useEffect(() => {
-    const checkFirstChat = async () => {
-      if (!selectedUser || !session?.user.id || userProfile?.user_type !== 'founder') return;
-
-      const { data } = await supabase
-        .from("messages")
-        .select("id")
-        .eq("sender_id", session.user.id)
-        .eq("receiver_id", selectedUser)
-        .limit(1);
-
-      if (!data?.length) {
-        setShowFirstChatModal(true);
-      }
-    };
-
-    checkFirstChat();
-  }, [selectedUser, session?.user.id, userProfile?.user_type]);
+    if (userProfile?.user_type === 'founder') {
+      setShowFirstChatModal(true);
+    }
+  }, [userProfile?.user_type]);
 
   if (isLoading) {
     return (
