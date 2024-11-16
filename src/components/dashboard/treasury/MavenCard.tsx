@@ -18,9 +18,9 @@ export const MavenCard = ({ maven }: MavenCardProps) => {
   return (
     <Card 
       onClick={handleClick}
-      className="group cursor-pointer overflow-hidden transition-all hover:-translate-y-1 border border-gray-200 hover:border-gray-300 hover:shadow-lg"
+      className="group cursor-pointer overflow-hidden transition-all hover:-translate-y-1 border border-gray-200 hover:border-gray-300 hover:shadow-lg h-full"
     >
-      <div className="relative aspect-[4/3] w-full">
+      <div className="relative aspect-[3/2] w-full">
         <img
           src={maven.avatar_url || "https://api.dicebear.com/7.x/avataaars/svg"}
           alt={maven.full_name || "Maven"}
@@ -28,8 +28,8 @@ export const MavenCard = ({ maven }: MavenCardProps) => {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
       </div>
-      <div className="p-4">
-        <div className="flex items-start justify-between gap-2">
+      <div className="p-4 md:p-6 flex flex-col h-[calc(100%-33.33%)]">
+        <div className="flex items-start justify-between gap-2 mb-3">
           <div>
             <h3 className="font-medium text-base md:text-lg line-clamp-1">
               {maven.full_name?.split(" ")[0]}
@@ -47,12 +47,14 @@ export const MavenCard = ({ maven }: MavenCardProps) => {
             {maven.maven_skillset}
           </Badge>
         </div>
-        <p className="mt-3 text-sm text-muted-foreground line-clamp-2">
+        <p className="text-sm text-muted-foreground line-clamp-2 flex-grow">
           {maven.bio || "Maven on the platform"}
         </p>
-        <div className="mt-4 flex items-center justify-between border-t pt-4">
-          <span className="text-xs text-muted-foreground">Starting at</span>
-          <span className="font-medium">$50/hr</span>
+        <div className="mt-4 pt-4 border-t border-gray-100">
+          <div className="flex items-center justify-between">
+            <span className="text-xs text-muted-foreground">Starting at</span>
+            <span className="font-medium">$50/hr</span>
+          </div>
         </div>
       </div>
     </Card>
