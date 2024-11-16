@@ -14,7 +14,8 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useQuery } from "@tanstack/react-query";
 import { NavLink } from "react-router-dom";
-import AnimatedNavigation from "@/components/dashboard/AnimatedNavigation";
+import { Sidebar, SidebarBody, SidebarLink } from "@/components/dashboard/NewSidebar";
+import { ListTodo, MessageSquare, Wallet, User, Settings as SettingsIcon, Link as LinkIcon } from "lucide-react";
 
 const Dashboard = () => {
   const { session } = useAuth();
@@ -41,6 +42,15 @@ const Dashboard = () => {
     await supabase.auth.signOut();
     window.location.href = "/login";
   };
+
+  const navItems = [
+    { label: "Tasks", href: "/dashboard/tasks", icon: <ListTodo className="h-5 w-5" /> },
+    { label: "Chat", href: "/dashboard/chat", icon: <MessageSquare className="h-5 w-5" /> },
+    { label: "Marketplace", href: "/dashboard/marketplace", icon: <Wallet className="h-5 w-5" /> },
+    { label: "Integrations", href: "/dashboard/integrations", icon: <LinkIcon className="h-5 w-5" /> },
+    { label: "Profile", href: "/dashboard/profile", icon: <User className="h-5 w-5" /> },
+    ...(isAdmin ? [{ label: "Admin", href: "/dashboard/admin", icon: <SettingsIcon className="h-5 w-5" /> }] : []),
+  ];
 
   return (
     <div className="min-h-screen bg-gray-50/50 no-scrollbar">
@@ -104,10 +114,23 @@ const Dashboard = () => {
         </div>
       </nav>
 
-      <AnimatedNavigation />
+      <Sidebar>
+        <SidebarBody className="pt-24">
+          <div className="flex flex-col gap-2">
+            {navItems.map((item) => (
+              <SidebarLink
+                key={item.href}
+                link={item}
+                className="text-neutral-700 hover:text-neutral-900"
+              />
+            ))}
+          </div>
+        </SidebarBody>
+      </Sidebar>
+
       <InstallPrompt />
 
-      <div className="pt-24 pb-24 md:pb-20">
+      <div className="pt-24 pb-24 md:pb-20 md:pl-[60px] hover:md:pl-[300px] transition-all duration-300">
         <Outlet />
       </div>
     </div>
