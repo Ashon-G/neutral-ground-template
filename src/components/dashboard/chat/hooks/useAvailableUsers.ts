@@ -23,14 +23,15 @@ export const useAvailableUsers = (userProfile: any, currentUserId: string | unde
     queryFn: async () => {
       if (!userProfile?.user_type || !currentUserId) return [];
 
-      // Get unique users from message history
+      // Get users from actual message history
       const { data: messageUsers } = await supabase
         .from("messages")
         .select(`
           sender:profiles!messages_sender_id_fkey(id, full_name, user_type, avatar_url),
           receiver:profiles!messages_receiver_id_fkey(id, full_name, user_type, avatar_url)
         `)
-        .or(`sender_id.eq.${currentUserId},receiver_id.eq.${currentUserId}`);
+        .or(`sender_id.eq.${currentUserId},receiver_id.eq.${currentUserId}`)
+        .not('content', 'eq', ''); // Ensure there's actual message content
 
       if (!messageUsers) return [];
 
@@ -39,7 +40,10 @@ export const useAvailableUsers = (userProfile: any, currentUserId: string | unde
       const users: ChatUser[] = [];
 
       (messageUsers as unknown as MessageUser[]).forEach((msg) => {
+        // Determine which user is the other party in the conversation
         const otherUser = msg.sender?.id === currentUserId ? msg.receiver : msg.sender;
+        
+        // Only add users that exist and haven't been added yet
         if (otherUser && !uniqueUserIds.has(otherUser.id)) {
           uniqueUserIds.add(otherUser.id);
           users.push({
