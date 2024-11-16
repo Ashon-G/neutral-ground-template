@@ -37,12 +37,12 @@ export const Chat = () => {
   const { data: messages, isLoading } = useMessages(selectedUser, session?.user.id);
   const sendMessage = useSendMessage(session?.user.id, selectedUser, userProfile);
 
-  // Show modal when component mounts if user is a founder
+  // Reset modal state and show it when component mounts for founders
   useEffect(() => {
     if (userProfile?.user_type === 'founder') {
       setShowFirstChatModal(true);
     }
-  }, [userProfile?.user_type]);
+  }, []);
 
   if (isLoading) {
     return (
