@@ -15,7 +15,6 @@ const DashboardContent = () => {
   const userMetadataType = session?.user?.user_metadata?.user_type;
   const appMetadataType = session?.user?.app_metadata?.user_type;
   const isAdmin = userMetadataType === 'admin' || appMetadataType === 'admin';
-  const isFounder = userMetadataType === 'founder' || appMetadataType === 'founder';
 
   const navItems = [
     { label: "Tasks", href: "/dashboard/tasks", icon: <ListTodo className="h-5 w-5" /> },
@@ -27,7 +26,8 @@ const DashboardContent = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50/50 no-scrollbar">
+    <div className="min-h-screen bg-gray-50/50">
+      {/* Top Navigation Bar */}
       <nav className="fixed top-0 left-0 right-0 z-50 mb-8 bg-white p-4 border-b border-black/5 shadow-[0_2px_4px_rgba(0,0,0,0.02)]">
         <div className="mx-auto max-w-7xl">
           <div className="flex items-center justify-between gap-2">
@@ -40,6 +40,7 @@ const DashboardContent = () => {
         </div>
       </nav>
 
+      {/* Sidebar */}
       <Sidebar>
         <SidebarBody className="pt-24 fixed left-0">
           <div className="flex flex-col h-full">
@@ -65,15 +66,16 @@ const DashboardContent = () => {
 
       <InstallPrompt />
 
+      {/* Main Content */}
       <motion.main 
-        className="pt-24 pb-24 md:pb-20 md:ml-[300px] transition-all duration-300"
+        className="pt-24 pb-24 md:pb-20 transition-all duration-300"
         animate={{
           marginLeft: animate ? (open ? "300px" : "60px") : "300px",
           width: animate ? (open ? "calc(100% - 300px)" : "calc(100% - 60px)") : "calc(100% - 300px)",
         }}
-        transition={{ duration: 0.3, ease: "easeInOut" }}
+        className="md:ml-[300px] pt-24 pb-24 md:pb-20 px-4 md:px-8"
       >
-        <div className="container mx-auto px-4 md:px-8">
+        <div className="container mx-auto">
           <Outlet />
         </div>
       </motion.main>

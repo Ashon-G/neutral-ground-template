@@ -103,7 +103,7 @@ export const MobileSidebar = ({
   return (
     <div
       className={cn(
-        "h-10 px-4 py-4 flex flex-row md:hidden items-center justify-between bg-neutral-100 dark:bg-neutral-800 w-full fixed bottom-0 left-0 right-0 z-50"
+        "h-16 px-4 py-4 flex flex-row md:hidden items-center justify-between bg-neutral-100 dark:bg-neutral-800 w-full fixed bottom-0 left-0 right-0 z-50 border-t border-neutral-200 dark:border-neutral-700"
       )}
     >
       <div className="flex justify-end z-20 w-full">
@@ -123,54 +123,22 @@ export const MobileSidebar = ({
               ease: "easeInOut",
             }}
             className={cn(
-              "fixed h-full w-full inset-0 bg-white dark:bg-neutral-900 p-10 z-[100] flex flex-col justify-between",
+              "fixed h-[calc(100vh-4rem)] w-full inset-0 bg-white dark:bg-neutral-900 p-6 z-[100] flex flex-col justify-between overflow-y-auto",
               className
             )}
           >
-            <div>
+            <div className="flex flex-col h-full">
               <div
-                className="absolute right-10 top-10 z-50 text-neutral-800 dark:text-neutral-200"
+                className="absolute right-6 top-6 z-50 text-neutral-800 dark:text-neutral-200"
                 onClick={() => setOpen(!open)}
               >
                 <X />
               </div>
               {children}
             </div>
-            <UserAvatar />
           </motion.div>
         )}
       </AnimatePresence>
     </div>
-  );
-};
-
-export const SidebarLink = ({
-  link,
-  className,
-}: {
-  link: Links;
-  className?: string;
-}) => {
-  const { open, animate } = useSidebar();
-  return (
-    <Link
-      to={link.href}
-      className={cn(
-        "flex items-center justify-start gap-2 group/sidebar py-2",
-        className
-      )}
-    >
-      {link.icon}
-      <motion.span
-        initial={false}
-        animate={{
-          opacity: animate ? (open ? 1 : 0) : 1,
-          display: animate ? (open ? "block" : "none") : "block",
-        }}
-        className="text-neutral-700 dark:text-neutral-200 text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre"
-      >
-        {link.label}
-      </motion.span>
-    </Link>
   );
 };
