@@ -116,20 +116,40 @@ export const MavenDetailsDialog = ({ maven, open, onOpenChange }: MavenDetailsDi
                 </>
               )}
 
-              <MavenEducation education={education} />
-              <Separator />
+              {education && (
+                <>
+                  <MavenEducation education={education} />
+                  <Separator />
+                </>
+              )}
               
-              <MavenExperience experience={experience} />
-              <Separator />
+              {experience && experience.length > 0 && (
+                <>
+                  <MavenExperience experience={experience} />
+                  <Separator />
+                </>
+              )}
               
-              <MavenSkills skills={skills} />
-              <Separator />
+              {skills && skills.length > 0 && (
+                <>
+                  <MavenSkills skills={skills} />
+                  <Separator />
+                </>
+              )}
               
-              <MavenAvailability availability={availability} />
-              <Separator />
+              {availability && (
+                <>
+                  <MavenAvailability availability={availability} />
+                  <Separator />
+                </>
+              )}
               
-              <MavenDocuments documents={documents} />
-              <Separator />
+              {documents && documents.length > 0 && (
+                <>
+                  <MavenDocuments documents={documents} />
+                  <Separator />
+                </>
+              )}
 
               <div className="space-y-2">
                 <h3 className="text-lg font-semibold text-gray-900">Contact Information</h3>
