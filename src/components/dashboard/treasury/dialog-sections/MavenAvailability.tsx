@@ -4,11 +4,12 @@ import { format } from "date-fns";
 interface MavenAvailabilityProps {
   availability: {
     id: string;
+    maven_id: string;
     start_date: string;
     end_date: string;
     role_type: string;
     location_preference: string;
-  };
+  } | null;
 }
 
 export const MavenAvailability = ({ availability }: MavenAvailabilityProps) => {

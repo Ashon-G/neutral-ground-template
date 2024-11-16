@@ -2,8 +2,20 @@ import { Briefcase } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
 
+interface Experience {
+  id: string;
+  maven_id: string;
+  experience_type: string;
+  company_name: string;
+  job_title: string;
+  start_date: string;
+  end_date: string | null;
+  responsibilities: string | null;
+  achievements: string | null;
+}
+
 interface MavenExperienceProps {
-  experience: any[];
+  experience: Experience[] | null;
 }
 
 export const MavenExperience = ({ experience }: MavenExperienceProps) => {

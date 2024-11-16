@@ -2,6 +2,7 @@ import { FileText } from "lucide-react";
 
 interface Document {
   id: string;
+  maven_id: string;
   document_type: string;
   document_url: string;
 }

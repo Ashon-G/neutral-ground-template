@@ -3,6 +3,7 @@ import { Lightbulb } from "lucide-react";
 
 interface Skill {
   id: string;
+  maven_id: string;
   skill_type: string;
   skill_name: string;
 }

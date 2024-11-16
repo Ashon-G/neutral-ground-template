@@ -2,7 +2,20 @@ import { GraduationCap } from "lucide-react";
 import { format } from "date-fns";
 
 interface MavenEducationProps {
-  education: any;
+  education: {
+    id: string;
+    maven_id: string;
+    university_id: string;
+    degree_program: string;
+    major: string;
+    minor: string | null;
+    year_of_study: string;
+    graduation_date: string;
+    gpa: number | null;
+    universities: {
+      name: string;
+    };
+  } | null;
 }
 
 export const MavenEducation = ({ education }: MavenEducationProps) => {
