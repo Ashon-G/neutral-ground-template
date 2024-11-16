@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, Link } from "react-router-dom";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { ImpersonateUser } from "@/components/admin/ImpersonateUser";
 import { InstallPrompt } from "@/components/pwa/InstallPrompt";
