@@ -131,6 +131,7 @@ export const MobileSidebar = ({
               "fixed h-full w-full inset-0 bg-white dark:bg-neutral-900 p-10 z-[100] flex flex-col justify-between",
               className
             )}
+            {...props}
           >
             <div
               className="absolute right-10 top-10 z-50 text-neutral-800 dark:text-neutral-200"
@@ -165,7 +166,7 @@ export const SidebarLink = ({
       {...props}
     >
       {link.icon}
-      <motion.span
+      <motion.div
         animate={{
           display: animate ? (open ? "inline-block" : "none") : "inline-block",
           opacity: animate ? (open ? 1 : 0) : 1,
@@ -173,7 +174,7 @@ export const SidebarLink = ({
         className="text-neutral-700 dark:text-neutral-200 text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre"
       >
         {link.label}
-      </motion.span>
+      </motion.div>
     </Link>
   );
 };
