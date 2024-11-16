@@ -14,8 +14,7 @@ export const IntegrationsBlock = () => (
   <Block className="col-span-3 overflow-hidden md:col-span-2">
     <CardTitle>Integrate with everything</CardTitle>
     <CardSubtitle>
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus cum
-      earum facilis sint ducimus nulla magnam eveniet a reprehenderit veniam.
+      Seamlessly connect with your favorite tools and platforms to streamline workflows, enhance productivity, and unlock new possibilities for your projects. Our integrations ensure compatibility and simplicity, giving you more time to focus on what matters most.
     </CardSubtitle>
 
     <div className="relative -mx-6 -mb-6 mt-6 grid grid-cols-3 place-content-center rounded-t-none border-t-2 border-zinc-900">
