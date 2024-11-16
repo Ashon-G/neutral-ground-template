@@ -166,7 +166,7 @@ export const SidebarLink = ({
       {...props}
     >
       {link.icon}
-      <motion.div
+      <motion.span
         initial={false}
         animate={{
           display: animate ? (open ? "inline-block" : "none") : "inline-block",
@@ -175,7 +175,7 @@ export const SidebarLink = ({
         className="text-neutral-700 dark:text-neutral-200 text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre"
       >
         {link.label}
-      </motion.div>
+      </motion.span>
     </Link>
   );
 };
