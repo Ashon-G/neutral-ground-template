@@ -27,8 +27,8 @@ export const useAvailableUsers = (userProfile: any, currentUserId: string | unde
       const { data: messageUsers } = await supabase
         .from("messages")
         .select(`
-          sender:sender_id(id, full_name, user_type, avatar_url),
-          receiver:receiver_id(id, full_name, user_type, avatar_url)
+          sender:profiles!messages_sender_id_fkey(id, full_name, user_type, avatar_url),
+          receiver:profiles!messages_receiver_id_fkey(id, full_name, user_type, avatar_url)
         `)
         .or(`sender_id.eq.${currentUserId},receiver_id.eq.${currentUserId}`);
 
@@ -38,7 +38,7 @@ export const useAvailableUsers = (userProfile: any, currentUserId: string | unde
       const uniqueUserIds = new Set<string>();
       const users: ChatUser[] = [];
 
-      (messageUsers as MessageUser[]).forEach((msg) => {
+      (messageUsers as unknown as MessageUser[]).forEach((msg) => {
         const otherUser = msg.sender?.id === currentUserId ? msg.receiver : msg.sender;
         if (otherUser && !uniqueUserIds.has(otherUser.id)) {
           uniqueUserIds.add(otherUser.id);
