@@ -5,6 +5,8 @@ import { useAuth } from "@/components/auth/AuthProvider";
 import { KanbanBoard } from "./kanban/KanbanBoard";
 import { CreateTaskDialog } from "./kanban/CreateTaskDialog";
 import { GenerateTasksDialog } from "./kanban/GenerateTasksDialog";
+import { Button } from "@/components/ui/button";
+import { Wand2 } from "lucide-react";
 
 export const TaskList = () => {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
@@ -44,6 +46,18 @@ export const TaskList = () => {
 
   return (
     <div className="space-y-4">
+      {userProfile?.user_type === "founder" && (
+        <div className="flex justify-end gap-2">
+          <Button
+            variant="outline"
+            onClick={() => setIsGenerateOpen(true)}
+          >
+            <Wand2 className="h-4 w-4 mr-2" />
+            Generate Tasks with AI
+          </Button>
+        </div>
+      )}
+      
       <KanbanBoard tasks={tasks || []} isLoading={isLoading} />
       
       {userProfile?.user_type === "founder" && (
