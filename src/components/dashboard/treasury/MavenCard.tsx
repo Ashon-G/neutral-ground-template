@@ -18,7 +18,7 @@ export const MavenCard = ({ maven }: MavenCardProps) => {
   return (
     <Card
       onClick={handleClick}
-      className="group cursor-pointer overflow-hidden transition-all hover:-translate-y-1 border border-gray-200 hover:border-gray-300 hover:shadow-lg w-[350px] md:w-[400px]"
+      className="group cursor-pointer overflow-hidden transition-all hover:-translate-y-1 border border-gray-200 hover:border-gray-300 hover:shadow-lg w-[450px] md:w-[500px]"
     >
       {/* Image Section */}
       <div className="relative aspect-[4/3] w-full">
