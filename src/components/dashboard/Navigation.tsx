@@ -19,74 +19,86 @@ export const Navigation = () => {
       <NavLink
         to="tasks"
         className={({ isActive }) =>
-          `flex flex-col items-center p-2 rounded-lg hover:bg-gray-100 ${
-            isActive ? "bg-gradient-to-r from-blue-400 to-blue-600 text-white" : "text-gray-600"
+          `flex flex-col items-center p-2 rounded-lg transition-all duration-200 ${
+            isActive 
+              ? "bg-gradient-to-br from-blue-500 via-blue-600 to-blue-700 text-white shadow-lg" 
+              : "text-gray-600 hover:bg-gray-100"
           }`
         }
       >
         <ListTodo className="h-5 w-5" />
-        <span className="text-xs">Tasks</span>
+        <span className="text-xs mt-1">Tasks</span>
       </NavLink>
 
       <NavLink
         to="chat"
         className={({ isActive }) =>
-          `flex flex-col items-center p-2 rounded-lg hover:bg-gray-100 ${
-            isActive ? "bg-gradient-to-r from-blue-400 to-blue-600 text-white" : "text-gray-600"
+          `flex flex-col items-center p-2 rounded-lg transition-all duration-200 ${
+            isActive 
+              ? "bg-gradient-to-br from-blue-500 via-blue-600 to-blue-700 text-white shadow-lg" 
+              : "text-gray-600 hover:bg-gray-100"
           }`
         }
       >
         <MessageSquare className="h-5 w-5" />
-        <span className="text-xs">Chat</span>
+        <span className="text-xs mt-1">Chat</span>
       </NavLink>
 
       <NavLink
         to="marketplace"
         className={({ isActive }) =>
-          `flex flex-col items-center p-2 rounded-lg hover:bg-gray-100 ${
-            isActive ? "bg-gradient-to-r from-blue-400 to-blue-600 text-white" : "text-gray-600"
+          `flex flex-col items-center p-2 rounded-lg transition-all duration-200 ${
+            isActive 
+              ? "bg-gradient-to-br from-blue-500 via-blue-600 to-blue-700 text-white shadow-lg" 
+              : "text-gray-600 hover:bg-gray-100"
           }`
         }
       >
         <Wallet className="h-5 w-5" />
-        <span className="text-xs">Marketplace</span>
+        <span className="text-xs mt-1">Marketplace</span>
       </NavLink>
 
       <NavLink
         to="integrations"
         className={({ isActive }) =>
-          `flex flex-col items-center p-2 rounded-lg hover:bg-gray-100 ${
-            isActive ? "bg-gradient-to-r from-blue-400 to-blue-600 text-white" : "text-gray-600"
+          `flex flex-col items-center p-2 rounded-lg transition-all duration-200 ${
+            isActive 
+              ? "bg-gradient-to-br from-blue-500 via-blue-600 to-blue-700 text-white shadow-lg" 
+              : "text-gray-600 hover:bg-gray-100"
           }`
         }
       >
         <LinkIcon className="h-5 w-5" />
-        <span className="text-xs">Integrations</span>
+        <span className="text-xs mt-1">Integrations</span>
       </NavLink>
 
       <NavLink
         to="profile"
         className={({ isActive }) =>
-          `flex flex-col items-center p-2 rounded-lg hover:bg-gray-100 ${
-            isActive ? "bg-gradient-to-r from-blue-400 to-blue-600 text-white" : "text-gray-600"
+          `flex flex-col items-center p-2 rounded-lg transition-all duration-200 ${
+            isActive 
+              ? "bg-gradient-to-br from-blue-500 via-blue-600 to-blue-700 text-white shadow-lg" 
+              : "text-gray-600 hover:bg-gray-100"
           }`
         }
       >
         <User className="h-5 w-5" />
-        <span className="text-xs">Profile</span>
+        <span className="text-xs mt-1">Profile</span>
       </NavLink>
 
       {isAdmin && (
         <NavLink
           to="admin"
           className={({ isActive }) =>
-            `flex flex-col items-center p-2 rounded-lg hover:bg-gray-100 ${
-              isActive ? "bg-gradient-to-r from-blue-400 to-blue-600 text-white" : "text-gray-600"
+            `flex flex-col items-center p-2 rounded-lg transition-all duration-200 ${
+              isActive 
+                ? "bg-gradient-to-br from-blue-500 via-blue-600 to-blue-700 text-white shadow-lg" 
+                : "text-gray-600 hover:bg-gray-100"
             }`
           }
         >
           <Settings className="h-5 w-5" />
-          <span className="text-xs">Admin</span>
+          <span className="text-xs mt-1">Admin</span>
         </NavLink>
       )}
     </nav>
