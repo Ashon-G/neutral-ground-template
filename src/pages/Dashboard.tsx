@@ -68,7 +68,6 @@ const DashboardContent = () => {
 
       {/* Main Content */}
       <motion.main 
-        className="pt-24 pb-24 md:pb-20 transition-all duration-300"
         animate={{
           marginLeft: animate ? (open ? "300px" : "60px") : "300px",
           width: animate ? (open ? "calc(100% - 300px)" : "calc(100% - 60px)") : "calc(100% - 300px)",

@@ -142,3 +142,34 @@ export const MobileSidebar = ({
     </div>
   );
 };
+
+export const SidebarLink = ({
+  link,
+  className,
+}: {
+  link: Links;
+  className?: string;
+}) => {
+  const { open, animate } = useSidebar();
+  return (
+    <Link
+      to={link.href}
+      className={cn(
+        "flex items-center justify-start gap-2 group/sidebar py-2",
+        className
+      )}
+    >
+      {link.icon}
+      <motion.span
+        initial={false}
+        animate={{
+          opacity: animate ? (open ? 1 : 0) : 1,
+          display: animate ? (open ? "block" : "none") : "block",
+        }}
+        className="text-neutral-700 dark:text-neutral-200 text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre"
+      >
+        {link.label}
+      </motion.span>
+    </Link>
+  );
+};
