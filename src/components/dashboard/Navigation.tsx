@@ -20,7 +20,7 @@ export const Navigation = () => {
         to="tasks"
         className={({ isActive }) =>
           `flex flex-col items-center p-2 rounded-lg ${
-            isActive ? "bg-blue-500 text-white" : "text-gray-600 hover:bg-gray-100"
+            isActive ? "bg-secondary text-white" : "text-gray-600 hover:bg-gray-100"
           }`
         }
       >
@@ -32,7 +32,7 @@ export const Navigation = () => {
         to="chat"
         className={({ isActive }) =>
           `flex flex-col items-center p-2 rounded-lg ${
-            isActive ? "bg-blue-500 text-white" : "text-gray-600 hover:bg-gray-100"
+            isActive ? "bg-secondary text-white" : "text-gray-600 hover:bg-gray-100"
           }`
         }
       >
@@ -44,7 +44,7 @@ export const Navigation = () => {
         to="marketplace"
         className={({ isActive }) =>
           `flex flex-col items-center p-2 rounded-lg ${
-            isActive ? "bg-blue-500 text-white" : "text-gray-600 hover:bg-gray-100"
+            isActive ? "bg-secondary text-white" : "text-gray-600 hover:bg-gray-100"
           }`
         }
       >
@@ -56,7 +56,7 @@ export const Navigation = () => {
         to="integrations"
         className={({ isActive }) =>
           `flex flex-col items-center p-2 rounded-lg ${
-            isActive ? "bg-blue-500 text-white" : "text-gray-600 hover:bg-gray-100"
+            isActive ? "bg-secondary text-white" : "text-gray-600 hover:bg-gray-100"
           }`
         }
       >
@@ -68,7 +68,7 @@ export const Navigation = () => {
         to="profile"
         className={({ isActive }) =>
           `flex flex-col items-center p-2 rounded-lg ${
-            isActive ? "bg-blue-500 text-white" : "text-gray-600 hover:bg-gray-100"
+            isActive ? "bg-secondary text-white" : "text-gray-600 hover:bg-gray-100"
           }`
         }
       >
@@ -81,7 +81,7 @@ export const Navigation = () => {
           to="admin"
           className={({ isActive }) =>
             `flex flex-col items-center p-2 rounded-lg ${
-              isActive ? "bg-blue-500 text-white" : "text-gray-600 hover:bg-gray-100"
+              isActive ? "bg-secondary text-white" : "text-gray-600 hover:bg-gray-100"
             }`
           }
         >
