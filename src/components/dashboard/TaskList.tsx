@@ -4,20 +4,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { KanbanBoard } from "./kanban/KanbanBoard";
 import { CreateTaskDialog } from "./kanban/CreateTaskDialog";
-import { JiraIntegrationDialog } from "./jira/JiraIntegrationDialog";
 import { GenerateTasksDialog } from "./kanban/GenerateTasksDialog";
-import { SlackIntegrationDialog } from "./slack/SlackIntegrationDialog";
-import { useSearchParams } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { MessageSquare } from "lucide-react";
 
 export const TaskList = () => {
-  const [searchParams] = useSearchParams();
-  const showJiraDialog = searchParams.get("jira") === "true";
-  const showSlackDialog = searchParams.get("slack") === "true";
   const [isCreateOpen, setIsCreateOpen] = useState(false);
-  const [isJiraOpen, setIsJiraOpen] = useState(showJiraDialog);
-  const [isSlackOpen, setIsSlackOpen] = useState(showSlackDialog);
   const [isGenerateOpen, setIsGenerateOpen] = useState(false);
   const { session } = useAuth();
 
@@ -54,19 +44,6 @@ export const TaskList = () => {
 
   return (
     <div className="space-y-4">
-      {userProfile?.user_type === "founder" && (
-        <div className="flex gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setIsSlackOpen(true)}
-          >
-            <MessageSquare className="h-4 w-4 mr-2" />
-            Connect Slack
-          </Button>
-        </div>
-      )}
-
       <KanbanBoard tasks={tasks || []} isLoading={isLoading} />
       
       {userProfile?.user_type === "founder" && (
@@ -75,14 +52,6 @@ export const TaskList = () => {
             open={isCreateOpen}
             onOpenChange={setIsCreateOpen}
             userId={session?.user.id}
-          />
-          <JiraIntegrationDialog
-            open={isJiraOpen}
-            onOpenChange={setIsJiraOpen}
-          />
-          <SlackIntegrationDialog
-            open={isSlackOpen}
-            onOpenChange={setIsSlackOpen}
           />
           <GenerateTasksDialog
             open={isGenerateOpen}
