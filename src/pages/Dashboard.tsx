@@ -115,12 +115,16 @@ const Dashboard = () => {
       </nav>
 
       <Sidebar>
-        <SidebarBody className="pt-24">
+        <SidebarBody className="pt-24 fixed left-0">
           <div className="flex flex-col gap-2">
             {navItems.map((item) => (
               <SidebarLink
                 key={item.href}
-                link={item}
+                link={{
+                  label: item.label,
+                  href: item.href,
+                  icon: item.icon
+                }}
                 className="text-neutral-700 hover:text-neutral-900"
               />
             ))}
@@ -130,7 +134,7 @@ const Dashboard = () => {
 
       <InstallPrompt />
 
-      <div className="pt-24 pb-24 md:pb-20 md:pl-[60px] hover:md:pl-[300px] transition-all duration-300">
+      <div className="pt-24 pb-24 md:pb-20 md:pl-[60px]">
         <Outlet />
       </div>
     </div>
