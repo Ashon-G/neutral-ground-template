@@ -18,7 +18,6 @@ serve(async (req) => {
   try {
     const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
     
-    // Subscribe to new messages
     const changes = await supabase
       .channel('messages')
       .on(
@@ -31,7 +30,6 @@ serve(async (req) => {
         async (payload) => {
           const { new: message } = payload;
           
-          // Get receiver's email and sender's name
           const { data: receiverData } = await supabase
             .from('profiles')
             .select('email')
@@ -49,7 +47,6 @@ serve(async (req) => {
             return;
           }
 
-          // Send email notification using Resend's API directly
           const emailResponse = await fetch('https://api.resend.com/emails', {
             method: 'POST',
             headers: {

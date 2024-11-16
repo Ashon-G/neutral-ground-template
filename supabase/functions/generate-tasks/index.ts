@@ -79,7 +79,7 @@ Make tasks specific, actionable, and focused on project implementation.`;
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          model: 'gpt-4o-mini',
+          model: 'gpt-4', // Fixed from gpt-4o-mini to gpt-4
           messages: [
             { role: 'system', content: 'You are a helpful project manager that generates specific, actionable tasks.' },
             { role: 'user', content: prompt }
