@@ -2,10 +2,11 @@ import { Profile } from "@/integrations/supabase/types/profile";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { StarIcon, MessageSquare } from "lucide-react";
+import { StarIcon, MessageSquare, Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/components/auth/AuthProvider";
+import { useRating } from "@/hooks/useRating";
 
 interface MavenCardProps {
   maven: Profile;
@@ -16,6 +17,7 @@ export const MavenCard = ({ maven }: MavenCardProps) => {
   const { toast } = useToast();
   const { session } = useAuth();
   const userType = session?.user?.user_metadata?.user_type;
+  const { data: rating, isLoading: isLoadingRating } = useRating(maven.id);
 
   const handleChatClick = () => {
     if (!session) {
@@ -55,9 +57,17 @@ export const MavenCard = ({ maven }: MavenCardProps) => {
               {maven.full_name?.split(" ")[0]}
             </h3>
             <div className="flex items-center gap-1 text-sm">
-              <StarIcon className="h-4 w-4 text-yellow-500 fill-yellow-500" />
-              <span className="text-gray-900">5.0</span>
-              <span className="text-gray-500">(24)</span>
+              {isLoadingRating ? (
+                <Loader2 className="h-4 w-4 animate-spin text-yellow-500" />
+              ) : rating > 0 ? (
+                <>
+                  <StarIcon className="h-4 w-4 text-yellow-500 fill-yellow-500" />
+                  <span className="text-gray-900">{rating}</span>
+                  <span className="text-gray-500">rating</span>
+                </>
+              ) : (
+                <span className="text-gray-500">No ratings yet</span>
+              )}
             </div>
           </div>
           <Badge
