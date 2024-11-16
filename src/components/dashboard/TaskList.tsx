@@ -47,7 +47,7 @@ export const TaskList = () => {
   return (
     <div className="space-y-4">
       {userProfile?.user_type === "founder" && (
-        <div className="flex justify-end gap-2">
+        <div className="flex justify-start gap-2">
           <Button
             variant="outline"
             onClick={() => setIsGenerateOpen(true)}
