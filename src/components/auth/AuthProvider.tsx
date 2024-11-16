@@ -40,10 +40,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
         if (!initialSession && location.pathname.startsWith('/dashboard')) {
           navigate("/login", { replace: true });
-        } else if (initialSession && location.pathname === '/login') {
+        } else if (initialSession) {
           const userType = initialSession.user.user_metadata.user_type;
-          const defaultPath = userType === 'founder' ? '/dashboard/marketplace' : '/dashboard/tasks';
-          navigate(defaultPath, { replace: true });
+          if (location.pathname === '/login' || location.pathname === '/') {
+            const defaultPath = userType === 'founder' ? '/dashboard/marketplace' : '/dashboard/tasks';
+            navigate(defaultPath, { replace: true });
+          }
         }
       } catch (error) {
         console.error('Error initializing auth:', error);
@@ -61,10 +63,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
       
       if (!session && location.pathname.startsWith('/dashboard')) {
         navigate("/login", { replace: true });
-      } else if (session && location.pathname === '/login') {
+      } else if (session) {
         const userType = session.user.user_metadata.user_type;
-        const defaultPath = userType === 'founder' ? '/dashboard/marketplace' : '/dashboard/tasks';
-        navigate(defaultPath, { replace: true });
+        if (location.pathname === '/login' || location.pathname === '/') {
+          const defaultPath = userType === 'founder' ? '/dashboard/marketplace' : '/dashboard/tasks';
+          navigate(defaultPath, { replace: true });
+        }
       }
     });
 
@@ -78,7 +82,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   return (
     <AuthContext.Provider value={value}>
-      {children}
+      {loading ? (
+        <div className="min-h-screen flex items-center justify-center">
+          <LoadingAnimation />
+        </div>
+      ) : (
+        children
+      )}
     </AuthContext.Provider>
   );
 }
