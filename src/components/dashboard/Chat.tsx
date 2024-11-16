@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/components/auth/AuthProvider";
@@ -10,11 +10,13 @@ import { Button } from "@/components/ui/button";
 import { useAvailableUsers } from "./chat/hooks/useAvailableUsers";
 import { useMessages } from "./chat/hooks/useMessages";
 import { useSendMessage } from "./chat/hooks/useSendMessage";
+import { FirstChatModal } from "./chat/FirstChatModal";
 
 export const Chat = () => {
   const [message, setMessage] = useState("");
   const [selectedUser, setSelectedUser] = useState("");
   const [showUserList, setShowUserList] = useState(true);
+  const [showFirstChatModal, setShowFirstChatModal] = useState(false);
   const { session } = useAuth();
 
   const { data: userProfile } = useQuery({
@@ -34,6 +36,25 @@ export const Chat = () => {
   const { data: availableUsers } = useAvailableUsers(userProfile, session?.user.id);
   const { data: messages, isLoading } = useMessages(selectedUser, session?.user.id);
   const sendMessage = useSendMessage(session?.user.id, selectedUser, userProfile);
+
+  useEffect(() => {
+    const checkFirstChat = async () => {
+      if (!selectedUser || !session?.user.id || userProfile?.user_type !== 'founder') return;
+
+      const { data } = await supabase
+        .from("messages")
+        .select("id")
+        .eq("sender_id", session.user.id)
+        .eq("receiver_id", selectedUser)
+        .limit(1);
+
+      if (!data?.length) {
+        setShowFirstChatModal(true);
+      }
+    };
+
+    checkFirstChat();
+  }, [selectedUser, session?.user.id, userProfile?.user_type]);
 
   if (isLoading) {
     return (
@@ -86,6 +107,10 @@ export const Chat = () => {
           </div>
         )}
       </div>
+      <FirstChatModal 
+        open={showFirstChatModal} 
+        onClose={() => setShowFirstChatModal(false)} 
+      />
     </div>
   );
 };
