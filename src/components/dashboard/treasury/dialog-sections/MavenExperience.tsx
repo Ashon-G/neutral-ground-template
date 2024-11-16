@@ -58,9 +58,10 @@ export const MavenExperience = ({ experience }: MavenExperienceProps) => {
               </div>
             )}
 
-            <div className="mt-3 pt-3 border-t border-gray-200 space-y-2">
+            <div className="mt-3 pt-3 border-t border-gray-200">
               <p className="text-xs text-gray-500">Experience ID: {exp.id}</p>
               <p className="text-xs text-gray-500">Maven ID: {exp.maven_id}</p>
+              <p className="text-xs text-gray-500">Type: {exp.experience_type}</p>
             </div>
           </div>
         ))}

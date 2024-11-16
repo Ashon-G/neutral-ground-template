@@ -43,7 +43,7 @@ export const MavenAvailability = ({ availability }: MavenAvailabilityProps) => {
           </div>
         </div>
 
-        <div className="pt-3 border-t border-gray-200 space-y-2">
+        <div className="pt-3 border-t border-gray-200">
           <p className="text-xs text-gray-500">Availability ID: {availability.id}</p>
           <p className="text-xs text-gray-500">Maven ID: {availability.maven_id}</p>
           <p className="text-xs text-gray-500">Role Type: {availability.role_type}</p>

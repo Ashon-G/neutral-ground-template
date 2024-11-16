@@ -47,30 +47,27 @@ export const MavenEducation = ({ education }: MavenEducationProps) => {
                 <p className="text-gray-800">{education.minor}</p>
               </div>
             )}
-          </div>
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <p className="text-sm font-medium text-gray-600">Year of Study</p>
-            <p className="text-gray-800">{education.year_of_study}</p>
-          </div>
-          <div>
-            <p className="text-sm font-medium text-gray-600">Graduation Date</p>
-            <p className="text-gray-800">{format(new Date(education.graduation_date), 'MMMM yyyy')}</p>
-          </div>
-          {education.gpa !== null && (
             <div>
-              <p className="text-sm font-medium text-gray-600">GPA</p>
-              <p className="text-gray-800">{education.gpa.toFixed(2)}</p>
+              <p className="text-sm font-medium text-gray-600">Year of Study</p>
+              <p className="text-gray-800">{education.year_of_study}</p>
             </div>
-          )}
+            <div>
+              <p className="text-sm font-medium text-gray-600">Graduation Date</p>
+              <p className="text-gray-800">{format(new Date(education.graduation_date), 'MMMM yyyy')}</p>
+            </div>
+            {education.gpa !== null && (
+              <div>
+                <p className="text-sm font-medium text-gray-600">GPA</p>
+                <p className="text-gray-800">{education.gpa.toFixed(2)}</p>
+              </div>
+            )}
+          </div>
         </div>
 
-        <div className="pt-3 border-t border-gray-200 space-y-2 text-xs text-gray-500">
-          <p>Education ID: {education.id}</p>
-          <p>Maven ID: {education.maven_id}</p>
-          <p>University ID: {education.university_id}</p>
+        <div className="pt-3 border-t border-gray-200">
+          <p className="text-xs text-gray-500">Education ID: {education.id}</p>
+          <p className="text-xs text-gray-500">Maven ID: {education.maven_id}</p>
+          <p className="text-xs text-gray-500">University ID: {education.university_id}</p>
         </div>
       </div>
     </div>
