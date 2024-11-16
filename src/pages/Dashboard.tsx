@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { ImpersonateUser } from "@/components/admin/ImpersonateUser";
+import { InstallPrompt } from "@/components/pwa/InstallPrompt";
 import { Sidebar, SidebarBody, SidebarLink } from "@/components/dashboard/NewSidebar";
 import { ListTodo, MessageSquare, Wallet, User, Settings as SettingsIcon, Link as LinkIcon } from "lucide-react";
 import { useSidebar } from "@/components/dashboard/sidebar/SidebarContext";
@@ -14,6 +15,7 @@ const DashboardContent = () => {
   const userMetadataType = session?.user?.user_metadata?.user_type;
   const appMetadataType = session?.user?.app_metadata?.user_type;
   const isAdmin = userMetadataType === 'admin' || appMetadataType === 'admin';
+  const isFounder = userMetadataType === 'founder' || appMetadataType === 'founder';
 
   const navItems = [
     { label: "Tasks", href: "/dashboard/tasks", icon: <ListTodo className="h-5 w-5" /> },
@@ -60,6 +62,8 @@ const DashboardContent = () => {
           </div>
         </SidebarBody>
       </Sidebar>
+
+      <InstallPrompt />
 
       <motion.main 
         className="pt-24 pb-24 md:pb-20 md:ml-[300px] transition-all duration-300"
