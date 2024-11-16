@@ -31,18 +31,18 @@ export const Chat = () => {
       if (error) throw error;
       return data;
     },
+    enabled: !!session?.user.id,
   });
 
   const { data: availableUsers } = useAvailableUsers(userProfile, session?.user.id);
   const { data: messages, isLoading } = useMessages(selectedUser, session?.user.id);
   const sendMessage = useSendMessage(session?.user.id, selectedUser, userProfile);
 
-  // Show modal when profile is loaded and user is a founder
   useEffect(() => {
     if (!isProfileLoading && userProfile?.user_type === 'founder') {
       setShowFirstChatModal(true);
     }
-  }, [userProfile, isProfileLoading]);
+  }, [userProfile?.user_type, isProfileLoading]);
 
   if (isLoading || isProfileLoading) {
     return (
