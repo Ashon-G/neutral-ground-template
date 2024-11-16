@@ -2,6 +2,21 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { ChatUser } from "@/types/chat";
 
+type MessageUser = {
+  sender: {
+    id: string;
+    full_name: string | null;
+    user_type: string | null;
+    avatar_url: string | null;
+  } | null;
+  receiver: {
+    id: string;
+    full_name: string | null;
+    user_type: string | null;
+    avatar_url: string | null;
+  } | null;
+};
+
 export const useAvailableUsers = (userProfile: any, currentUserId: string | undefined) => {
   return useQuery<ChatUser[]>({
     queryKey: ["availableUsers", currentUserId],
@@ -23,9 +38,9 @@ export const useAvailableUsers = (userProfile: any, currentUserId: string | unde
       const uniqueUserIds = new Set<string>();
       const users: ChatUser[] = [];
 
-      messageUsers.forEach((msg) => {
-        const otherUser = msg.sender.id === currentUserId ? msg.receiver : msg.sender;
-        if (!uniqueUserIds.has(otherUser.id)) {
+      (messageUsers as MessageUser[]).forEach((msg) => {
+        const otherUser = msg.sender?.id === currentUserId ? msg.receiver : msg.sender;
+        if (otherUser && !uniqueUserIds.has(otherUser.id)) {
           uniqueUserIds.add(otherUser.id);
           users.push({
             id: otherUser.id,
