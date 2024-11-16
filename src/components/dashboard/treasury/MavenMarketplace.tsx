@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Profile, MavenSkillset } from "@/integrations/supabase/types/profile";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
-import { MavenGrid } from "./sections/MavenGrid";
+import { MavenCarousel } from "./MavenCarousel";
 
 export const MavenMarketplace = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -41,29 +41,29 @@ export const MavenMarketplace = () => {
 
   return (
     <div className="space-y-8 pb-12 md:space-y-12 md:pb-20">
-      <div className="bg-gradient-to-r from-blue-600 to-orange-500 -mx-4 md:-mx-8 px-4 md:px-8 py-8 md:py-20">
-        <div className="max-w-5xl mx-auto space-y-6 md:space-y-10">
+      <div className="bg-gradient-to-r from-blue-600 to-orange-500 -mx-4 md:-mx-8 px-4 md:px-8 py-12 md:py-24">
+        <div className="max-w-6xl mx-auto space-y-8 md:space-y-12">
           <div className="text-center space-y-4">
-            <h1 className="text-2xl md:text-5xl lg:text-6xl font-bold text-white">
+            <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white">
               Build & market your company with{" "}
               <span className="italic font-serif">student mavens</span>
             </h1>
           </div>
-          <div className="relative max-w-xl mx-auto px-4 md:px-0">
-            <Search className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 w-5 h-5 md:w-7 md:h-7 text-gray-400" />
+          <div className="relative max-w-3xl mx-auto">
+            <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-6 h-6 md:w-8 md:h-8 text-gray-400" />
             <Input
               placeholder="Search for any service..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-12 md:pl-16 py-4 md:py-8 text-base md:text-xl rounded-lg md:rounded-xl border-0 shadow-lg w-full"
+              className="pl-16 md:pl-20 py-6 md:py-8 text-lg md:text-xl rounded-xl md:rounded-2xl border-0 shadow-lg w-full"
             />
           </div>
         </div>
       </div>
 
-      <div className="space-y-12 md:space-y-20 max-w-[1600px] mx-auto px-4 sm:px-6 md:px-8">
+      <div className="space-y-16 md:space-y-24 max-w-[1600px] mx-auto px-4 sm:px-6 md:px-8">
         {Object.entries(groupedMavens).map(([skillset, mavens]) => (
-          <MavenGrid 
+          <MavenCarousel 
             key={skillset}
             title={`${skillset} Mavens`}
             mavens={mavens}
