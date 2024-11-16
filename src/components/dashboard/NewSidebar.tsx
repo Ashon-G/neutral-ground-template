@@ -1,56 +1,15 @@
 import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
-import React, { useState, createContext, useContext } from "react";
 import { AnimatePresence, motion, HTMLMotionProps } from "framer-motion";
 import { Menu, X } from "lucide-react";
-import { useAuth } from "@/components/auth/AuthProvider";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { SidebarProvider, useSidebar } from "./sidebar/SidebarContext";
+import { UserAvatar } from "./sidebar/UserAvatar";
 
 interface Links {
   label: string;
   href: string;
   icon: React.ReactNode;
 }
-
-interface SidebarContextProps {
-  open: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  animate: boolean;
-}
-
-const SidebarContext = createContext<SidebarContextProps | undefined>(undefined);
-
-export const useSidebar = () => {
-  const context = useContext(SidebarContext);
-  if (!context) {
-    throw new Error("useSidebar must be used within a SidebarProvider");
-  }
-  return context;
-};
-
-export const SidebarProvider = ({
-  children,
-  open: openProp,
-  setOpen: setOpenProp,
-  animate = true,
-}: {
-  children: React.ReactNode;
-  open?: boolean;
-  setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
-  animate?: boolean;
-}) => {
-  const [openState, setOpenState] = useState(false);
-  const open = openProp !== undefined ? openProp : openState;
-  const setOpen = setOpenProp !== undefined ? setOpenProp : setOpenState;
-
-  return (
-    <SidebarContext.Provider value={{ open, setOpen, animate }}>
-      {children}
-    </SidebarContext.Provider>
-  );
-};
 
 export const Sidebar = ({
   children,
@@ -79,32 +38,6 @@ export const SidebarBody = (props: HTMLMotionProps<"div">) => {
   );
 };
 
-const UserAvatar = () => {
-  const { session } = useAuth();
-  const { data: profile } = useQuery({
-    queryKey: ["profile"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("id", session?.user.id)
-        .single();
-
-      if (error) throw error;
-      return data;
-    },
-  });
-
-  return (
-    <Avatar className="h-8 w-8">
-      <AvatarImage src={profile?.avatar_url || ""} />
-      <AvatarFallback>
-        {profile?.full_name?.charAt(0) || session?.user.email?.charAt(0) || "?"}
-      </AvatarFallback>
-    </Avatar>
-  );
-};
-
 export const DesktopSidebar = ({
   className,
   children,
@@ -125,19 +58,7 @@ export const DesktopSidebar = ({
       {...props}
     >
       <div className="flex flex-col gap-2">{children}</div>
-      <div className="flex items-center gap-3">
-        <UserAvatar />
-        <motion.span
-          initial={false}
-          animate={{
-            opacity: animate ? (open ? 1 : 0) : 1,
-            display: animate ? (open ? "block" : "none") : "block",
-          }}
-          className="text-sm text-neutral-700 dark:text-neutral-200"
-        >
-          Profile
-        </motion.span>
-      </div>
+      <UserAvatar />
     </motion.div>
   );
 };
@@ -185,12 +106,7 @@ export const MobileSidebar = ({
               </div>
               {children}
             </div>
-            <div className="flex items-center gap-3">
-              <UserAvatar />
-              <span className="text-sm text-neutral-700 dark:text-neutral-200">
-                Profile
-              </span>
-            </div>
+            <UserAvatar />
           </motion.div>
         )}
       </AnimatePresence>
