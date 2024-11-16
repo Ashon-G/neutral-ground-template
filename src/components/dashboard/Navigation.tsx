@@ -19,10 +19,8 @@ export const Navigation = () => {
       <NavLink
         to="tasks"
         className={({ isActive }) =>
-          `flex flex-col items-center p-2 rounded-lg transition-all duration-200 ${
-            isActive 
-              ? "bg-gradient-to-br from-blue-500 via-blue-600 to-blue-700 text-white shadow-lg" 
-              : "text-gray-600 hover:bg-gray-100"
+          `flex flex-col items-center p-2 rounded-lg ${
+            isActive ? "bg-blue-500 text-white" : "text-gray-600 hover:bg-gray-100"
           }`
         }
       >
@@ -33,10 +31,8 @@ export const Navigation = () => {
       <NavLink
         to="chat"
         className={({ isActive }) =>
-          `flex flex-col items-center p-2 rounded-lg transition-all duration-200 ${
-            isActive 
-              ? "bg-gradient-to-br from-blue-500 via-blue-600 to-blue-700 text-white shadow-lg" 
-              : "text-gray-600 hover:bg-gray-100"
+          `flex flex-col items-center p-2 rounded-lg ${
+            isActive ? "bg-blue-500 text-white" : "text-gray-600 hover:bg-gray-100"
           }`
         }
       >
@@ -47,10 +43,8 @@ export const Navigation = () => {
       <NavLink
         to="marketplace"
         className={({ isActive }) =>
-          `flex flex-col items-center p-2 rounded-lg transition-all duration-200 ${
-            isActive 
-              ? "bg-gradient-to-br from-blue-500 via-blue-600 to-blue-700 text-white shadow-lg" 
-              : "text-gray-600 hover:bg-gray-100"
+          `flex flex-col items-center p-2 rounded-lg ${
+            isActive ? "bg-blue-500 text-white" : "text-gray-600 hover:bg-gray-100"
           }`
         }
       >
@@ -61,10 +55,8 @@ export const Navigation = () => {
       <NavLink
         to="integrations"
         className={({ isActive }) =>
-          `flex flex-col items-center p-2 rounded-lg transition-all duration-200 ${
-            isActive 
-              ? "bg-gradient-to-br from-blue-500 via-blue-600 to-blue-700 text-white shadow-lg" 
-              : "text-gray-600 hover:bg-gray-100"
+          `flex flex-col items-center p-2 rounded-lg ${
+            isActive ? "bg-blue-500 text-white" : "text-gray-600 hover:bg-gray-100"
           }`
         }
       >
@@ -75,10 +67,8 @@ export const Navigation = () => {
       <NavLink
         to="profile"
         className={({ isActive }) =>
-          `flex flex-col items-center p-2 rounded-lg transition-all duration-200 ${
-            isActive 
-              ? "bg-gradient-to-br from-blue-500 via-blue-600 to-blue-700 text-white shadow-lg" 
-              : "text-gray-600 hover:bg-gray-100"
+          `flex flex-col items-center p-2 rounded-lg ${
+            isActive ? "bg-blue-500 text-white" : "text-gray-600 hover:bg-gray-100"
           }`
         }
       >
@@ -90,10 +80,8 @@ export const Navigation = () => {
         <NavLink
           to="admin"
           className={({ isActive }) =>
-            `flex flex-col items-center p-2 rounded-lg transition-all duration-200 ${
-              isActive 
-                ? "bg-gradient-to-br from-blue-500 via-blue-600 to-blue-700 text-white shadow-lg" 
-                : "text-gray-600 hover:bg-gray-100"
+            `flex flex-col items-center p-2 rounded-lg ${
+              isActive ? "bg-blue-500 text-white" : "text-gray-600 hover:bg-gray-100"
             }`
           }
         >
