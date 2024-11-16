@@ -39,16 +39,10 @@ export const Chat = () => {
   const sendMessage = useSendMessage(session?.user.id, selectedUser, userProfile);
 
   useEffect(() => {
-    const hasSeenModal = localStorage.getItem('hasSeenChatModal');
-    if (!isProfileLoading && userProfile?.user_type === 'founder' && !hasSeenModal) {
+    if (!isProfileLoading && userProfile?.user_type === 'founder') {
       setShowFirstChatModal(true);
     }
   }, [userProfile?.user_type, isProfileLoading]);
-
-  const handleCloseModal = () => {
-    localStorage.setItem('hasSeenChatModal', 'true');
-    setShowFirstChatModal(false);
-  };
 
   if (isLoading || isProfileLoading) {
     return (
@@ -103,7 +97,7 @@ export const Chat = () => {
       </div>
       <FirstChatModal 
         open={showFirstChatModal} 
-        onClose={handleCloseModal} 
+        onClose={() => setShowFirstChatModal(false)} 
       />
     </div>
   );
