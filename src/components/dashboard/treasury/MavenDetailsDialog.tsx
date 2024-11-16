@@ -25,8 +25,7 @@ export const MavenDetailsDialog = ({ maven, open, onOpenChange }: MavenDetailsDi
       const { data, error } = await supabase
         .from("maven_education")
         .select("*, universities(name)")
-        .eq("maven_id", maven.id)
-        .single();
+        .eq("maven_id", maven.id);
       
       if (error) throw error;
       return data;
@@ -116,9 +115,9 @@ export const MavenDetailsDialog = ({ maven, open, onOpenChange }: MavenDetailsDi
                 </>
               )}
 
-              {education && (
+              {education && education.length > 0 && (
                 <>
-                  <MavenEducation education={education} />
+                  <MavenEducation education={education[0]} />
                   <Separator />
                 </>
               )}
