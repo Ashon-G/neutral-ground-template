@@ -19,7 +19,7 @@ export const Chat = () => {
   const [showFirstChatModal, setShowFirstChatModal] = useState(false);
   const { session } = useAuth();
 
-  const { data: userProfile } = useQuery({
+  const { data: userProfile, isLoading: isProfileLoading } = useQuery({
     queryKey: ["userProfile"],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -37,14 +37,14 @@ export const Chat = () => {
   const { data: messages, isLoading } = useMessages(selectedUser, session?.user.id);
   const sendMessage = useSendMessage(session?.user.id, selectedUser, userProfile);
 
-  // Reset modal state and show it when component mounts for founders
+  // Show modal when profile is loaded and user is a founder
   useEffect(() => {
-    if (userProfile?.user_type === 'founder') {
+    if (!isProfileLoading && userProfile?.user_type === 'founder') {
       setShowFirstChatModal(true);
     }
-  }, []);
+  }, [userProfile, isProfileLoading]);
 
-  if (isLoading) {
+  if (isLoading || isProfileLoading) {
     return (
       <div className="flex justify-center items-center h-64">
         <Loader2 className="h-8 w-8 animate-spin" />
