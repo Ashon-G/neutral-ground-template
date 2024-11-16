@@ -2,107 +2,42 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { ChatUser } from "@/types/chat";
 
-export const useAvailableUsers = (userProfile: any, sessionUserId: string | undefined) => {
+export const useAvailableUsers = (userProfile: any, currentUserId: string | undefined) => {
   return useQuery<ChatUser[]>({
-    queryKey: ["availableUsers", sessionUserId],
+    queryKey: ["availableUsers", currentUserId],
     queryFn: async () => {
-      if (!userProfile?.user_type || !sessionUserId) return [];
+      if (!userProfile?.user_type || !currentUserId) return [];
 
-      if (userProfile.user_type === 'admin') {
-        // Admins can see all founders and mavens
-        const { data: users } = await supabase
-          .from("profiles")
-          .select("id, full_name, user_type, avatar_url")
-          .in("user_type", ['founder', 'maven'])
-          .neq("id", sessionUserId);
-        return users || [];
-      } else if (userProfile.user_type === "founder") {
-        // Founders can only see mavens they've chatted with
-        const { data: conversations } = await supabase
-          .from("messages")
-          .select(`
-            profiles!messages_receiver_id_fkey(
-              id,
-              full_name,
-              user_type,
-              avatar_url
-            )
-          `)
-          .eq("sender_id", sessionUserId)
-          .eq("profiles.user_type", "maven")
-          .not("profiles.id", "is", null);
+      // Get unique users from message history
+      const { data: messageUsers } = await supabase
+        .from("messages")
+        .select(`
+          sender:sender_id(id, full_name, user_type, avatar_url),
+          receiver:receiver_id(id, full_name, user_type, avatar_url)
+        `)
+        .or(`sender_id.eq.${currentUserId},receiver_id.eq.${currentUserId}`);
 
-        // Also get messages where the founder is the receiver
-        const { data: reverseConversations } = await supabase
-          .from("messages")
-          .select(`
-            profiles!messages_sender_id_fkey(
-              id,
-              full_name,
-              user_type,
-              avatar_url
-            )
-          `)
-          .eq("receiver_id", sessionUserId)
-          .eq("profiles.user_type", "maven")
-          .not("profiles.id", "is", null);
+      if (!messageUsers) return [];
 
-        // Combine and deduplicate users
-        const allUsers = [
-          ...(conversations?.map(c => c.profiles) || []),
-          ...(reverseConversations?.map(c => c.profiles) || [])
-        ];
+      // Create a Set to store unique user IDs that the current user has chatted with
+      const uniqueUserIds = new Set<string>();
+      const users: ChatUser[] = [];
 
-        const uniqueUsers = Array.from(
-          new Map(allUsers.map(user => [user.id, user])).values()
-        );
+      messageUsers.forEach((msg) => {
+        const otherUser = msg.sender.id === currentUserId ? msg.receiver : msg.sender;
+        if (!uniqueUserIds.has(otherUser.id)) {
+          uniqueUserIds.add(otherUser.id);
+          users.push({
+            id: otherUser.id,
+            full_name: otherUser.full_name,
+            user_type: otherUser.user_type,
+            avatar_url: otherUser.avatar_url,
+          });
+        }
+      });
 
-        return uniqueUsers;
-      } else if (userProfile.user_type === "maven") {
-        // Mavens can only see founders they've chatted with
-        const { data: conversations } = await supabase
-          .from("messages")
-          .select(`
-            profiles!messages_receiver_id_fkey(
-              id,
-              full_name,
-              user_type,
-              avatar_url
-            )
-          `)
-          .eq("sender_id", sessionUserId)
-          .eq("profiles.user_type", "founder")
-          .not("profiles.id", "is", null);
-
-        // Also get messages where the maven is the receiver
-        const { data: reverseConversations } = await supabase
-          .from("messages")
-          .select(`
-            profiles!messages_sender_id_fkey(
-              id,
-              full_name,
-              user_type,
-              avatar_url
-            )
-          `)
-          .eq("receiver_id", sessionUserId)
-          .eq("profiles.user_type", "founder")
-          .not("profiles.id", "is", null);
-
-        // Combine and deduplicate users
-        const allUsers = [
-          ...(conversations?.map(c => c.profiles) || []),
-          ...(reverseConversations?.map(c => c.profiles) || [])
-        ];
-
-        const uniqueUsers = Array.from(
-          new Map(allUsers.map(user => [user.id, user])).values()
-        );
-
-        return uniqueUsers;
-      }
-      return [];
+      return users;
     },
-    enabled: !!userProfile && !!sessionUserId,
+    enabled: !!userProfile && !!currentUserId,
   });
 };
