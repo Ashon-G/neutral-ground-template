@@ -7,7 +7,8 @@ import { GenerateTasksButton } from "./GenerateTasksButton";
 import { Loader2 } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { ProjectBasicFields } from "./form/ProjectBasicFields";
-import { ProjectGoals } from "./form/ProjectGoals";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 const STORAGE_KEY = "project_form_data";
 
@@ -114,12 +115,32 @@ export const ProjectForm = () => {
         onChange={handleFieldChange}
       />
 
-      <ProjectGoals
-        goals={formData.goals}
-        onGoalChange={handleGoalChange}
-        onAddGoal={addGoal}
-        onRemoveGoal={removeGoal}
-      />
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <Label>Project Goals</Label>
+          <Button type="button" variant="outline" onClick={addGoal}>
+            Add Goal
+          </Button>
+        </div>
+        {formData.goals.map((goal, index) => (
+          <div key={index} className="flex gap-2">
+            <Input
+              value={goal}
+              onChange={(e) => handleGoalChange(index, e.target.value)}
+              placeholder={`Goal ${index + 1}`}
+            />
+            {formData.goals.length > 1 && (
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => removeGoal(index)}
+              >
+                Remove
+              </Button>
+            )}
+          </div>
+        ))}
+      </div>
 
       <div className="flex gap-4">
         <Button type="submit" disabled={isSubmitting}>

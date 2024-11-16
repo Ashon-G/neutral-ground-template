@@ -2,12 +2,12 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { TaskDialogHeader } from "./TaskDialogHeader";
 import { TaskDialogContent } from "./TaskDialogContent";
-import { TaskDialogFooter } from "./TaskDialogFooter";
 import { RatingDialog } from "./RatingDialog";
 import { MobileFullscreenDialog } from "./MobileFullscreenDialog";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { useTaskDialog } from "./hooks/useTaskDialog";
 import { Task } from "@/integrations/supabase/types/task";
+import { Button } from "@/components/ui/button";
 
 interface TaskDialogProps {
   task: Task;
@@ -62,26 +62,47 @@ export const TaskDialog = ({ task, open, onOpenChange }: TaskDialogProps) => {
           onEndDateChange={setEditedEndDate}
         />
       </div>
-      <TaskDialogFooter
-        canEdit={canEdit}
-        isEditing={isEditing}
-        onEdit={() => {
-          setEditedTitle(task.title);
-          setEditedDescription(task.description || "");
-          setEditedStartDate(task.start_date);
-          setEditedEndDate(task.end_date);
-          setIsEditing(true);
-        }}
-        onCancel={() => {
-          setIsEditing(false);
-          setEditedTitle(task.title);
-          setEditedDescription(task.description || "");
-          setEditedStartDate(task.start_date);
-          setEditedEndDate(task.end_date);
-        }}
-        onSave={handleSave}
-        onDelete={() => deleteTask.mutate()}
-      />
+      <div className="flex justify-end gap-2 pt-4 border-t">
+        {canEdit && (
+          <>
+            {isEditing ? (
+              <>
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setIsEditing(false);
+                    setEditedTitle(task.title);
+                    setEditedDescription(task.description || "");
+                    setEditedStartDate(task.start_date);
+                    setEditedEndDate(task.end_date);
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button onClick={handleSave}>Save</Button>
+              </>
+            ) : (
+              <>
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setEditedTitle(task.title);
+                    setEditedDescription(task.description || "");
+                    setEditedStartDate(task.start_date);
+                    setEditedEndDate(task.end_date);
+                    setIsEditing(true);
+                  }}
+                >
+                  Edit
+                </Button>
+                <Button variant="destructive" onClick={() => deleteTask.mutate()}>
+                  Delete
+                </Button>
+              </>
+            )}
+          </>
+        )}
+      </div>
       {task.assignee?.id && (
         <RatingDialog
           open={showRating}
