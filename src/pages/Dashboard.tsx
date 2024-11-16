@@ -6,8 +6,9 @@ import { Sidebar, SidebarBody, SidebarLink } from "@/components/dashboard/NewSid
 import { ListTodo, MessageSquare, Wallet, User, Settings as SettingsIcon, Link as LinkIcon } from "lucide-react";
 import { useSidebar } from "@/components/dashboard/sidebar/SidebarContext";
 import { motion } from "framer-motion";
+import { SidebarProvider } from "@/components/dashboard/sidebar/SidebarContext";
 
-const Dashboard = () => {
+const DashboardContent = () => {
   const { session } = useAuth();
   const { open, animate } = useSidebar();
   const userMetadataType = session?.user?.user_metadata?.user_type;
@@ -70,6 +71,14 @@ const Dashboard = () => {
         </div>
       </motion.div>
     </div>
+  );
+};
+
+const Dashboard = () => {
+  return (
+    <SidebarProvider>
+      <DashboardContent />
+    </SidebarProvider>
   );
 };
 
