@@ -31,15 +31,18 @@ export const MavenExperience = ({ experience }: MavenExperienceProps) => {
         {experience.map((exp) => (
           <div key={exp.id} className="bg-secondary/10 rounded-lg p-4">
             <div className="flex justify-between items-start mb-2">
-              <div>
-                <p className="font-medium text-gray-800 text-lg">{exp.job_title}</p>
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <p className="font-medium text-gray-800 text-lg">{exp.job_title}</p>
+                  <Badge variant="secondary">{exp.experience_type}</Badge>
+                </div>
                 <p className="text-gray-700">{exp.company_name}</p>
                 <p className="text-sm text-gray-600">
                   {format(new Date(exp.start_date), 'MMM yyyy')} - 
                   {exp.end_date ? format(new Date(exp.end_date), ' MMM yyyy') : ' Present'}
                 </p>
               </div>
-              <Badge variant="secondary">{exp.experience_type}</Badge>
+              <span className="text-xs text-gray-500">ID: {exp.id}</span>
             </div>
             
             {exp.responsibilities && (
@@ -55,6 +58,10 @@ export const MavenExperience = ({ experience }: MavenExperienceProps) => {
                 <p className="text-sm text-gray-700 whitespace-pre-wrap">{exp.achievements}</p>
               </div>
             )}
+
+            <div className="mt-3 pt-3 border-t border-gray-200">
+              <p className="text-xs text-gray-500">Maven ID: {exp.maven_id}</p>
+            </div>
           </div>
         ))}
       </div>

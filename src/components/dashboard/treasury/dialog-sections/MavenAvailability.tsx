@@ -22,19 +22,30 @@ export const MavenAvailability = ({ availability }: MavenAvailabilityProps) => {
         Availability
       </h3>
       <div className="bg-secondary/10 rounded-lg p-4 space-y-3">
-        <div className="flex items-center gap-2">
-          <MapPin className="h-4 w-4 text-gray-600" />
-          <span className="text-gray-700">{availability.location_preference}</span>
+        <div className="flex justify-between items-start">
+          <div className="space-y-2">
+            <div className="flex items-center gap-2">
+              <MapPin className="h-4 w-4 text-gray-600" />
+              <span className="text-gray-700">{availability.location_preference}</span>
+            </div>
+            <p className="font-medium text-gray-800">{availability.role_type}</p>
+          </div>
+          <span className="text-xs text-gray-500">ID: {availability.id}</span>
         </div>
         
-        <div className="space-y-1">
-          <p className="font-medium text-gray-800">{availability.role_type}</p>
-          <p className="text-sm text-gray-700">
-            Available from {format(new Date(availability.start_date), 'MMMM dd, yyyy')}
-          </p>
-          <p className="text-sm text-gray-700">
-            Until {format(new Date(availability.end_date), 'MMMM dd, yyyy')}
-          </p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <p className="text-sm font-medium text-gray-600">Start Date</p>
+            <p className="text-gray-800">{format(new Date(availability.start_date), 'MMMM dd, yyyy')}</p>
+          </div>
+          <div>
+            <p className="text-sm font-medium text-gray-600">End Date</p>
+            <p className="text-gray-800">{format(new Date(availability.end_date), 'MMMM dd, yyyy')}</p>
+          </div>
+        </div>
+
+        <div className="pt-2 border-t border-gray-200">
+          <p className="text-xs text-gray-500">Maven ID: {availability.maven_id}</p>
         </div>
       </div>
     </div>

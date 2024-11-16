@@ -19,9 +19,9 @@ export const MavenSkills = ({ skills }: MavenSkillsProps) => {
     if (!acc[skill.skill_type]) {
       acc[skill.skill_type] = [];
     }
-    acc[skill.skill_type].push(skill.skill_name);
+    acc[skill.skill_type].push(skill);
     return acc;
-  }, {} as Record<string, string[]>);
+  }, {} as Record<string, Skill[]>);
 
   return (
     <div className="space-y-2">
@@ -30,14 +30,21 @@ export const MavenSkills = ({ skills }: MavenSkillsProps) => {
         Skills
       </h3>
       <div className="space-y-4">
-        {Object.entries(groupedSkills).map(([type, skillNames]) => (
+        {Object.entries(groupedSkills).map(([type, skills]) => (
           <div key={type} className="bg-secondary/10 rounded-lg p-4">
             <p className="text-sm font-medium mb-2 text-gray-800">{type}</p>
             <div className="flex flex-wrap gap-2">
-              {skillNames.map((name) => (
-                <Badge key={name} variant="secondary">
-                  {name}
-                </Badge>
+              {skills.map((skill) => (
+                <div key={skill.id} className="group relative">
+                  <Badge variant="secondary">
+                    {skill.skill_name}
+                  </Badge>
+                  <div className="hidden group-hover:block absolute bottom-full left-0 mb-2 bg-gray-800 text-white text-xs rounded p-1 whitespace-nowrap">
+                    ID: {skill.id}
+                    <br />
+                    Maven ID: {skill.maven_id}
+                  </div>
+                </div>
               ))}
             </div>
           </div>
