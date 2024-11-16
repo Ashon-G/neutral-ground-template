@@ -123,18 +123,16 @@ export const MavenDetailsDialog = ({ maven, open, onOpenChange }: MavenDetailsDi
               <MavenAvailability availability={availability} />
               <MavenDocuments documents={documents} />
 
-              {maven.phone_number && (
-                <div className="mt-4 pt-4 border-t">
+              <div className="mt-4 pt-4 border-t">
+                <p className="text-sm text-gray-600">
+                  Contact: {maven.phone_number}
+                </p>
+                {maven.location && (
                   <p className="text-sm text-gray-600">
-                    Contact: {maven.phone_number}
+                    Location: {maven.location}
                   </p>
-                  {maven.location && (
-                    <p className="text-sm text-gray-600">
-                      Location: {maven.location}
-                    </p>
-                  )}
-                </div>
-              )}
+                )}
+              </div>
             </div>
           )}
         </ScrollArea>
