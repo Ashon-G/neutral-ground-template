@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import { UserCircle, LogOut, Settings, CreditCard, Wand2, UserCircle2 } from "lucide-react";
+import { UserCircle, LogOut, Settings, CreditCard, UserCircle2 } from "lucide-react";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { supabase } from "@/integrations/supabase/client";
 import { ImpersonateUser } from "@/components/admin/ImpersonateUser";
@@ -15,10 +15,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useQuery } from "@tanstack/react-query";
 import { NavLink } from "react-router-dom";
 import AnimatedNavigation from "@/components/dashboard/AnimatedNavigation";
-import { Button } from "@/components/ui/button";
-import { JiraIntegrationDialog } from "@/components/dashboard/jira/JiraIntegrationDialog";
-import { GenerateTasksDialog } from "@/components/dashboard/kanban/GenerateTasksDialog";
-import { useState } from "react";
 
 const Dashboard = () => {
   const { session } = useAuth();
@@ -26,8 +22,6 @@ const Dashboard = () => {
   const appMetadataType = session?.user?.app_metadata?.user_type;
   const isAdmin = userMetadataType === 'admin' || appMetadataType === 'admin';
   const isFounder = userMetadataType === 'founder' || appMetadataType === 'founder';
-  const [isJiraOpen, setIsJiraOpen] = useState(false);
-  const [isGenerateOpen, setIsGenerateOpen] = useState(false);
 
   const { data: profile } = useQuery({
     queryKey: ["profile"],
@@ -41,21 +35,6 @@ const Dashboard = () => {
       if (error) throw error;
       return data;
     },
-  });
-
-  const { data: jiraIntegration } = useQuery({
-    queryKey: ["jiraIntegration", session?.user.id],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("jira_integrations")
-        .select("*")
-        .eq("user_id", session?.user.id)
-        .maybeSingle();
-
-      if (error) throw error;
-      return data;
-    },
-    enabled: !!session?.user.id,
   });
 
   const handleSignOut = async () => {
@@ -120,27 +99,6 @@ const Dashboard = () => {
                   <ImpersonateUser />
                 </div>
               )}
-
-              {profile?.user_type === "founder" && (
-                <div className="flex items-center gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setIsJiraOpen(true)}
-                  >
-                    <Settings className="h-4 w-4 mr-2" />
-                    {jiraIntegration ? "Update Jira Settings" : "Connect to Jira"}
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setIsGenerateOpen(true)}
-                  >
-                    <Wand2 className="h-4 w-4 mr-2" />
-                    Generate Tasks
-                  </Button>
-                </div>
-              )}
             </div>
           </div>
         </div>
@@ -152,20 +110,6 @@ const Dashboard = () => {
       <div className="pt-24 pb-24 md:pb-20">
         <Outlet />
       </div>
-
-      {profile?.user_type === "founder" && (
-        <>
-          <JiraIntegrationDialog
-            open={isJiraOpen}
-            onOpenChange={setIsJiraOpen}
-          />
-          <GenerateTasksDialog
-            open={isGenerateOpen}
-            onOpenChange={setIsGenerateOpen}
-            userId={session?.user.id}
-          />
-        </>
-      )}
     </div>
   );
 };
