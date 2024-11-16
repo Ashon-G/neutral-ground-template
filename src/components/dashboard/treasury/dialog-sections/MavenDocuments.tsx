@@ -1,7 +1,13 @@
 import { FileText } from "lucide-react";
 
+interface Document {
+  id: string;
+  document_type: string;
+  document_url: string;
+}
+
 interface MavenDocumentsProps {
-  documents: any[];
+  documents: Document[] | null;
 }
 
 export const MavenDocuments = ({ documents }: MavenDocumentsProps) => {

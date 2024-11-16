@@ -2,7 +2,13 @@ import { Calendar, MapPin } from "lucide-react";
 import { format } from "date-fns";
 
 interface MavenAvailabilityProps {
-  availability: any;
+  availability: {
+    id: string;
+    start_date: string;
+    end_date: string;
+    role_type: string;
+    location_preference: string;
+  };
 }
 
 export const MavenAvailability = ({ availability }: MavenAvailabilityProps) => {

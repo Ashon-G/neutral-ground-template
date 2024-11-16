@@ -2,6 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { Lightbulb } from "lucide-react";
 
 interface Skill {
+  id: string;
   skill_type: string;
   skill_name: string;
 }
