@@ -65,8 +65,9 @@ const DashboardContent = () => {
         className="pt-24 pb-24 md:pb-20"
         animate={{
           marginLeft: animate ? (open ? "300px" : "60px") : "300px",
-          transition: { duration: 0.3 }
+          width: animate ? (open ? "calc(100% - 300px)" : "calc(100% - 60px)") : "calc(100% - 300px)",
         }}
+        transition={{ duration: 0.3, ease: "easeInOut" }}
       >
         <div className="px-4 md:px-8">
           <Outlet />
