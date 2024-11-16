@@ -1,14 +1,15 @@
 import { Outlet } from "react-router-dom";
-import { UserCircle, LogOut, Settings, CreditCard, UserCircle2 } from "lucide-react";
 import { useAuth } from "@/components/auth/AuthProvider";
-import { supabase } from "@/integrations/supabase/client";
 import { ImpersonateUser } from "@/components/admin/ImpersonateUser";
 import { InstallPrompt } from "@/components/pwa/InstallPrompt";
 import { Sidebar, SidebarBody, SidebarLink } from "@/components/dashboard/NewSidebar";
 import { ListTodo, MessageSquare, Wallet, User, Settings as SettingsIcon, Link as LinkIcon } from "lucide-react";
+import { useSidebar } from "@/components/dashboard/sidebar/SidebarContext";
+import { motion } from "framer-motion";
 
 const Dashboard = () => {
   const { session } = useAuth();
+  const { open, animate } = useSidebar();
   const userMetadataType = session?.user?.user_metadata?.user_type;
   const appMetadataType = session?.user?.app_metadata?.user_type;
   const isAdmin = userMetadataType === 'admin' || appMetadataType === 'admin';
@@ -57,9 +58,17 @@ const Dashboard = () => {
 
       <InstallPrompt />
 
-      <div className="pt-24 pb-24 md:pb-20 md:pl-[60px]">
-        <Outlet />
-      </div>
+      <motion.div 
+        className="pt-24 pb-24 md:pb-20"
+        animate={{
+          marginLeft: animate ? (open ? "300px" : "60px") : "300px",
+          transition: { duration: 0.3 }
+        }}
+      >
+        <div className="px-4 md:px-8">
+          <Outlet />
+        </div>
+      </motion.div>
     </div>
   );
 };

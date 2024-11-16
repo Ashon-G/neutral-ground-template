@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
-import { AnimatePresence, motion, HTMLMotionProps } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { SidebarProvider, useSidebar } from "./sidebar/SidebarContext";
 import { UserAvatar } from "./sidebar/UserAvatar";
@@ -29,11 +29,17 @@ export const Sidebar = ({
   );
 };
 
-export const SidebarBody = (props: HTMLMotionProps<"div">) => {
+export const SidebarBody = ({
+  className,
+  children,
+}: {
+  className?: string;
+  children: React.ReactNode;
+}) => {
   return (
     <>
-      <DesktopSidebar {...props} />
-      <MobileSidebar {...props} />
+      <DesktopSidebar className={className}>{children}</DesktopSidebar>
+      <MobileSidebar className={className}>{children}</MobileSidebar>
     </>
   );
 };
@@ -41,8 +47,10 @@ export const SidebarBody = (props: HTMLMotionProps<"div">) => {
 export const DesktopSidebar = ({
   className,
   children,
-  ...props
-}: HTMLMotionProps<"div">) => {
+}: {
+  className?: string;
+  children: React.ReactNode;
+}) => {
   const { open, setOpen, animate } = useSidebar();
   return (
     <motion.div
@@ -55,10 +63,8 @@ export const DesktopSidebar = ({
       }}
       onMouseEnter={() => setOpen(true)}
       onMouseLeave={() => setOpen(false)}
-      {...props}
     >
-      <div className="flex flex-col gap-2">{children}</div>
-      <UserAvatar />
+      {children}
     </motion.div>
   );
 };
@@ -66,8 +72,10 @@ export const DesktopSidebar = ({
 export const MobileSidebar = ({
   className,
   children,
-  ...props
-}: HTMLMotionProps<"div">) => {
+}: {
+  className?: string;
+  children: React.ReactNode;
+}) => {
   const { open, setOpen } = useSidebar();
   return (
     <div
@@ -95,7 +103,6 @@ export const MobileSidebar = ({
               "fixed h-full w-full inset-0 bg-white dark:bg-neutral-900 p-10 z-[100] flex flex-col justify-between",
               className
             )}
-            {...props}
           >
             <div>
               <div
