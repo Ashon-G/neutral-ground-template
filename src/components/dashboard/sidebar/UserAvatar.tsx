@@ -4,6 +4,8 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { NavLink } from "react-router-dom";
 import { UserCircle, LogOut, CreditCard, UserCircle2 } from "lucide-react";
+import { useSidebar } from "@/components/dashboard/sidebar/SidebarContext";
+import { motion } from "framer-motion";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,6 +16,7 @@ import {
 
 export const UserAvatar = () => {
   const { session } = useAuth();
+  const { open, animate } = useSidebar();
   const isFounder = session?.user?.user_metadata?.user_type === 'founder';
   
   const { data: profile } = useQuery({
@@ -45,9 +48,16 @@ export const UserAvatar = () => {
               {profile?.full_name?.charAt(0) || session?.user.email?.charAt(0) || "?"}
             </AvatarFallback>
           </Avatar>
-          <span className="text-sm text-neutral-700 dark:text-neutral-200">
+          <motion.span
+            initial={false}
+            animate={{
+              opacity: animate ? (open ? 1 : 0) : 1,
+              display: animate ? (open ? "block" : "none") : "block",
+            }}
+            className="text-sm text-neutral-700 dark:text-neutral-200"
+          >
             {profile?.full_name || session?.user.email}
-          </span>
+          </motion.span>
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" className="w-56 bg-white border border-gray-200 shadow-lg">
