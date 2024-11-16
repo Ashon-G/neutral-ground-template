@@ -3,6 +3,10 @@ import { Link } from "react-router-dom";
 import React, { useState, createContext, useContext } from "react";
 import { AnimatePresence, motion, HTMLMotionProps } from "framer-motion";
 import { Menu, X } from "lucide-react";
+import { useAuth } from "@/components/auth/AuthProvider";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 interface Links {
   label: string;
@@ -75,6 +79,32 @@ export const SidebarBody = (props: HTMLMotionProps<"div">) => {
   );
 };
 
+const UserAvatar = () => {
+  const { session } = useAuth();
+  const { data: profile } = useQuery({
+    queryKey: ["profile"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", session?.user.id)
+        .single();
+
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  return (
+    <Avatar className="h-8 w-8">
+      <AvatarImage src={profile?.avatar_url || ""} />
+      <AvatarFallback>
+        {profile?.full_name?.charAt(0) || session?.user.email?.charAt(0) || "?"}
+      </AvatarFallback>
+    </Avatar>
+  );
+};
+
 export const DesktopSidebar = ({
   className,
   children,
@@ -84,7 +114,7 @@ export const DesktopSidebar = ({
   return (
     <motion.div
       className={cn(
-        "fixed left-0 h-full px-4 py-4 hidden md:flex md:flex-col bg-neutral-100 dark:bg-neutral-800 w-[300px] flex-shrink-0 z-50",
+        "fixed left-0 h-full px-4 py-4 hidden md:flex md:flex-col bg-neutral-100 dark:bg-neutral-800 w-[300px] flex-shrink-0 z-50 justify-between",
         className
       )}
       animate={{
@@ -94,7 +124,20 @@ export const DesktopSidebar = ({
       onMouseLeave={() => setOpen(false)}
       {...props}
     >
-      {children}
+      <div className="flex flex-col gap-2">{children}</div>
+      <div className="flex items-center gap-3">
+        <UserAvatar />
+        <motion.span
+          initial={false}
+          animate={{
+            opacity: animate ? (open ? 1 : 0) : 1,
+            display: animate ? (open ? "block" : "none") : "block",
+          }}
+          className="text-sm text-neutral-700 dark:text-neutral-200"
+        >
+          Profile
+        </motion.span>
+      </div>
     </motion.div>
   );
 };
@@ -133,13 +176,21 @@ export const MobileSidebar = ({
             )}
             {...props}
           >
-            <div
-              className="absolute right-10 top-10 z-50 text-neutral-800 dark:text-neutral-200"
-              onClick={() => setOpen(!open)}
-            >
-              <X />
+            <div>
+              <div
+                className="absolute right-10 top-10 z-50 text-neutral-800 dark:text-neutral-200"
+                onClick={() => setOpen(!open)}
+              >
+                <X />
+              </div>
+              {children}
             </div>
-            {children}
+            <div className="flex items-center gap-3">
+              <UserAvatar />
+              <span className="text-sm text-neutral-700 dark:text-neutral-200">
+                Profile
+              </span>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
@@ -169,8 +220,8 @@ export const SidebarLink = ({
       <motion.span
         initial={false}
         animate={{
-          display: animate ? (open ? "inline-block" : "none") : "inline-block",
           opacity: animate ? (open ? 1 : 0) : 1,
+          display: animate ? (open ? "block" : "none") : "block",
         }}
         className="text-neutral-700 dark:text-neutral-200 text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre"
       >
