@@ -20,11 +20,11 @@ export const Navigation = () => {
         to="tasks"
         className={({ isActive }) =>
           `flex flex-col items-center p-2 rounded-lg hover:bg-gray-100 ${
-            isActive ? "text-primary" : "text-gray-600"
+            isActive ? "text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600" : "text-gray-600"
           }`
         }
       >
-        <ListTodo className="h-5 w-5" />
+        <ListTodo className="h-5 w-5" style={{ stroke: "currentColor" }} />
         <span className="text-xs">Tasks</span>
       </NavLink>
 
@@ -32,11 +32,11 @@ export const Navigation = () => {
         to="chat"
         className={({ isActive }) =>
           `flex flex-col items-center p-2 rounded-lg hover:bg-gray-100 ${
-            isActive ? "text-primary" : "text-gray-600"
+            isActive ? "text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600" : "text-gray-600"
           }`
         }
       >
-        <MessageSquare className="h-5 w-5" />
+        <MessageSquare className="h-5 w-5" style={{ stroke: "currentColor" }} />
         <span className="text-xs">Chat</span>
       </NavLink>
 
@@ -44,11 +44,11 @@ export const Navigation = () => {
         to="marketplace"
         className={({ isActive }) =>
           `flex flex-col items-center p-2 rounded-lg hover:bg-gray-100 ${
-            isActive ? "text-primary" : "text-gray-600"
+            isActive ? "text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600" : "text-gray-600"
           }`
         }
       >
-        <Wallet className="h-5 w-5" />
+        <Wallet className="h-5 w-5" style={{ stroke: "currentColor" }} />
         <span className="text-xs">Marketplace</span>
       </NavLink>
 
@@ -56,11 +56,11 @@ export const Navigation = () => {
         to="integrations"
         className={({ isActive }) =>
           `flex flex-col items-center p-2 rounded-lg hover:bg-gray-100 ${
-            isActive ? "text-primary" : "text-gray-600"
+            isActive ? "text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600" : "text-gray-600"
           }`
         }
       >
-        <LinkIcon className="h-5 w-5" />
+        <LinkIcon className="h-5 w-5" style={{ stroke: "currentColor" }} />
         <span className="text-xs">Integrations</span>
       </NavLink>
 
@@ -68,11 +68,11 @@ export const Navigation = () => {
         to="profile"
         className={({ isActive }) =>
           `flex flex-col items-center p-2 rounded-lg hover:bg-gray-100 ${
-            isActive ? "text-primary" : "text-gray-600"
+            isActive ? "text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600" : "text-gray-600"
           }`
         }
       >
-        <User className="h-5 w-5" />
+        <User className="h-5 w-5" style={{ stroke: "currentColor" }} />
         <span className="text-xs">Profile</span>
       </NavLink>
 
@@ -81,11 +81,11 @@ export const Navigation = () => {
           to="admin"
           className={({ isActive }) =>
             `flex flex-col items-center p-2 rounded-lg hover:bg-gray-100 ${
-              isActive ? "text-primary" : "text-gray-600"
+              isActive ? "text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600" : "text-gray-600"
             }`
           }
         >
-          <Settings className="h-5 w-5" />
+          <Settings className="h-5 w-5" style={{ stroke: "currentColor" }} />
           <span className="text-xs">Admin</span>
         </NavLink>
       )}
