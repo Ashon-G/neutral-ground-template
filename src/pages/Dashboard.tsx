@@ -42,20 +42,24 @@ const DashboardContent = () => {
 
       <Sidebar>
         <SidebarBody className="pt-24 fixed left-0">
-          <div className="flex flex-col gap-2">
-            {navItems.map((item) => (
-              <SidebarLink
-                key={item.href}
-                link={{
-                  label: item.label,
-                  href: item.href,
-                  icon: item.icon
-                }}
-                className="text-neutral-700 hover:text-neutral-900"
-              />
-            ))}
+          <div className="flex flex-col h-full">
+            <div className="flex flex-col gap-2">
+              {navItems.map((item) => (
+                <SidebarLink
+                  key={item.href}
+                  link={{
+                    label: item.label,
+                    href: item.href,
+                    icon: item.icon
+                  }}
+                  className="text-neutral-700 hover:text-neutral-900"
+                />
+              ))}
+            </div>
+            <div className="mt-auto pt-4">
+              <UserAvatar />
+            </div>
           </div>
-          <UserAvatar />
         </SidebarBody>
       </Sidebar>
 

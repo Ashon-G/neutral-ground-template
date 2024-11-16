@@ -87,10 +87,6 @@ export const DesktopSidebar = ({
         <div className="flex-grow mt-8">
           {children}
         </div>
-
-        <div className="mt-auto">
-          <UserAvatar />
-        </div>
       </div>
     </motion.div>
   );
