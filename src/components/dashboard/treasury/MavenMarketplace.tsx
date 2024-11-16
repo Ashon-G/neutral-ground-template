@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Profile } from "@/integrations/supabase/types/profile";
+import { Profile, MavenSkillset } from "@/integrations/supabase/types/profile";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 import { MavenGrid } from "./sections/MavenGrid";
@@ -28,6 +28,17 @@ export const MavenMarketplace = () => {
     maven.bio?.toLowerCase().includes(searchQuery.toLowerCase())
   ) || [];
 
+  // Group mavens by skillset
+  const groupedMavens = filteredMavens.reduce((acc, maven) => {
+    if (maven.maven_skillset) {
+      if (!acc[maven.maven_skillset]) {
+        acc[maven.maven_skillset] = [];
+      }
+      acc[maven.maven_skillset].push(maven);
+    }
+    return acc;
+  }, {} as Record<MavenSkillset, Profile[]>);
+
   return (
     <div className="space-y-8 pb-20">
       <div className="bg-gradient-to-r from-blue-600 to-orange-500 animate-gradient-x -mx-4 md:-mx-8 px-4 md:px-8 py-12 mb-8 rounded-2xl">
@@ -50,10 +61,15 @@ export const MavenMarketplace = () => {
         </div>
       </div>
 
-      <MavenGrid 
-        title="Available Mavens" 
-        mavens={filteredMavens} 
-      />
+      <div className="space-y-16">
+        {Object.entries(groupedMavens).map(([skillset, mavens]) => (
+          <MavenGrid 
+            key={skillset}
+            title={`${skillset} Mavens`}
+            mavens={mavens}
+          />
+        ))}
+      </div>
     </div>
   );
 };
