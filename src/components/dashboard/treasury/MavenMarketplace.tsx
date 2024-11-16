@@ -30,7 +30,7 @@ export const MavenMarketplace = () => {
 
   return (
     <div className="space-y-8 pb-20">
-      <div className="bg-gradient-to-r from-blue-600 to-orange-500 animate-gradient-x -mx-4 md:-mx-8 px-4 md:px-8 py-12 mb-8">
+      <div className="bg-gradient-to-r from-blue-600 to-orange-500 animate-gradient-x -mx-4 md:-mx-8 px-4 md:px-8 py-12 mb-8 rounded-2xl">
         <div className="max-w-4xl mx-auto space-y-6">
           <div className="text-center space-y-4">
             <h1 className="text-4xl md:text-5xl font-bold text-white">
