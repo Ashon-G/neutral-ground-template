@@ -37,7 +37,7 @@ export const CollaborateBlock = () => (
       <div>
         <CardTitle>Collaborate seamlessly</CardTitle>
         <CardSubtitle>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit.
+          Work together effortlessly with tools designed to foster real-time communication, share ideas, and achieve goals as a team.
         </CardSubtitle>
       </div>
     </div>
