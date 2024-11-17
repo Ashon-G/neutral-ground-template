@@ -3,7 +3,7 @@ import { useAuth } from "@/components/auth/AuthProvider";
 import { ImpersonateUser } from "@/components/admin/ImpersonateUser";
 import { InstallPrompt } from "@/components/pwa/InstallPrompt";
 import { Sidebar, SidebarBody, SidebarLink } from "@/components/dashboard/NewSidebar";
-import { ListTodo, MessageSquare, Wallet, Settings as SettingsIcon, Link as LinkIcon, BookOpen, FolderKanban } from "lucide-react";
+import { ListTodo, MessageSquare, Wallet, Settings as SettingsIcon, Link as LinkIcon, BookOpen, FolderKanban, Archive } from "lucide-react";
 import { useSidebar } from "@/components/dashboard/sidebar/SidebarContext";
 import { motion } from "framer-motion";
 import { SidebarProvider } from "@/components/dashboard/sidebar/SidebarContext";
@@ -28,7 +28,10 @@ const DashboardContent = () => {
       icon: <FolderKanban className="h-5 w-5" />,
       submenu: [
         { label: "Tasks", href: "/dashboard/tasks", icon: <ListTodo className="h-5 w-5" /> },
-        { label: "Create Project", href: "/dashboard/create-project", icon: <FolderKanban className="h-5 w-5" /> }
+        ...(isFounder ? [
+          { label: "Create Project", href: "/dashboard/create-project", icon: <FolderKanban className="h-5 w-5" /> },
+          { label: "My Projects", href: "/dashboard/my-projects", icon: <Archive className="h-5 w-5" /> }
+        ] : [])
       ]
     },
     { label: "Chat", href: "/dashboard/chat", icon: <MessageSquare className="h-5 w-5" /> },

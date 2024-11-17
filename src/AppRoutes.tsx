@@ -20,6 +20,7 @@ import Integrations from "./pages/dashboard/Integrations";
 import HelpCenter from "./pages/HelpCenter";
 import GettingStarted from "./pages/dashboard/GettingStarted";
 import CreateProject from "./pages/dashboard/CreateProject";
+import MyProjects from "./pages/dashboard/MyProjects";
 
 const ProtectedRoute = ({ children, adminOnly = false }: { children: React.ReactNode, adminOnly?: boolean }) => {
   const { session, loading } = useAuth();
@@ -84,6 +85,7 @@ const AppRoutes = () => {
         <Route path="integrations" element={<Integrations />} />
         <Route path="profile" element={<Profile />} />
         <Route path="create-project" element={<CreateProject />} />
+        <Route path="my-projects" element={<MyProjects />} />
         <Route path="admin" element={
           <ProtectedRoute adminOnly>
             <Admin />
