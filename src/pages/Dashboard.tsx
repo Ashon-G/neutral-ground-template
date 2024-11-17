@@ -21,7 +21,7 @@ const DashboardContent = () => {
     { label: "Tasks", href: "/dashboard/tasks", icon: <ListTodo className="h-5 w-5" /> },
     { label: "Chat", href: "/dashboard/chat", icon: <MessageSquare className="h-5 w-5" /> },
     { label: "Marketplace", href: "/dashboard/marketplace", icon: <Wallet className="h-5 w-5" /> },
-    { label: "Integrations", href: "/dashboard/integrations", icon: <LinkIcon className="h-5 w-5" /> },
+    { label: "Integrations", href: "/dashboard/integrations", icon: <LinkIcon className="h-5 w-5" />, badge: "Early Alpha" },
     { label: "Profile", href: "/dashboard/profile", icon: <User className="h-5 w-5" /> },
     ...(isAdmin ? [{ label: "Admin", href: "/dashboard/admin", icon: <SettingsIcon className="h-5 w-5" /> }] : []),
   ];
@@ -47,11 +47,7 @@ const DashboardContent = () => {
               {navItems.map((item) => (
                 <SidebarLink
                   key={item.href}
-                  link={{
-                    label: item.label,
-                    href: item.href,
-                    icon: item.icon
-                  }}
+                  link={item}
                   className="text-neutral-700 hover:text-neutral-900"
                 />
               ))}

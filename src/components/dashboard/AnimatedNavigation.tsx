@@ -10,6 +10,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { ListTodo, MessageSquare, Wallet, User, Settings, Link as LinkIcon } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 const NUM_LINES = 30;
 
@@ -24,7 +25,7 @@ const AnimatedNavigation = () => {
     { position: 1, title: "Tasks", path: "/dashboard/tasks", icon: ListTodo },
     { position: 8, title: "Chat", path: "/dashboard/chat", icon: MessageSquare },
     { position: 15, title: "Marketplace", path: "/dashboard/marketplace", icon: Wallet },
-    { position: 22, title: "Integrations", path: "/dashboard/integrations", icon: LinkIcon },
+    { position: 22, title: "Integrations", path: "/dashboard/integrations", icon: LinkIcon, badge: "Early Alpha" },
     { position: 25, title: "Profile", path: "/dashboard/profile", icon: User },
     ...(isAdmin ? [{ position: 29, title: "Admin", path: "/dashboard/admin", icon: Settings }] : []),
   ];
@@ -47,7 +48,14 @@ const AnimatedNavigation = () => {
                 isActive ? 'text-secondary' : 'text-gray-500'
               }`}
             >
-              <Icon className="h-5 w-5" />
+              <div className="relative">
+                <Icon className="h-5 w-5" />
+                {item.badge && (
+                  <Badge variant="secondary" className="absolute -top-2 -right-2 text-[10px] px-1 py-0">
+                    {item.badge}
+                  </Badge>
+                )}
+              </div>
               <span className="text-xs">{item.title}</span>
             </button>
           );
@@ -82,6 +90,7 @@ const AnimatedNavigation = () => {
               isHovered={isHovered}
               mouseY={mouseY}
               onClick={() => linkContent?.path && navigate(linkContent.path)}
+              badge={linkContent?.badge}
             />
           );
         })}
@@ -104,6 +113,7 @@ const LinkLine = ({
   path,
   isActive,
   onClick,
+  badge,
 }: {
   mouseY: MotionValue;
   title?: string;
@@ -111,6 +121,7 @@ const LinkLine = ({
   isActive?: boolean;
   isHovered: boolean;
   onClick?: () => void;
+  badge?: string;
 }) => {
   const ref = useRef<HTMLDivElement>(null);
   const distance = useTransform(mouseY, (val) => {
@@ -142,16 +153,23 @@ const LinkLine = ({
       >
         <AnimatePresence>
           {isHovered && (
-            <motion.span
+            <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className={`absolute left-0 top-0 z-10 w-full pt-2 font-bold uppercase transition-colors ${
-                isActive ? 'text-secondary' : 'text-neutral-500 group-hover:text-secondary'
-              }`}
+              className="absolute left-0 top-0 z-10 w-full pt-2 flex items-center gap-2"
             >
-              {title}
-            </motion.span>
+              <span className={`font-bold uppercase transition-colors ${
+                isActive ? 'text-secondary' : 'text-neutral-500 group-hover:text-secondary'
+              }`}>
+                {title}
+              </span>
+              {badge && (
+                <Badge variant="secondary" className="text-[10px] px-1 py-0">
+                  {badge}
+                </Badge>
+              )}
+            </motion.div>
           )}
         </AnimatePresence>
       </motion.div>

@@ -4,11 +4,13 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { SidebarProvider, useSidebar } from "./sidebar/SidebarContext";
 import { UserAvatar } from "./sidebar/UserAvatar";
+import { Badge } from "@/components/ui/badge";
 
 interface Links {
   label: string;
   href: string;
   icon: React.ReactNode;
+  badge?: string;
 }
 
 export const Sidebar = ({
@@ -161,16 +163,23 @@ export const SidebarLink = ({
       )}
     >
       {link.icon}
-      <motion.span
+      <motion.div
         initial={false}
         animate={{
           opacity: animate ? (open ? 1 : 0) : 1,
-          display: animate ? (open ? "block" : "none") : "block",
+          display: animate ? (open ? "flex" : "none") : "flex",
         }}
-        className="text-neutral-700 dark:text-neutral-200 text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre"
+        className="items-center gap-2"
       >
-        {link.label}
-      </motion.span>
+        <span className="text-neutral-700 dark:text-neutral-200 text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre">
+          {link.label}
+        </span>
+        {link.badge && (
+          <Badge variant="secondary" className="text-[10px] px-1 py-0">
+            {link.badge}
+          </Badge>
+        )}
+      </motion.div>
     </Link>
   );
 };
