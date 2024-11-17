@@ -154,15 +154,18 @@ export const ProjectBasicFields = ({
                 <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-full p-0">
+            <PopoverContent className="w-[200px] p-0" side="bottom" align="start">
               <Command>
                 <CommandInput placeholder="Search target audiences..." />
                 <CommandEmpty>No target audience found.</CommandEmpty>
-                <CommandGroup className="max-h-64 overflow-auto">
+                <CommandGroup className="max-h-[200px] overflow-auto">
                   {TARGET_AUDIENCES.map((audience) => (
                     <CommandItem
                       key={audience}
-                      onSelect={() => handleAudienceChange(audience)}
+                      onSelect={() => {
+                        handleAudienceChange(audience);
+                        setOpen(false);
+                      }}
                     >
                       <Check
                         className={cn(
@@ -185,13 +188,12 @@ export const ProjectBasicFields = ({
                 key={audience}
                 variant="secondary"
                 className="text-sm"
-                onClick={() => handleAudienceChange(audience)}
               >
                 {audience}
                 <button
                   className="ml-1 rounded-full outline-none focus:outline-none"
                   onClick={(e) => {
-                    e.stopPropagation();
+                    e.preventDefault();
                     handleAudienceChange(audience);
                   }}
                 >
