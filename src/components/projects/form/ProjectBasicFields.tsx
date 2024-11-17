@@ -1,4 +1,3 @@
-import React from "react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
@@ -18,7 +17,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { CalendarIcon, HelpCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { TargetAudienceField } from "./TargetAudienceField";
 
 interface ProjectBasicFieldsProps {
   title: string;
@@ -43,7 +41,7 @@ export const ProjectBasicFields = ({
     value: string,
     placeholder: string,
     tooltip: string,
-    type: "input" | "textarea" | "date" | "audience" = "input"
+    type: "input" | "textarea" | "date" = "input"
   ) => (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -94,12 +92,6 @@ export const ProjectBasicFields = ({
             />
           </PopoverContent>
         </Popover>
-      ) : type === "audience" ? (
-        <TargetAudienceField
-          value={value}
-          onChange={(value) => onChange(id, value)}
-          placeholder={placeholder}
-        />
       ) : (
         <Input
           id={id}
@@ -136,9 +128,8 @@ export const ProjectBasicFields = ({
         "Target Audience",
         "target_audience",
         targetAudience,
-        "Select up to 3 target audiences",
-        "Choose who will benefit from or use your project",
-        "audience"
+        "Who is this project for?",
+        "Define who will benefit from or use your project"
       )}
       {renderField(
         "Project Timeline",
