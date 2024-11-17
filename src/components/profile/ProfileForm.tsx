@@ -7,14 +7,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
 import { Loader2 } from "lucide-react";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { BusinessSection } from "./sections/BusinessSection";
+import { ProfileHeader } from "./sections/ProfileHeader";
 import { ProfileFormData } from "./types";
 import { Profile } from "@/integrations/supabase/types/profile";
-import { Json } from "@/integrations/supabase/types";
+import { parseBusinessInfo, businessInfoToJson } from "@/utils/typeConversions";
 
 export const ProfileForm = () => {
   const { session } = useAuth();
@@ -34,16 +33,15 @@ export const ProfileForm = () => {
 
       if (error) throw error;
       
-      const settings = (data?.settings || {}) as Record<string, any>;
       return { 
         ...data, 
-        settings,
-        business: data.business as Profile['business']
+        settings: (data?.settings || {}) as Record<string, any>,
+        business: parseBusinessInfo(data.business)
       } as Profile;
     },
   });
 
-  const { register, handleSubmit, formState: { errors } } = useForm<ProfileFormData>({
+  const { register, handleSubmit } = useForm<ProfileFormData>({
     defaultValues: {
       full_name: profile?.full_name || "",
       bio: profile?.bio || "",
@@ -93,7 +91,7 @@ export const ProfileForm = () => {
           bio: data.bio,
           avatar_url: avatarUrl,
           settings: data.settings,
-          business: data.business as Json,
+          business: businessInfoToJson(data.business),
         })
         .eq("id", session?.user.id);
 
@@ -129,43 +127,9 @@ export const ProfileForm = () => {
     );
   }
 
-  const getUserTypeColor = (userType?: string) => {
-    switch (userType) {
-      case 'founder':
-        return 'bg-blue-500';
-      case 'maven':
-        return 'bg-green-500';
-      case 'admin':
-        return 'bg-purple-500';
-      default:
-        return 'bg-gray-500';
-    }
-  };
-
   return (
     <form onSubmit={handleSubmit((data) => updateProfile.mutate(data))} className="space-y-6">
-      <div className="flex items-center gap-4">
-        <Avatar className="h-20 w-20">
-          <AvatarImage src={profile?.avatar_url || ""} />
-          <AvatarFallback>{profile?.full_name?.charAt(0) || "?"}</AvatarFallback>
-        </Avatar>
-        <div className="space-y-2">
-          <Input
-            type="file"
-            accept="image/*"
-            onChange={handleAvatarChange}
-            className="mb-2"
-          />
-          <p className="text-sm text-muted-foreground">
-            Recommended: Square image, max 1MB
-          </p>
-          {profile?.user_type && (
-            <Badge className={getUserTypeColor(profile.user_type)}>
-              {profile.user_type.charAt(0).toUpperCase() + profile.user_type.slice(1)}
-            </Badge>
-          )}
-        </div>
-      </div>
+      <ProfileHeader profile={profile} handleAvatarChange={handleAvatarChange} />
 
       <div className="space-y-2">
         <Label>Full Name</Label>

@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { Profile } from "@/integrations/supabase/types/profile";
 import { Json } from "@/integrations/supabase/types";
+import { parseBusinessInfo } from "@/utils/typeConversions";
 
 export const GettingStartedGuide = () => {
   const [isOpen, setIsOpen] = useState(true);
@@ -25,10 +26,9 @@ export const GettingStartedGuide = () => {
 
       if (error) throw error;
       
-      // Parse the business JSON into BusinessInfo type
       return {
         ...data,
-        business: data.business as Profile['business']
+        business: parseBusinessInfo(data.business)
       } as Profile;
     },
   });
