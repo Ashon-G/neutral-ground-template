@@ -47,7 +47,7 @@ export const JiraIntegrationDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-gradient-to-br from-purple-600 to-blue-500 text-white border-none">
+      <DialogContent className="bg-gradient-to-br from-orange-400 to-orange-600 text-white border-none">
         <button 
           onClick={() => onOpenChange(false)}
           className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground"
@@ -80,7 +80,7 @@ export const JiraIntegrationDialog = ({
             <Button
               onClick={() => {}}
               disabled={isConnecting}
-              className="w-full bg-white text-purple-600 hover:bg-white/90"
+              className="w-full bg-white text-orange-600 hover:bg-white/90"
             >
               {isConnecting && (
                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />
