@@ -47,7 +47,7 @@ export const TargetAudienceField = ({
   }, [onChange]);
 
   return (
-    <div className="relative">
+    <div className="relative w-full">
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
@@ -56,7 +56,7 @@ export const TargetAudienceField = ({
             aria-expanded={open}
             className="w-full justify-between"
           >
-            {value ? value : placeholder}
+            {value || placeholder}
           </Button>
         </PopoverTrigger>
         <PopoverContent 
@@ -65,7 +65,7 @@ export const TargetAudienceField = ({
           side="bottom"
           sideOffset={4}
         >
-          <Command shouldFilter={false}>
+          <Command>
             <CommandInput 
               placeholder="Search target audiences..." 
               className="h-9"
