@@ -192,10 +192,9 @@ export const SidebarLink = ({
           </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent 
-          side="right" 
-          align="start" 
-          sideOffset={5}
-          className="bg-white border border-neutral-200 shadow-lg"
+          side="bottom"
+          align="start"
+          className="bg-white border border-neutral-200 shadow-lg ml-8 w-[200px]"
         >
           {link.submenu.map((item) => (
             <DropdownMenuItem key={item.href} asChild>
