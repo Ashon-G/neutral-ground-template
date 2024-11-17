@@ -9,8 +9,14 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/components/auth/AuthProvider";
-import { ListTodo, MessageSquare, Wallet, User, Settings, Link as LinkIcon } from "lucide-react";
+import { ListTodo, MessageSquare, Wallet, User, Settings, Link as LinkIcon, FolderKanban } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const NUM_LINES = 30;
 
@@ -22,7 +28,15 @@ const AnimatedNavigation = () => {
 
   // Define nav items based on user role
   const navItems = [
-    { position: 1, title: "Tasks", path: "/dashboard/tasks", icon: ListTodo },
+    { 
+      position: 1, 
+      title: "Projects", 
+      icon: FolderKanban,
+      submenu: [
+        { title: "Tasks", path: "/dashboard/tasks", icon: ListTodo },
+        { title: "Create Project", path: "/dashboard/create-project", icon: FolderKanban }
+      ]
+    },
     { position: 8, title: "Chat", path: "/dashboard/chat", icon: MessageSquare },
     { position: 15, title: "Marketplace", path: "/dashboard/marketplace", icon: Wallet },
     { position: 22, title: "Integrations", path: "/dashboard/integrations", icon: LinkIcon, badge: "Early Alpha" },
@@ -39,11 +53,32 @@ const AnimatedNavigation = () => {
       <div className="flex justify-around items-center h-16">
         {navItems.map((item) => {
           const Icon = item.icon;
+          if (item.submenu) {
+            return (
+              <DropdownMenu key={item.title}>
+                <DropdownMenuTrigger className="flex flex-col items-center justify-center w-full h-full space-y-1 text-gray-500">
+                  <div className="relative">
+                    <Icon className="h-5 w-5" />
+                  </div>
+                  <span className="text-xs">{item.title}</span>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  {item.submenu.map((subItem) => (
+                    <DropdownMenuItem key={subItem.path} onClick={() => navigate(subItem.path)}>
+                      <subItem.icon className="h-4 w-4 mr-2" />
+                      {subItem.title}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            );
+          }
+
           const isActive = item.path === location.pathname;
           return (
             <button
               key={item.path}
-              onClick={() => navigate(item.path)}
+              onClick={() => navigate(item.path!)}
               className={`flex flex-col items-center justify-center w-full h-full space-y-1 ${
                 isActive ? 'text-secondary' : 'text-gray-500'
               }`}
@@ -86,10 +121,16 @@ const AnimatedNavigation = () => {
               key={i}
               title={linkContent?.title}
               path={linkContent?.path}
-              isActive={linkContent?.path === location.pathname}
+              submenu={linkContent?.submenu}
+              isActive={linkContent?.path === location.pathname || 
+                (linkContent?.submenu?.some(item => item.path === location.pathname))}
               isHovered={isHovered}
               mouseY={mouseY}
-              onClick={() => linkContent?.path && navigate(linkContent.path)}
+              onClick={() => {
+                if (linkContent?.path) {
+                  navigate(linkContent.path);
+                }
+              }}
               badge={linkContent?.badge}
             />
           );
@@ -111,6 +152,7 @@ const LinkLine = ({
   isHovered,
   title,
   path,
+  submenu,
   isActive,
   onClick,
   badge,
@@ -118,12 +160,14 @@ const LinkLine = ({
   mouseY: MotionValue;
   title?: string;
   path?: string;
+  submenu?: { title: string; path: string; icon: any }[];
   isActive?: boolean;
   isHovered: boolean;
   onClick?: () => void;
   badge?: string;
 }) => {
   const ref = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
   const distance = useTransform(mouseY, (val) => {
     const bounds = ref.current?.getBoundingClientRect();
     return val - (bounds?.y || 0) - (bounds?.height || 0) / 2;
@@ -141,7 +185,48 @@ const LinkLine = ({
     }
   }, [isHovered, linkWidth]);
 
-  if (title && path) {
+  if (title) {
+    if (submenu) {
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <motion.div
+              ref={ref}
+              className={`group relative cursor-pointer transition-colors ${
+                isActive ? 'bg-secondary' : 'bg-neutral-500 hover:bg-secondary'
+              }`}
+              style={{ width: linkWidth, height: 2 }}
+            >
+              <AnimatePresence>
+                {isHovered && (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="absolute left-0 top-0 z-10 w-full pt-2 flex items-center gap-2"
+                  >
+                    <span className={`font-bold uppercase transition-colors ${
+                      isActive ? 'text-secondary' : 'text-neutral-500 group-hover:text-secondary'
+                    }`}>
+                      {title}
+                    </span>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent side="left" align="center">
+            {submenu.map((item) => (
+              <DropdownMenuItem key={item.path} onClick={() => navigate(item.path)}>
+                <item.icon className="h-4 w-4 mr-2" />
+                {item.title}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
+    }
+
     return (
       <motion.div
         ref={ref}
