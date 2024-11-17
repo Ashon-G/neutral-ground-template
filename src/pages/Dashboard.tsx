@@ -10,6 +10,7 @@ import { SidebarProvider } from "@/components/dashboard/sidebar/SidebarContext";
 import { UserAvatar } from "@/components/dashboard/sidebar/UserAvatar";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { Navigation } from "@/components/dashboard/Navigation";
+import { GettingStartedGuide } from "@/components/dashboard/GettingStartedGuide";
 
 const DashboardContent = () => {
   const { session } = useAuth();
@@ -66,6 +67,8 @@ const DashboardContent = () => {
       )}
 
       <InstallPrompt />
+
+      {isFounder && <GettingStartedGuide />}
 
       <motion.main 
         className={`pt-24 pb-24 transition-all duration-300 ${
