@@ -31,7 +31,7 @@ const CreateProject = () => {
       >
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold mb-4">Create New Project</h1>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-black max-w-2xl mx-auto">
             Let's bring your vision to life! Fill out the details below to create a new project 
             and get matched with the perfect Maven for your needs.
           </p>
@@ -52,7 +52,7 @@ const CreateProject = () => {
                 </div>
                 <h3 className="font-semibold">{tip.title}</h3>
               </div>
-              <p className="text-sm text-muted-foreground">{tip.description}</p>
+              <p className="text-sm text-black">{tip.description}</p>
             </motion.div>
           ))}
         </div>

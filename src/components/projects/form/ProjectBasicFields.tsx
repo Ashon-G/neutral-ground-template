@@ -45,7 +45,7 @@ export const ProjectBasicFields = ({
         </Label>
         <Tooltip>
           <TooltipTrigger>
-            <HelpCircle className="h-4 w-4 text-muted-foreground" />
+            <HelpCircle className="h-4 w-4 text-black" />
           </TooltipTrigger>
           <TooltipContent>
             <p className="max-w-xs">{tooltip}</p>

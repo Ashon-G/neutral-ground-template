@@ -28,7 +28,7 @@ export const ProjectGoals = ({
         <Label className="text-lg font-medium">Project Goals</Label>
         <Tooltip>
           <TooltipTrigger>
-            <HelpCircle className="h-4 w-4 text-muted-foreground" />
+            <HelpCircle className="h-4 w-4 text-black" />
           </TooltipTrigger>
           <TooltipContent>
             <p className="max-w-xs">
@@ -79,8 +79,8 @@ export const ProjectGoals = ({
       </Button>
 
       <div className="bg-muted/50 rounded-lg p-4 text-sm text-muted-foreground">
-        <p className="font-medium mb-2">Tips for setting effective goals:</p>
-        <ul className="list-disc list-inside space-y-1">
+        <p className="font-medium mb-2 text-black">Tips for setting effective goals:</p>
+        <ul className="list-disc list-inside space-y-1 text-black">
           <li>Make them specific and measurable</li>
           <li>Set realistic timelines</li>
           <li>Focus on outcomes rather than tasks</li>
