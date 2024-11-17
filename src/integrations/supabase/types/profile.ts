@@ -1,16 +1,7 @@
+import { BusinessInfo } from './business';
+
 export type UserType = 'founder' | 'maven' | 'admin';
 export type MavenSkillset = 'Developer' | 'Marketer' | 'Copywriter' | 'Designer' | 'Accounting' | 'Sales' | 'Other';
-
-export interface BusinessInfo {
-  name: string;
-  website?: string;
-  industry: string;
-  stage: string;
-  yearStarted: string;
-  taxId?: string;
-  address: string;
-  description: string;
-}
 
 export interface Profile {
   id: string;
@@ -25,5 +16,5 @@ export interface Profile {
   phone_number: string | null;
   location: string | null;
   linkedin_profile: string | null;
-  business?: BusinessInfo | null;
+  business: BusinessInfo | null;
 }

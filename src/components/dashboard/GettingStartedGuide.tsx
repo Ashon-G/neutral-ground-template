@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/components/auth/AuthProvider";
+import { Profile } from "@/integrations/supabase/types/profile";
 
 export const GettingStartedGuide = () => {
   const [isOpen, setIsOpen] = useState(true);
@@ -22,7 +23,7 @@ export const GettingStartedGuide = () => {
         .single();
 
       if (error) throw error;
-      return data;
+      return data as Profile;
     },
   });
 

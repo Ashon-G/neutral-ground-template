@@ -13,6 +13,7 @@ import { Loader2 } from "lucide-react";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { BusinessSection } from "./sections/BusinessSection";
 import { ProfileFormData } from "./types";
+import { Profile } from "@/integrations/supabase/types/profile";
 
 export const ProfileForm = () => {
   const { session } = useAuth();
