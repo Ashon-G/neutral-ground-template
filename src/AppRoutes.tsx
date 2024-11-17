@@ -18,6 +18,7 @@ import BlogPost from "./pages/blog/[slug]";
 import Integrations from "./pages/dashboard/Integrations";
 import HelpCenter from "./pages/HelpCenter";
 import GettingStarted from "./pages/dashboard/GettingStarted";
+import CreateProject from "./pages/dashboard/CreateProject";
 
 const ProtectedRoute = ({ children, adminOnly = false }: { children: React.ReactNode, adminOnly?: boolean }) => {
   const { session, loading } = useAuth();
@@ -80,6 +81,7 @@ const AppRoutes = () => {
         <Route path="marketplace" element={<Marketplace />} />
         <Route path="integrations" element={<Integrations />} />
         <Route path="profile" element={<Profile />} />
+        <Route path="create-project" element={<CreateProject />} />
         <Route path="admin" element={
           <ProtectedRoute adminOnly>
             <Admin />

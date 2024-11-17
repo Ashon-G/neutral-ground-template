@@ -33,8 +33,22 @@ export const GettingStartedGuide = () => {
     },
   });
 
+  const { data: projects } = useQuery({
+    queryKey: ["projects"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("founder_projects")
+        .select("*")
+        .eq("founder_id", session?.user.id);
+
+      if (error) throw error;
+      return data;
+    },
+  });
+
   const isProfileComplete = profile?.business && Object.values(profile.business).some(value => value !== null && value !== '');
-  const progress = [isProfileComplete].filter(Boolean).length * 25;
+  const hasCreatedProject = projects && projects.length > 0;
+  const progress = [isProfileComplete, hasCreatedProject].filter(Boolean).length * 25;
 
   if (!isOpen) return null;
 
@@ -98,11 +112,11 @@ export const GettingStartedGuide = () => {
                 </div>
               </details>
 
-              <details className="mb-6 group">
+              <details className="mb-6 group" open={!hasCreatedProject}>
                 <summary className="flex justify-between items-center cursor-pointer">
                   <div className="flex items-center gap-2">
-                    <div className="w-[34px] h-[34px] bg-secondary/10 rounded-full flex items-center justify-center">
-                      <CheckCircle2 className="w-5 h-5 text-secondary" />
+                    <div className={`w-[34px] h-[34px] ${hasCreatedProject ? 'bg-green-500' : 'bg-secondary/10'} rounded-full flex items-center justify-center`}>
+                      <CheckCircle2 className={`w-5 h-5 ${hasCreatedProject ? 'text-white' : 'text-secondary'}`} />
                     </div>
                     <div>
                       <p className="text-neutral-950 font-medium">Create Your First Project</p>
@@ -115,7 +129,7 @@ export const GettingStartedGuide = () => {
                   <p className="text-neutral-500 text-sm mb-4">Create a project to start collaborating with Mavens</p>
                   <div className="flex gap-4">
                     <button 
-                      onClick={() => navigate("/dashboard/tasks")}
+                      onClick={() => navigate("/dashboard/create-project")}
                       className="bg-secondary text-white rounded-md py-2 px-4 hover:bg-secondary/90 transition-colors"
                     >
                       Create Project
