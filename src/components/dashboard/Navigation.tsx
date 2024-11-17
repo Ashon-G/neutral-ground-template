@@ -23,6 +23,7 @@ export const Navigation = () => {
   const userType = session?.user?.user_metadata?.user_type;
   const isAdmin = userType === 'admin';
   const isFounder = userType === 'founder';
+  const isMaven = userType === 'maven';
 
   const navItems = [
     ...(isFounder ? [{
@@ -35,7 +36,7 @@ export const Navigation = () => {
       label: "Projects",
       submenu: [
         { label: "Tasks", to: "tasks", icon: <ListTodo className="h-4 w-4" /> },
-        { label: "Create Project", to: "create-project", icon: <FolderKanban className="h-4 w-4" /> }
+        ...(isFounder ? [{ label: "Create Project", to: "create-project", icon: <FolderKanban className="h-4 w-4" /> }] : [])
       ]
     },
     {
@@ -45,8 +46,8 @@ export const Navigation = () => {
     },
     {
       icon: <Wallet className="h-5 w-5" />,
-      label: "Market",
-      to: "marketplace"
+      label: isFounder ? "Find Mavens" : "Find Projects",
+      to: isFounder ? "marketplace" : "project-marketplace"
     },
     {
       icon: <LinkIcon className="h-5 w-5" />,

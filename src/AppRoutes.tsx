@@ -12,6 +12,7 @@ import Chat from "./pages/dashboard/Chat";
 import Profile from "./pages/dashboard/Profile";
 import Admin from "./pages/dashboard/Admin";
 import Marketplace from "./pages/dashboard/Marketplace";
+import ProjectMarketplace from "./pages/dashboard/ProjectMarketplace";
 import UpgradePlan from "./pages/UpgradePlan";
 import CompliancePackages from "./pages/CompliancePackages";
 import BlogPost from "./pages/blog/[slug]";
@@ -73,12 +74,13 @@ const AppRoutes = () => {
         </ProtectedRoute>
       }>
         <Route index element={
-          <Navigate to={userType === 'founder' ? "getting-started" : "tasks"} replace />
+          <Navigate to={userType === 'founder' ? "getting-started" : "project-marketplace"} replace />
         } />
         <Route path="getting-started" element={<GettingStarted />} />
         <Route path="tasks" element={<Tasks />} />
         <Route path="chat" element={<Chat />} />
         <Route path="marketplace" element={<Marketplace />} />
+        <Route path="project-marketplace" element={<ProjectMarketplace />} />
         <Route path="integrations" element={<Integrations />} />
         <Route path="profile" element={<Profile />} />
         <Route path="create-project" element={<CreateProject />} />
