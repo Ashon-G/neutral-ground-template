@@ -86,6 +86,44 @@ export type Database = {
           },
         ]
       }
+      figma_integrations: {
+        Row: {
+          access_token: string
+          created_at: string
+          id: string
+          refresh_token: string
+          team_id: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          access_token: string
+          created_at?: string
+          id?: string
+          refresh_token: string
+          team_id?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          access_token?: string
+          created_at?: string
+          id?: string
+          refresh_token?: string
+          team_id?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "figma_integrations_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       founder_maven_assignments: {
         Row: {
           assigned_by: string
@@ -749,6 +787,7 @@ export type Database = {
     }
     Enums: {
       application_status_enum: "pending" | "approved" | "rejected"
+      figma_access_type: "read" | "write"
       jira_hosting_type: "cloud" | "server"
       maven_skillset_enum:
         | "Developer"

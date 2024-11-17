@@ -2,9 +2,10 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { Button } from "@/components/ui/button";
-import { GitPullRequest, Slack, Plus } from "lucide-react";
+import { GitPullRequest, Slack, Plus, Figma } from "lucide-react";
 import { JiraIntegrationDialog } from "@/components/dashboard/jira/JiraIntegrationDialog";
 import { SlackIntegrationDialog } from "@/components/dashboard/slack/SlackIntegrationDialog";
+import { FigmaIntegrationDialog } from "@/components/dashboard/figma/FigmaIntegrationDialog";
 import { useState } from "react";
 import { Switch } from "@/components/ui/switch";
 
@@ -12,11 +13,12 @@ const Integrations = () => {
   const { session } = useAuth();
   const [isJiraOpen, setIsJiraOpen] = useState(false);
   const [isSlackOpen, setIsSlackOpen] = useState(false);
+  const [isFigmaOpen, setIsFigmaOpen] = useState(false);
 
   const { data: integrations } = useQuery({
     queryKey: ["integrations", session?.user.id],
     queryFn: async () => {
-      const [jiraResponse, slackResponse] = await Promise.all([
+      const [jiraResponse, slackResponse, figmaResponse] = await Promise.all([
         supabase
           .from("jira_integrations")
           .select("*")
@@ -27,11 +29,17 @@ const Integrations = () => {
           .select("*")
           .eq("user_id", session?.user.id)
           .maybeSingle(),
+        supabase
+          .from("figma_integrations")
+          .select("*")
+          .eq("user_id", session?.user.id)
+          .maybeSingle(),
       ]);
 
       return {
         jira: jiraResponse.data,
         slack: slackResponse.data,
+        figma: figmaResponse.data,
       };
     },
     enabled: !!session?.user.id,
@@ -92,6 +100,26 @@ const Integrations = () => {
             />
           </div>
         </div>
+
+        <div className="border rounded-lg p-6">
+          <div className="flex items-start justify-between">
+            <div className="flex items-start gap-4">
+              <div className="rounded-lg p-2 bg-primary/10">
+                <Figma className="h-6 w-6 text-primary" />
+              </div>
+              <div>
+                <h3 className="font-semibold">Figma</h3>
+                <p className="text-sm text-muted-foreground">
+                  Connect your Figma account to embed private files in your projects.
+                </p>
+              </div>
+            </div>
+            <Switch
+              checked={!!integrations?.figma}
+              onCheckedChange={() => setIsFigmaOpen(true)}
+            />
+          </div>
+        </div>
       </div>
 
       <JiraIntegrationDialog
@@ -101,6 +129,10 @@ const Integrations = () => {
       <SlackIntegrationDialog
         open={isSlackOpen}
         onOpenChange={setIsSlackOpen}
+      />
+      <FigmaIntegrationDialog
+        open={isFigmaOpen}
+        onOpenChange={setIsFigmaOpen}
       />
     </div>
   );
