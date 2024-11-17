@@ -2,16 +2,37 @@ import React, { useState } from "react";
 import { X, ChevronDown, CheckCircle2, ChevronUp } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/components/auth/AuthProvider";
 
 export const GettingStartedGuide = () => {
   const [isOpen, setIsOpen] = useState(true);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const navigate = useNavigate();
+  const { session } = useAuth();
+
+  const { data: profile } = useQuery({
+    queryKey: ["profile"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", session?.user.id)
+        .single();
+
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  const isProfileComplete = profile?.business && Object.values(profile.business).some(value => value);
+  const progress = [isProfileComplete].filter(Boolean).length * 25;
 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed bottom-20 right-4 md:bottom-0 md:right-8 z-50">
+    <div className="fixed bottom-0 right-4 md:right-8 z-50">
       <AnimatePresence>
         {!isCollapsed ? (
           <motion.div 
@@ -37,25 +58,28 @@ export const GettingStartedGuide = () => {
               <p className="text-neutral-500 text-sm mb-4">Complete these steps to get started with Maven</p>
               
               <div className="w-full h-2 bg-neutral-200 rounded-full mb-1">
-                <div className="w-0 bg-secondary h-full rounded-full"></div>
+                <div 
+                  className="bg-secondary h-full rounded-full transition-all duration-500" 
+                  style={{ width: `${progress}%` }}
+                />
               </div>
-              <p className="text-neutral-500 text-xs mb-6">0% Completed</p>
+              <p className="text-neutral-500 text-xs mb-6">{progress}% Completed</p>
 
-              <details className="mb-6 group">
+              <details className="mb-6 group" open={!isProfileComplete}>
                 <summary className="flex justify-between items-center cursor-pointer">
                   <div className="flex items-center gap-2">
-                    <div className="w-[34px] h-[34px] bg-secondary/10 rounded-full flex items-center justify-center">
-                      <CheckCircle2 className="w-5 h-5 text-secondary" />
+                    <div className={`w-[34px] h-[34px] ${isProfileComplete ? 'bg-green-500' : 'bg-secondary/10'} rounded-full flex items-center justify-center`}>
+                      <CheckCircle2 className={`w-5 h-5 ${isProfileComplete ? 'text-white' : 'text-secondary'}`} />
                     </div>
                     <div>
-                      <p className="text-neutral-950 font-medium">Complete Your Profile</p>
-                      <p className="text-neutral-500 text-sm">Add your company details and preferences</p>
+                      <p className="text-neutral-950 font-medium">Complete Business Profile</p>
+                      <p className="text-neutral-500 text-sm">Add your company details</p>
                     </div>
                   </div>
                   <ChevronDown className="text-neutral-400 group-open:rotate-180 transition-transform" />
                 </summary>
                 <div className="pl-12 pr-4 mt-4">
-                  <p className="text-neutral-500 text-sm mb-4">Help us understand your needs better by completing your founder profile</p>
+                  <p className="text-neutral-500 text-sm mb-4">Help us understand your business better by completing your company profile</p>
                   <div className="flex gap-4">
                     <button 
                       onClick={() => navigate("/dashboard/profile")}

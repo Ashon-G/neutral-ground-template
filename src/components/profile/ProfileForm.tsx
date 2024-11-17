@@ -10,19 +10,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Loader2 } from "lucide-react";
 import { useAuth } from "@/components/auth/AuthProvider";
-
-type ProfileSettings = {
-  emailNotifications?: boolean;
-  theme?: 'light' | 'dark';
-};
-
-type Profile = {
-  full_name: string;
-  bio: string;
-  settings: ProfileSettings;
-  avatar_url?: string;
-  user_type?: 'founder' | 'maven' | 'admin';
-};
+import { BusinessSection } from "./sections/BusinessSection";
+import { ProfileFormData } from "./types";
 
 export const ProfileForm = () => {
   const { session } = useAuth();
@@ -42,21 +31,22 @@ export const ProfileForm = () => {
 
       if (error) throw error;
       
-      const settings = (data?.settings || {}) as ProfileSettings;
-      return { ...data, settings } as Profile;
+      const settings = (data?.settings || {}) as Record<string, any>;
+      return { ...data, settings };
     },
   });
 
-  const { register, handleSubmit, formState: { errors } } = useForm<Profile>({
+  const { register, handleSubmit, formState: { errors } } = useForm<ProfileFormData>({
     defaultValues: {
       full_name: profile?.full_name || "",
       bio: profile?.bio || "",
       settings: profile?.settings || {},
+      business: profile?.business || {},
     },
   });
 
   const updateProfile = useMutation({
-    mutationFn: async (data: Profile) => {
+    mutationFn: async (data: ProfileFormData) => {
       let avatarUrl = profile?.avatar_url;
 
       if (avatarFile) {
@@ -64,7 +54,6 @@ export const ProfileForm = () => {
         const fileExt = avatarFile.name.split('.').pop();
         const filePath = `${session?.user.id}/avatar.${fileExt}`;
 
-        // First, try to remove any existing avatar
         try {
           await supabase.storage
             .from('avatars')
@@ -73,7 +62,6 @@ export const ProfileForm = () => {
           // Ignore error if file doesn't exist
         }
 
-        // Upload new avatar
         const { error: uploadError } = await supabase.storage
           .from('avatars')
           .upload(filePath, avatarFile, { 
@@ -100,6 +88,9 @@ export const ProfileForm = () => {
         .eq("id", session?.user.id);
 
       if (error) throw error;
+
+      // Invalidate the getting started progress
+      queryClient.invalidateQueries({ queryKey: ["gettingStartedProgress"] });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["profile"] });
@@ -170,18 +161,22 @@ export const ProfileForm = () => {
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm font-medium">Full Name</label>
+        <Label>Full Name</Label>
         <Input {...register("full_name")} />
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm font-medium">Bio</label>
+        <Label>Bio</Label>
         <Textarea
           {...register("bio")}
           placeholder="Tell us about yourself..."
           className="h-32"
         />
       </div>
+
+      {profile?.user_type === 'founder' && (
+        <BusinessSection register={register} />
+      )}
 
       <Button
         type="submit"
