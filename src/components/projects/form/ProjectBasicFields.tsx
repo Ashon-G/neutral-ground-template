@@ -2,12 +2,21 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { motion } from "framer-motion";
+import { format } from "date-fns";
+import { Calendar } from "@/components/ui/calendar";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { HelpCircle } from "lucide-react";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
+import { CalendarIcon, HelpCircle } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface ProjectBasicFieldsProps {
   title: string;
@@ -32,7 +41,7 @@ export const ProjectBasicFields = ({
     value: string,
     placeholder: string,
     tooltip: string,
-    type: "input" | "textarea" = "input"
+    type: "input" | "textarea" | "date" = "input"
   ) => (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -60,6 +69,29 @@ export const ProjectBasicFields = ({
           placeholder={placeholder}
           className="min-h-[150px] resize-none"
         />
+      ) : type === "date" ? (
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button
+              variant="outline"
+              className={cn(
+                "w-full justify-start text-left font-normal",
+                !value && "text-muted-foreground"
+              )}
+            >
+              <CalendarIcon className="mr-2 h-4 w-4" />
+              {value ? format(new Date(value), "PPP") : placeholder}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-0" align="start">
+            <Calendar
+              mode="single"
+              selected={value ? new Date(value) : undefined}
+              onSelect={(date) => onChange(id, date ? date.toISOString() : "")}
+              initialFocus
+            />
+          </PopoverContent>
+        </Popover>
       ) : (
         <Input
           id={id}
@@ -100,11 +132,12 @@ export const ProjectBasicFields = ({
         "Define who will benefit from or use your project"
       )}
       {renderField(
-        "Timeline",
+        "Project Timeline",
         "timeline",
         timeline,
-        "Expected timeline for the project",
-        "Specify your project's duration and key milestones"
+        "Select target completion date",
+        "Choose when you expect the project to be completed",
+        "date"
       )}
     </div>
   );
