@@ -17,6 +17,7 @@ import CompliancePackages from "./pages/CompliancePackages";
 import BlogPost from "./pages/blog/[slug]";
 import Integrations from "./pages/dashboard/Integrations";
 import HelpCenter from "./pages/HelpCenter";
+import GettingStarted from "./pages/dashboard/GettingStarted";
 
 const ProtectedRoute = ({ children, adminOnly = false }: { children: React.ReactNode, adminOnly?: boolean }) => {
   const { session, loading } = useAuth();
@@ -71,8 +72,9 @@ const AppRoutes = () => {
         </ProtectedRoute>
       }>
         <Route index element={
-          <Navigate to={userType === 'founder' ? "marketplace" : "tasks"} replace />
+          <Navigate to={userType === 'founder' ? "getting-started" : "tasks"} replace />
         } />
+        <Route path="getting-started" element={<GettingStarted />} />
         <Route path="tasks" element={<Tasks />} />
         <Route path="chat" element={<Chat />} />
         <Route path="marketplace" element={<Marketplace />} />

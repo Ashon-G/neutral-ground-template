@@ -3,7 +3,7 @@ import { useAuth } from "@/components/auth/AuthProvider";
 import { ImpersonateUser } from "@/components/admin/ImpersonateUser";
 import { InstallPrompt } from "@/components/pwa/InstallPrompt";
 import { Sidebar, SidebarBody, SidebarLink } from "@/components/dashboard/NewSidebar";
-import { ListTodo, MessageSquare, Wallet, User, Settings as SettingsIcon, Link as LinkIcon } from "lucide-react";
+import { ListTodo, MessageSquare, Wallet, User, Settings as SettingsIcon, Link as LinkIcon, BookOpen } from "lucide-react";
 import { useSidebar } from "@/components/dashboard/sidebar/SidebarContext";
 import { motion } from "framer-motion";
 import { SidebarProvider } from "@/components/dashboard/sidebar/SidebarContext";
@@ -18,6 +18,7 @@ const DashboardContent = () => {
   const isFounder = userMetadataType === 'founder' || appMetadataType === 'founder';
 
   const navItems = [
+    ...(isFounder ? [{ label: "Getting Started", href: "/dashboard/getting-started", icon: <BookOpen className="h-5 w-5" /> }] : []),
     { label: "Tasks", href: "/dashboard/tasks", icon: <ListTodo className="h-5 w-5" /> },
     { label: "Chat", href: "/dashboard/chat", icon: <MessageSquare className="h-5 w-5" /> },
     { label: "Marketplace", href: "/dashboard/marketplace", icon: <Wallet className="h-5 w-5" /> },
