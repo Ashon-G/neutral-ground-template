@@ -57,7 +57,7 @@ export const TargetAudienceField = ({ value, onChange, placeholder }: TargetAudi
   };
 
   return (
-    <div className="space-y-2">
+    <div className="relative space-y-2">
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
@@ -77,20 +77,24 @@ export const TargetAudienceField = ({ value, onChange, placeholder }: TargetAudi
           </Button>
         </PopoverTrigger>
         <PopoverContent 
-          className="w-[300px] p-0" 
-          side="bottom" 
+          className="w-[300px] p-0 z-50" 
           align="start"
-          sideOffset={5}
+          side="bottom"
+          sideOffset={4}
+          alignOffset={0}
+          avoidCollisions={true}
+          style={{ position: 'relative' }}
         >
-          <Command>
-            <CommandInput placeholder="Search target audiences..." />
+          <Command className="max-h-[300px] overflow-auto">
+            <CommandInput placeholder="Search target audiences..." className="h-9" />
             <CommandEmpty>No target audience found.</CommandEmpty>
-            <CommandGroup className="max-h-[200px] overflow-auto">
+            <CommandGroup>
               {TARGET_AUDIENCES.map((audience) => (
                 <CommandItem
                   key={audience}
                   value={audience}
                   onSelect={() => handleAudienceChange(audience)}
+                  className="cursor-pointer"
                 >
                   <Check
                     className={cn(
