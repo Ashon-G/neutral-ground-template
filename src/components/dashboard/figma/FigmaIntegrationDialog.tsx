@@ -65,7 +65,7 @@ export const FigmaIntegrationDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-gradient-to-br from-purple-600 to-blue-500 text-white border-none relative overflow-hidden">
+      <DialogContent className="bg-gradient-to-br from-purple-600 to-blue-500 text-white border-none">
         <button 
           onClick={() => onOpenChange(false)}
           className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground"
@@ -107,12 +107,6 @@ export const FigmaIntegrationDialog = ({
             </Button>
           )}
         </div>
-
-        <img 
-          src="/logos/figma-logo.svg" 
-          alt="Figma Logo" 
-          className="absolute bottom-4 right-4 w-12 h-12 opacity-50"
-        />
       </DialogContent>
     </Dialog>
   );
