@@ -1,16 +1,11 @@
 import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ChevronDown, ChevronUp } from "lucide-react";
 import { SidebarProvider, useSidebar } from "./sidebar/SidebarContext";
 import { UserAvatar } from "./sidebar/UserAvatar";
 import { Badge } from "@/components/ui/badge";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { useState } from "react";
 
 interface SubMenuItem {
   label: string;
@@ -167,46 +162,58 @@ export const SidebarLink = ({
   className?: string;
 }) => {
   const { open, animate } = useSidebar();
+  const [isSubmenuOpen, setIsSubmenuOpen] = useState(false);
 
   if (link.submenu) {
     return (
-      <div className="relative">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <button className={cn(
-              "flex items-center justify-start gap-2 group/sidebar py-2 w-full",
-              className
-            )}>
-              {link.icon}
-              <motion.div
-                initial={false}
-                animate={{
-                  opacity: animate ? (open ? 1 : 0) : 1,
-                  display: animate ? (open ? "flex" : "none") : "flex",
-                }}
-                className="items-center gap-2"
-              >
-                <span className="text-neutral-700 dark:text-neutral-200 text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre">
-                  {link.label}
-                </span>
-              </motion.div>
-            </button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent 
-            side="bottom"
-            align="start"
-            className="bg-white border border-neutral-200 shadow-lg w-full"
+      <div>
+        <button
+          onClick={() => setIsSubmenuOpen(!isSubmenuOpen)}
+          className={cn(
+            "flex items-center justify-start gap-2 group/sidebar py-2 w-full",
+            className
+          )}
+        >
+          {link.icon}
+          <motion.div
+            initial={false}
+            animate={{
+              opacity: animate ? (open ? 1 : 0) : 1,
+              display: animate ? (open ? "flex" : "none") : "flex",
+            }}
+            className="items-center gap-2 flex-grow"
           >
-            {link.submenu.map((item) => (
-              <DropdownMenuItem key={item.href} asChild>
-                <Link to={item.href} className="flex items-center gap-2 text-neutral-700 hover:text-neutral-900">
+            <span className="text-neutral-700 dark:text-neutral-200 text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre">
+              {link.label}
+            </span>
+            {isSubmenuOpen ? (
+              <ChevronUp className="h-4 w-4 ml-auto" />
+            ) : (
+              <ChevronDown className="h-4 w-4 ml-auto" />
+            )}
+          </motion.div>
+        </button>
+        <AnimatePresence>
+          {isSubmenuOpen && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              className="overflow-hidden bg-white dark:bg-neutral-800"
+            >
+              {link.submenu.map((item) => (
+                <Link
+                  key={item.href}
+                  to={item.href}
+                  className="flex items-center gap-2 py-2 pl-8 text-sm text-neutral-700 hover:text-neutral-900 dark:text-neutral-200 dark:hover:text-white"
+                >
                   {item.icon}
                   {item.label}
                 </Link>
-              </DropdownMenuItem>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     );
   }
