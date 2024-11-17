@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
 import { Profile } from "@/integrations/supabase/types/profile";
+import { parseBusinessInfo } from "@/utils/typeConversions";
 
 interface ProjectDetailsDialogProps {
   project: Project;
@@ -28,7 +29,12 @@ export const ProjectDetailsDialog = ({ project, open, onOpenChange }: ProjectDet
         .single();
       
       if (error) throw error;
-      return data as Profile;
+      
+      // Convert the business data to the correct type
+      return {
+        ...data,
+        business: parseBusinessInfo(data.business)
+      } as Profile;
     },
     enabled: open,
   });
