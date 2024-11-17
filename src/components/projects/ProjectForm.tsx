@@ -4,10 +4,16 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { supabase } from "@/integrations/supabase/client";
 import { GenerateTasksButton } from "./GenerateTasksButton";
-import { Loader2 } from "lucide-react";
+import { Loader2, HelpCircle } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { ProjectBasicFields } from "./form/ProjectBasicFields";
 import { ProjectGoals } from "./form/ProjectGoals";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { motion } from "framer-motion";
 
 const STORAGE_KEY = "project_form_data";
 
@@ -17,6 +23,7 @@ export const ProjectForm = () => {
   const queryClient = useQueryClient();
   const [projectId, setProjectId] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -60,6 +67,19 @@ export const ProjectForm = () => {
     setFormData({ ...formData, goals: newGoals });
   };
 
+  const isStepComplete = (step: number) => {
+    switch (step) {
+      case 1:
+        return formData.title.trim() !== "" && formData.description.trim() !== "";
+      case 2:
+        return formData.goals.some(goal => goal.trim() !== "");
+      case 3:
+        return formData.target_audience.trim() !== "" && formData.timeline.trim() !== "";
+      default:
+        return false;
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -78,19 +98,12 @@ export const ProjectForm = () => {
 
       setProjectId(data.id);
       localStorage.removeItem(STORAGE_KEY);
-      setFormData({
-        title: "",
-        description: "",
-        goals: [""],
-        target_audience: "",
-        timeline: "",
-      });
-
+      
       queryClient.invalidateQueries({ queryKey: ["projects"] });
 
       toast({
-        title: "Project Created",
-        description: "Your project has been saved successfully.",
+        title: "🎉 Project Created Successfully!",
+        description: "Your project has been created. You can now start adding tasks.",
       });
     } catch (error) {
       console.error("Error creating project:", error);
@@ -104,35 +117,130 @@ export const ProjectForm = () => {
     }
   };
 
+  const nextStep = () => {
+    if (currentStep < 3 && isStepComplete(currentStep)) {
+      setCurrentStep(prev => prev + 1);
+    }
+  };
+
+  const prevStep = () => {
+    if (currentStep > 1) {
+      setCurrentStep(prev => prev - 1);
+    }
+  };
+
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 max-w-2xl mx-auto mb-8">
-      <ProjectBasicFields
-        title={formData.title}
-        description={formData.description}
-        targetAudience={formData.target_audience}
-        timeline={formData.timeline}
-        onChange={handleFieldChange}
-      />
+    <motion.form 
+      onSubmit={handleSubmit}
+      className="space-y-8"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-2">
+          <h2 className="text-xl font-semibold">
+            Step {currentStep} of 3
+          </h2>
+          <Tooltip>
+            <TooltipTrigger>
+              <HelpCircle className="h-4 w-4 text-muted-foreground" />
+            </TooltipTrigger>
+            <TooltipContent>
+              <p className="max-w-xs">
+                Fill out each section carefully. You can always come back and edit later.
+              </p>
+            </TooltipContent>
+          </Tooltip>
+        </div>
+        <div className="flex gap-2">
+          {Array.from({ length: 3 }, (_, i) => (
+            <div
+              key={i}
+              className={`h-2 w-16 rounded-full transition-colors ${
+                i + 1 === currentStep
+                  ? "bg-secondary"
+                  : i + 1 < currentStep
+                  ? "bg-muted-foreground"
+                  : "bg-muted"
+              }`}
+            />
+          ))}
+        </div>
+      </div>
 
-      <ProjectGoals
-        goals={formData.goals}
-        onGoalChange={handleGoalChange}
-        onAddGoal={addGoal}
-        onRemoveGoal={removeGoal}
-      />
-
-      <div className="flex gap-4">
-        <Button type="submit" disabled={isSubmitting}>
-          {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-          Save Project
-        </Button>
-        {projectId && session?.user.id && (
-          <GenerateTasksButton
-            projectId={projectId}
-            founderId={session.user.id}
+      <div className="space-y-8">
+        {currentStep === 1 && (
+          <ProjectBasicFields
+            title={formData.title}
+            description={formData.description}
+            targetAudience={formData.target_audience}
+            timeline={formData.timeline}
+            onChange={handleFieldChange}
           />
         )}
+
+        {currentStep === 2 && (
+          <ProjectGoals
+            goals={formData.goals}
+            onGoalChange={handleGoalChange}
+            onAddGoal={addGoal}
+            onRemoveGoal={removeGoal}
+          />
+        )}
+
+        {currentStep === 3 && (
+          <div className="space-y-6">
+            <div className="space-y-4">
+              <h3 className="text-lg font-medium">Final Details</h3>
+              <ProjectBasicFields
+                title={formData.title}
+                description={formData.description}
+                targetAudience={formData.target_audience}
+                timeline={formData.timeline}
+                onChange={handleFieldChange}
+                hideBasic
+              />
+            </div>
+          </div>
+        )}
       </div>
-    </form>
+
+      <div className="flex justify-between pt-6 border-t">
+        <Button
+          type="button"
+          variant="outline"
+          onClick={prevStep}
+          disabled={currentStep === 1}
+        >
+          Previous
+        </Button>
+
+        {currentStep < 3 ? (
+          <Button
+            type="button"
+            onClick={nextStep}
+            disabled={!isStepComplete(currentStep)}
+          >
+            Next Step
+          </Button>
+        ) : (
+          <div className="flex gap-4">
+            <Button type="submit" disabled={isSubmitting || !isStepComplete(currentStep)}>
+              {isSubmitting ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : null}
+              Create Project
+            </Button>
+            {projectId && session?.user.id && (
+              <GenerateTasksButton
+                projectId={projectId}
+                founderId={session.user.id}
+              />
+            )}
+          </div>
+        )}
+      </div>
+    </motion.form>
   );
 };
