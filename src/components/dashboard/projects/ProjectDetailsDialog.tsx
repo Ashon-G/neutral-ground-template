@@ -1,6 +1,6 @@
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Project } from "@/integrations/supabase/types/project";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Loader2, Calendar, Users, Target, Coins } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -9,6 +9,15 @@ import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
 import { Profile } from "@/integrations/supabase/types/profile";
 import { parseBusinessInfo } from "@/utils/typeConversions";
+import { useToast } from "@/components/ui/use-toast";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useAuth } from "@/components/auth/AuthProvider";
 
 interface ProjectDetailsDialogProps {
   project: Project;
@@ -18,6 +27,10 @@ interface ProjectDetailsDialogProps {
 
 export const ProjectDetailsDialog = ({ project, open, onOpenChange }: ProjectDetailsDialogProps) => {
   const navigate = useNavigate();
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+  const { session } = useAuth();
+  const isFounder = session?.user?.id === project.founder_id;
 
   const { data: founder, isLoading: loadingFounder } = useQuery({
     queryKey: ["founder", project.founder_id],
@@ -30,7 +43,6 @@ export const ProjectDetailsDialog = ({ project, open, onOpenChange }: ProjectDet
       
       if (error) throw error;
       
-      // Convert the business data to the correct type
       return {
         ...data,
         business: parseBusinessInfo(data.business)
@@ -39,10 +51,43 @@ export const ProjectDetailsDialog = ({ project, open, onOpenChange }: ProjectDet
     enabled: open,
   });
 
+  const updateProjectStatus = useMutation({
+    mutationFn: async (status: string) => {
+      const { error } = await supabase
+        .from("founder_projects")
+        .update({ status })
+        .eq("id", project.id);
+
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["projects"] });
+      queryClient.invalidateQueries({ queryKey: ["my-projects"] });
+      toast({
+        title: "Success",
+        description: "Project status updated successfully",
+      });
+    },
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: "Failed to update project status",
+        variant: "destructive",
+      });
+    },
+  });
+
   const handleContactClick = () => {
     navigate(`/dashboard/chat`, { state: { selectedFounder: project.founder_id } });
     onOpenChange(false);
   };
+
+  const projectStatuses = [
+    { value: "active", label: "Active" },
+    { value: "draft", label: "Not Active" },
+    { value: "completed", label: "Completed" },
+    { value: "archived", label: "Archived" }
+  ];
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -59,7 +104,25 @@ export const ProjectDetailsDialog = ({ project, open, onOpenChange }: ProjectDet
                   <h2 className="text-2xl font-bold">{project.title}</h2>
                   <p className="text-gray-500">Posted by {founder?.full_name}</p>
                 </div>
-                <Badge variant="secondary">{project.status}</Badge>
+                {isFounder ? (
+                  <Select
+                    value={project.status}
+                    onValueChange={(value) => updateProjectStatus.mutate(value)}
+                  >
+                    <SelectTrigger className="w-[140px]">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {projectStatuses.map((status) => (
+                        <SelectItem key={status.value} value={status.value}>
+                          {status.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                ) : (
+                  <Badge variant="secondary">{project.status}</Badge>
+                )}
               </div>
 
               <div className="space-y-4">
@@ -114,9 +177,11 @@ export const ProjectDetailsDialog = ({ project, open, onOpenChange }: ProjectDet
                   </div>
                 )}
 
-                <Button onClick={handleContactClick} className="w-full">
-                  Contact Founder
-                </Button>
+                {!isFounder && (
+                  <Button onClick={handleContactClick} className="w-full">
+                    Contact Founder
+                  </Button>
+                )}
               </div>
             </div>
           </ScrollArea>

@@ -17,6 +17,7 @@ const ProjectMarketplace = () => {
       const { data, error } = await supabase
         .from("founder_projects")
         .select("*")
+        .eq("status", "active")
         .order("created_at", { ascending: false });
 
       if (error) throw error;
@@ -39,7 +40,7 @@ const ProjectMarketplace = () => {
               Find Your Next Project
             </h1>
             <p className="text-white/80 text-lg">
-              Browse through available projects and connect with founders
+              Browse through available active projects and connect with founders
             </p>
           </div>
           <div className="relative max-w-2xl mx-auto">
