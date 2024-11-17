@@ -64,20 +64,24 @@ export const GettingStartedGuide = () => {
             exit={{ y: 100, opacity: 0 }}
             className="w-[90vw] max-w-[400px] bg-white rounded-t-xl border border-border shadow-lg"
           >
-            <div className="flex justify-between items-start p-6 pb-0">
+            <div className="flex justify-between items-center p-4 pb-0">
               <h2 className="text-neutral-950 font-title text-lg">Getting Started</h2>
               <div className="flex gap-2">
-                <ChevronDown 
-                  className="text-neutral-400 cursor-pointer hover:text-neutral-600" 
+                <button 
                   onClick={() => setIsCollapsed(true)}
-                />
-                <X 
-                  className="text-neutral-400 cursor-pointer hover:text-neutral-600" 
+                  className="p-1 hover:bg-gray-100 rounded-md transition-colors"
+                >
+                  <ChevronDown className="h-4 w-4 text-neutral-400" />
+                </button>
+                <button 
                   onClick={() => setIsOpen(false)}
-                />
+                  className="p-1 hover:bg-gray-100 rounded-md transition-colors"
+                >
+                  <X className="h-4 w-4 text-neutral-400" />
+                </button>
               </div>
             </div>
-            <div className="p-6">
+            <div className="p-4">
               <p className="text-neutral-500 text-sm mb-4">Complete these steps to get started with Maven</p>
               
               <GettingStartedProgress progress={progress} />
@@ -120,7 +124,7 @@ export const GettingStartedGuide = () => {
                 />
               </Accordion>
 
-              <div className="text-center text-neutral-500 text-xs mt-8">
+              <div className="text-center text-neutral-500 text-xs mt-4">
                 <p>Powered by Maven</p>
               </div>
             </div>
@@ -131,9 +135,9 @@ export const GettingStartedGuide = () => {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 100, opacity: 0 }}
             onClick={() => setIsCollapsed(false)}
-            className="bg-white rounded-t-xl border border-border shadow-lg px-6 py-3 flex items-center gap-2"
+            className="bg-white rounded-t-xl border border-border shadow-lg px-4 py-2 flex items-center gap-2"
           >
-            <ChevronUp className="w-5 h-5" />
+            <ChevronUp className="h-4 w-4" />
             <span>Getting Started Guide</span>
           </motion.button>
         )}
