@@ -170,42 +170,44 @@ export const SidebarLink = ({
 
   if (link.submenu) {
     return (
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <button className={cn(
-            "flex items-center justify-start gap-2 group/sidebar py-2 w-full",
-            className
-          )}>
-            {link.icon}
-            <motion.div
-              initial={false}
-              animate={{
-                opacity: animate ? (open ? 1 : 0) : 1,
-                display: animate ? (open ? "flex" : "none") : "flex",
-              }}
-              className="items-center gap-2"
-            >
-              <span className="text-neutral-700 dark:text-neutral-200 text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre">
-                {link.label}
-              </span>
-            </motion.div>
-          </button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent 
-          side="bottom"
-          align="start"
-          className="bg-white border border-neutral-200 shadow-lg ml-8 w-[200px]"
-        >
-          {link.submenu.map((item) => (
-            <DropdownMenuItem key={item.href} asChild>
-              <Link to={item.href} className="flex items-center gap-2 text-neutral-700 hover:text-neutral-900">
-                {item.icon}
-                {item.label}
-              </Link>
-            </DropdownMenuItem>
-          ))}
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <div className="relative">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button className={cn(
+              "flex items-center justify-start gap-2 group/sidebar py-2 w-full",
+              className
+            )}>
+              {link.icon}
+              <motion.div
+                initial={false}
+                animate={{
+                  opacity: animate ? (open ? 1 : 0) : 1,
+                  display: animate ? (open ? "flex" : "none") : "flex",
+                }}
+                className="items-center gap-2"
+              >
+                <span className="text-neutral-700 dark:text-neutral-200 text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre">
+                  {link.label}
+                </span>
+              </motion.div>
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent 
+            side="bottom"
+            align="start"
+            className="bg-white border border-neutral-200 shadow-lg w-full"
+          >
+            {link.submenu.map((item) => (
+              <DropdownMenuItem key={item.href} asChild>
+                <Link to={item.href} className="flex items-center gap-2 text-neutral-700 hover:text-neutral-900">
+                  {item.icon}
+                  {item.label}
+                </Link>
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
     );
   }
 
