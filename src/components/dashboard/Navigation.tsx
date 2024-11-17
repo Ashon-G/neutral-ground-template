@@ -3,7 +3,6 @@ import { useAuth } from "@/components/auth/AuthProvider";
 import {
   MessageSquare,
   ListTodo,
-  User,
   Settings,
   Wallet,
   Link as LinkIcon,
@@ -54,11 +53,6 @@ export const Navigation = () => {
       label: "Connect",
       to: "integrations",
       badge: "Alpha"
-    },
-    {
-      icon: <User className="h-5 w-5" />,
-      label: "Profile",
-      to: "profile"
     },
     ...(isAdmin ? [{
       icon: <Settings className="h-5 w-5" />,

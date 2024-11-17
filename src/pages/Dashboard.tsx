@@ -3,7 +3,7 @@ import { useAuth } from "@/components/auth/AuthProvider";
 import { ImpersonateUser } from "@/components/admin/ImpersonateUser";
 import { InstallPrompt } from "@/components/pwa/InstallPrompt";
 import { Sidebar, SidebarBody, SidebarLink } from "@/components/dashboard/NewSidebar";
-import { ListTodo, MessageSquare, Wallet, User, Settings as SettingsIcon, Link as LinkIcon, BookOpen, FolderKanban } from "lucide-react";
+import { ListTodo, MessageSquare, Wallet, Settings as SettingsIcon, Link as LinkIcon, BookOpen, FolderKanban } from "lucide-react";
 import { useSidebar } from "@/components/dashboard/sidebar/SidebarContext";
 import { motion } from "framer-motion";
 import { SidebarProvider } from "@/components/dashboard/sidebar/SidebarContext";
@@ -34,7 +34,6 @@ const DashboardContent = () => {
     { label: "Chat", href: "/dashboard/chat", icon: <MessageSquare className="h-5 w-5" /> },
     { label: "Marketplace", href: "/dashboard/marketplace", icon: <Wallet className="h-5 w-5" /> },
     { label: "Integrations", href: "/dashboard/integrations", icon: <LinkIcon className="h-5 w-5" />, badge: "Early Alpha" },
-    { label: "Profile", href: "/dashboard/profile", icon: <User className="h-5 w-5" /> },
     ...(isAdmin ? [{ label: "Admin", href: "/dashboard/admin", icon: <SettingsIcon className="h-5 w-5" /> }] : []),
   ];
 
