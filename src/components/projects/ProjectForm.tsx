@@ -1,13 +1,12 @@
 import { useState, useEffect } from "react";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { supabase } from "@/integrations/supabase/client";
 import { GenerateTasksButton } from "./GenerateTasksButton";
 import { Loader2, HelpCircle } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
-import { ProjectBasicFields } from "./form/ProjectBasicFields";
-import { ProjectGoals } from "./form/ProjectGoals";
+import { ProjectFormSteps } from "./form/ProjectFormSteps";
 import {
   Tooltip,
   TooltipContent,
@@ -30,14 +29,15 @@ export const ProjectForm = () => {
     goals: [""],
     target_audience: "",
     timeline: "",
+    image_url: "",
+    documents: [],
   });
 
   useEffect(() => {
     const savedData = localStorage.getItem(STORAGE_KEY);
     if (savedData) {
       try {
-        const parsedData = JSON.parse(savedData);
-        setFormData(parsedData);
+        setFormData(JSON.parse(savedData));
       } catch (error) {
         console.error("Error parsing saved form data:", error);
       }
@@ -48,7 +48,7 @@ export const ProjectForm = () => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(formData));
   }, [formData]);
 
-  const handleFieldChange = (field: string, value: string) => {
+  const handleFieldChange = (field: string, value: any) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -169,42 +169,14 @@ export const ProjectForm = () => {
         </div>
       </div>
 
-      <div className="space-y-8">
-        {currentStep === 1 && (
-          <ProjectBasicFields
-            title={formData.title}
-            description={formData.description}
-            targetAudience={formData.target_audience}
-            timeline={formData.timeline}
-            onChange={handleFieldChange}
-          />
-        )}
-
-        {currentStep === 2 && (
-          <ProjectGoals
-            goals={formData.goals}
-            onGoalChange={handleGoalChange}
-            onAddGoal={addGoal}
-            onRemoveGoal={removeGoal}
-          />
-        )}
-
-        {currentStep === 3 && (
-          <div className="space-y-6">
-            <div className="space-y-4">
-              <h3 className="text-lg font-medium">Final Details</h3>
-              <ProjectBasicFields
-                title={formData.title}
-                description={formData.description}
-                targetAudience={formData.target_audience}
-                timeline={formData.timeline}
-                onChange={handleFieldChange}
-                hideBasic
-              />
-            </div>
-          </div>
-        )}
-      </div>
+      <ProjectFormSteps
+        currentStep={currentStep}
+        formData={formData}
+        onChange={handleFieldChange}
+        onGoalChange={handleGoalChange}
+        onAddGoal={addGoal}
+        onRemoveGoal={removeGoal}
+      />
 
       <div className="flex justify-between pt-6 border-t">
         <Button
