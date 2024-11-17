@@ -5,12 +5,25 @@ import { Menu, X } from "lucide-react";
 import { SidebarProvider, useSidebar } from "./sidebar/SidebarContext";
 import { UserAvatar } from "./sidebar/UserAvatar";
 import { Badge } from "@/components/ui/badge";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
-interface Links {
+interface SubMenuItem {
   label: string;
   href: string;
   icon: React.ReactNode;
+}
+
+interface Links {
+  label: string;
+  href?: string;
+  icon: React.ReactNode;
   badge?: string;
+  submenu?: SubMenuItem[];
 }
 
 export const Sidebar = ({
@@ -154,9 +167,45 @@ export const SidebarLink = ({
   className?: string;
 }) => {
   const { open, animate } = useSidebar();
+
+  if (link.submenu) {
+    return (
+      <DropdownMenu>
+        <DropdownMenuTrigger className={cn(
+          "flex items-center justify-start gap-2 group/sidebar py-2",
+          className
+        )}>
+          {link.icon}
+          <motion.div
+            initial={false}
+            animate={{
+              opacity: animate ? (open ? 1 : 0) : 1,
+              display: animate ? (open ? "flex" : "none") : "flex",
+            }}
+            className="items-center gap-2"
+          >
+            <span className="text-neutral-700 dark:text-neutral-200 text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre">
+              {link.label}
+            </span>
+          </motion.div>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          {link.submenu.map((item) => (
+            <DropdownMenuItem key={item.href} asChild>
+              <Link to={item.href} className="flex items-center gap-2">
+                {item.icon}
+                {item.label}
+              </Link>
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenu>
+    );
+  }
+
   return (
     <Link
-      to={link.href}
+      to={link.href!}
       className={cn(
         "flex items-center justify-start gap-2 group/sidebar py-2",
         className
