@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState, useCallback } from "react";
+import { Check } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import {
   Command,
   CommandEmpty,
@@ -13,51 +14,40 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Check, ChevronsUpDown } from "lucide-react";
-import { cn } from "@/lib/utils";
 
 const TARGET_AUDIENCES = [
-  "Small Business Owners",
+  "Small Businesses",
   "Enterprise Companies",
   "Startups",
-  "Freelancers",
-  "Students",
-  "Parents",
-  "Young Professionals",
-  "Remote Workers",
-  "Local Businesses",
-  "Tech Enthusiasts",
-  "Creative Professionals",
-  "Healthcare Providers",
-  "Educational Institutions",
-  "Non-Profit Organizations",
-  "Government Agencies"
+  "Consumers",
+  "Government",
+  "Education",
+  "Healthcare",
+  "Non-profit",
+  "Technology",
+  "Retail",
 ];
 
 interface TargetAudienceFieldProps {
   value: string;
   onChange: (value: string) => void;
-  placeholder: string;
+  placeholder?: string;
 }
 
-export const TargetAudienceField = ({ value, onChange, placeholder }: TargetAudienceFieldProps) => {
-  const [open, setOpen] = React.useState(false);
-  const selectedAudiences = value ? value.split(",").filter(Boolean) : [];
+export const TargetAudienceField = ({
+  value,
+  onChange,
+  placeholder = "Select target audience...",
+}: TargetAudienceFieldProps) => {
+  const [open, setOpen] = useState(false);
 
-  const handleAudienceChange = (audience: string) => {
-    const current = new Set(selectedAudiences);
-    
-    if (current.has(audience)) {
-      current.delete(audience);
-    } else if (current.size < 3) {
-      current.add(audience);
-    }
-    
-    onChange(Array.from(current).join(","));
-  };
+  const handleAudienceChange = useCallback((currentValue: string) => {
+    onChange(currentValue);
+    setOpen(false);
+  }, [onChange]);
 
   return (
-    <div className="relative space-y-2">
+    <div className="relative">
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
@@ -66,42 +56,32 @@ export const TargetAudienceField = ({ value, onChange, placeholder }: TargetAudi
             aria-expanded={open}
             className="w-full justify-between"
           >
-            {selectedAudiences.length === 0 ? (
-              <span className="text-muted-foreground">{placeholder}</span>
-            ) : (
-              <span className="text-black">
-                {selectedAudiences.length} selected
-              </span>
-            )}
-            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+            {value ? value : placeholder}
           </Button>
         </PopoverTrigger>
         <PopoverContent 
-          className="w-[300px] p-0 z-50" 
+          className="w-full min-w-[200px] p-0" 
           align="start"
           side="bottom"
           sideOffset={4}
-          alignOffset={0}
-          avoidCollisions={true}
-          style={{ position: 'relative' }}
         >
-          <Command className="max-h-[300px] overflow-auto">
-            <CommandInput placeholder="Search target audiences..." className="h-9" />
+          <Command shouldFilter={false}>
+            <CommandInput 
+              placeholder="Search target audiences..." 
+              className="h-9"
+            />
             <CommandEmpty>No target audience found.</CommandEmpty>
-            <CommandGroup>
+            <CommandGroup className="max-h-[200px] overflow-y-auto">
               {TARGET_AUDIENCES.map((audience) => (
                 <CommandItem
                   key={audience}
                   value={audience}
                   onSelect={() => handleAudienceChange(audience)}
-                  className="cursor-pointer"
                 >
                   <Check
                     className={cn(
                       "mr-2 h-4 w-4",
-                      selectedAudiences.includes(audience)
-                        ? "opacity-100"
-                        : "opacity-0"
+                      value === audience ? "opacity-100" : "opacity-0"
                     )}
                   />
                   {audience}
@@ -111,27 +91,6 @@ export const TargetAudienceField = ({ value, onChange, placeholder }: TargetAudi
           </Command>
         </PopoverContent>
       </Popover>
-      <div className="flex flex-wrap gap-2">
-        {selectedAudiences.map((audience) => (
-          <Badge
-            key={audience}
-            variant="secondary"
-            className="text-sm"
-          >
-            {audience}
-            <button
-              className="ml-1 rounded-full outline-none focus:outline-none"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                handleAudienceChange(audience);
-              }}
-            >
-              ×
-            </button>
-          </Badge>
-        ))}
-      </div>
     </div>
   );
 };
