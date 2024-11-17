@@ -8,6 +8,8 @@ import { useSidebar } from "@/components/dashboard/sidebar/SidebarContext";
 import { motion } from "framer-motion";
 import { SidebarProvider } from "@/components/dashboard/sidebar/SidebarContext";
 import { UserAvatar } from "@/components/dashboard/sidebar/UserAvatar";
+import { useMediaQuery } from "@/hooks/use-media-query";
+import { Navigation } from "@/components/dashboard/Navigation";
 
 const DashboardContent = () => {
   const { session } = useAuth();
@@ -16,6 +18,7 @@ const DashboardContent = () => {
   const appMetadataType = session?.user?.app_metadata?.user_type;
   const isAdmin = userMetadataType === 'admin' || appMetadataType === 'admin';
   const isFounder = userMetadataType === 'founder' || appMetadataType === 'founder';
+  const isMobile = useMediaQuery("(max-width: 768px)");
 
   const navItems = [
     ...(isFounder ? [{ label: "Getting Started", href: "/dashboard/getting-started", icon: <BookOpen className="h-5 w-5" /> }] : []),
@@ -41,32 +44,36 @@ const DashboardContent = () => {
         </div>
       </nav>
 
-      <Sidebar>
-        <SidebarBody className="pt-24 fixed left-0">
-          <div className="flex flex-col h-full">
-            <div className="flex flex-col gap-2">
-              {navItems.map((item) => (
-                <SidebarLink
-                  key={item.href}
-                  link={item}
-                  className="text-neutral-700 hover:text-neutral-900"
-                />
-              ))}
+      {!isMobile && (
+        <Sidebar>
+          <SidebarBody className="pt-24 fixed left-0">
+            <div className="flex flex-col h-full">
+              <div className="flex flex-col gap-2">
+                {navItems.map((item) => (
+                  <SidebarLink
+                    key={item.href}
+                    link={item}
+                    className="text-neutral-700 hover:text-neutral-900"
+                  />
+                ))}
+              </div>
+              <div className="mt-auto pt-4">
+                <UserAvatar />
+              </div>
             </div>
-            <div className="mt-auto pt-4">
-              <UserAvatar />
-            </div>
-          </div>
-        </SidebarBody>
-      </Sidebar>
+          </SidebarBody>
+        </Sidebar>
+      )}
 
       <InstallPrompt />
 
       <motion.main 
-        className="pt-24 pb-24 md:pb-20 md:ml-[300px] transition-all duration-300"
+        className={`pt-24 pb-24 transition-all duration-300 ${
+          isMobile ? "" : "md:pb-20 md:ml-[300px]"
+        }`}
         animate={{
-          marginLeft: animate ? (open ? "300px" : "60px") : "300px",
-          width: animate ? (open ? "calc(100% - 300px)" : "calc(100% - 60px)") : "calc(100% - 300px)",
+          marginLeft: !isMobile && animate ? (open ? "300px" : "60px") : "0px",
+          width: !isMobile && animate ? (open ? "calc(100% - 300px)" : "calc(100% - 60px)") : "100%",
         }}
         transition={{ duration: 0.3, ease: "easeInOut" }}
       >
@@ -74,6 +81,8 @@ const DashboardContent = () => {
           <Outlet />
         </div>
       </motion.main>
+
+      {isMobile && <Navigation />}
     </div>
   );
 };
