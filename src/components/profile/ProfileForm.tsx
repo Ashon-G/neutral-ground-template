@@ -14,6 +14,7 @@ import { useAuth } from "@/components/auth/AuthProvider";
 import { BusinessSection } from "./sections/BusinessSection";
 import { ProfileFormData } from "./types";
 import { Profile } from "@/integrations/supabase/types/profile";
+import { Json } from "@/integrations/supabase/types";
 
 export const ProfileForm = () => {
   const { session } = useAuth();
@@ -34,7 +35,11 @@ export const ProfileForm = () => {
       if (error) throw error;
       
       const settings = (data?.settings || {}) as Record<string, any>;
-      return { ...data, settings };
+      return { 
+        ...data, 
+        settings,
+        business: data.business as Profile['business']
+      } as Profile;
     },
   });
 
@@ -84,15 +89,15 @@ export const ProfileForm = () => {
       const { error } = await supabase
         .from("profiles")
         .update({
-          ...data,
+          full_name: data.full_name,
+          bio: data.bio,
           avatar_url: avatarUrl,
+          settings: data.settings,
+          business: data.business as Json,
         })
         .eq("id", session?.user.id);
 
       if (error) throw error;
-
-      // Invalidate the getting started progress
-      queryClient.invalidateQueries({ queryKey: ["gettingStartedProgress"] });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["profile"] });

@@ -18,7 +18,12 @@ export const MavenMarketplace = () => {
         .eq("user_type", "maven");
 
       if (error) throw error;
-      return data as Profile[];
+      
+      // Parse the business JSON into BusinessInfo type for each maven
+      return (data as any[]).map(maven => ({
+        ...maven,
+        business: maven.business as Profile['business']
+      })) as Profile[];
     },
   });
 

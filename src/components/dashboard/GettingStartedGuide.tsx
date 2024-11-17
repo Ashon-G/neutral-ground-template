@@ -6,6 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { Profile } from "@/integrations/supabase/types/profile";
+import { Json } from "@/integrations/supabase/types";
 
 export const GettingStartedGuide = () => {
   const [isOpen, setIsOpen] = useState(true);
@@ -23,7 +24,12 @@ export const GettingStartedGuide = () => {
         .single();
 
       if (error) throw error;
-      return data as Profile;
+      
+      // Parse the business JSON into BusinessInfo type
+      return {
+        ...data,
+        business: data.business as Profile['business']
+      } as Profile;
     },
   });
 

@@ -1,4 +1,5 @@
 import { BusinessInfo } from './business';
+import { Json } from '../types';
 
 export type UserType = 'founder' | 'maven' | 'admin';
 export type MavenSkillset = 'Developer' | 'Marketer' | 'Copywriter' | 'Designer' | 'Accounting' | 'Sales' | 'Other';
