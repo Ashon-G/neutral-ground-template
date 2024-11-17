@@ -137,9 +137,11 @@ export type Database = {
           budget: string | null
           created_at: string
           description: string
+          documents: Json | null
           founder_id: string
           goals: string[] | null
           id: string
+          image_url: string | null
           status: Database["public"]["Enums"]["project_status_enum"]
           target_audience: string | null
           timeline: string | null
@@ -149,9 +151,11 @@ export type Database = {
           budget?: string | null
           created_at?: string
           description: string
+          documents?: Json | null
           founder_id: string
           goals?: string[] | null
           id?: string
+          image_url?: string | null
           status?: Database["public"]["Enums"]["project_status_enum"]
           target_audience?: string | null
           timeline?: string | null
@@ -161,9 +165,11 @@ export type Database = {
           budget?: string | null
           created_at?: string
           description?: string
+          documents?: Json | null
           founder_id?: string
           goals?: string[] | null
           id?: string
+          image_url?: string | null
           status?: Database["public"]["Enums"]["project_status_enum"]
           target_audience?: string | null
           timeline?: string | null
