@@ -26,7 +26,7 @@ export const GettingStartedGuide = () => {
     },
   });
 
-  const isProfileComplete = profile?.business && Object.values(profile.business).some(value => value);
+  const isProfileComplete = profile?.business && Object.values(profile.business).some(value => value !== null && value !== '');
   const progress = [isProfileComplete].filter(Boolean).length * 25;
 
   if (!isOpen) return null;
