@@ -1,13 +1,15 @@
-import React, { useState } from "react";
-import { X, ChevronDown, CheckCircle2, ChevronUp } from "lucide-react";
+import { useState } from "react";
+import { X, ChevronDown, ChevronUp } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { Profile } from "@/integrations/supabase/types/profile";
-import { Json } from "@/integrations/supabase/types";
 import { parseBusinessInfo } from "@/utils/typeConversions";
+import { Accordion } from "@/components/ui/accordion";
+import { GettingStartedProgress } from "./getting-started/GettingStartedProgress";
+import { GettingStartedTask } from "./getting-started/GettingStartedTask";
 
 export const GettingStartedGuide = () => {
   const [isOpen, setIsOpen] = useState(true);
@@ -78,117 +80,45 @@ export const GettingStartedGuide = () => {
             <div className="p-6">
               <p className="text-neutral-500 text-sm mb-4">Complete these steps to get started with Maven</p>
               
-              <div className="w-full h-2 bg-neutral-200 rounded-full mb-1">
-                <div 
-                  className="bg-secondary h-full rounded-full transition-all duration-500" 
-                  style={{ width: `${progress}%` }}
+              <GettingStartedProgress progress={progress} />
+
+              <Accordion type="single" collapsible>
+                <GettingStartedTask
+                  value="profile"
+                  title="Complete Business Profile"
+                  description="Add your company details"
+                  isCompleted={isProfileComplete}
+                  buttonText="Complete Profile"
+                  onAction={() => navigate("/dashboard/profile")}
                 />
-              </div>
-              <p className="text-neutral-500 text-xs mb-6">{progress}% Completed</p>
 
-              <details className="mb-6 group" open={!isProfileComplete}>
-                <summary className="flex justify-between items-center cursor-pointer">
-                  <div className="flex items-center gap-2">
-                    <div className={`w-[34px] h-[34px] ${isProfileComplete ? 'bg-green-500' : 'bg-secondary/10'} rounded-full flex items-center justify-center`}>
-                      <CheckCircle2 className={`w-5 h-5 ${isProfileComplete ? 'text-white' : 'text-secondary'}`} />
-                    </div>
-                    <div>
-                      <p className="text-neutral-950 font-medium">Complete Business Profile</p>
-                      <p className="text-neutral-500 text-sm">Add your company details</p>
-                    </div>
-                  </div>
-                  <ChevronDown className="text-neutral-400 group-open:rotate-180 transition-transform" />
-                </summary>
-                <div className="pl-12 pr-4 mt-4">
-                  <p className="text-neutral-500 text-sm mb-4">Help us understand your business better by completing your company profile</p>
-                  <div className="flex gap-4">
-                    <button 
-                      onClick={() => navigate("/dashboard/profile")}
-                      className="bg-secondary text-white rounded-md py-2 px-4 hover:bg-secondary/90 transition-colors"
-                    >
-                      Complete Profile
-                    </button>
-                  </div>
-                </div>
-              </details>
+                <GettingStartedTask
+                  value="project"
+                  title="Create Your First Project"
+                  description="Define what you need help with"
+                  isCompleted={hasCreatedProject}
+                  buttonText="Create Project"
+                  onAction={() => navigate("/dashboard/create-project")}
+                />
 
-              <details className="mb-6 group" open={!hasCreatedProject}>
-                <summary className="flex justify-between items-center cursor-pointer">
-                  <div className="flex items-center gap-2">
-                    <div className={`w-[34px] h-[34px] ${hasCreatedProject ? 'bg-green-500' : 'bg-secondary/10'} rounded-full flex items-center justify-center`}>
-                      <CheckCircle2 className={`w-5 h-5 ${hasCreatedProject ? 'text-white' : 'text-secondary'}`} />
-                    </div>
-                    <div>
-                      <p className="text-neutral-950 font-medium">Create Your First Project</p>
-                      <p className="text-neutral-500 text-sm">Define what you need help with</p>
-                    </div>
-                  </div>
-                  <ChevronDown className="text-neutral-400 group-open:rotate-180 transition-transform" />
-                </summary>
-                <div className="pl-12 pr-4 mt-4">
-                  <p className="text-neutral-500 text-sm mb-4">Create a project to start collaborating with Mavens</p>
-                  <div className="flex gap-4">
-                    <button 
-                      onClick={() => navigate("/dashboard/create-project")}
-                      className="bg-secondary text-white rounded-md py-2 px-4 hover:bg-secondary/90 transition-colors"
-                    >
-                      Create Project
-                    </button>
-                  </div>
-                </div>
-              </details>
+                <GettingStartedTask
+                  value="marketplace"
+                  title="Browse Mavens"
+                  description="Find the perfect Maven for your needs"
+                  isCompleted={false}
+                  buttonText="View Marketplace"
+                  onAction={() => navigate("/dashboard/marketplace")}
+                />
 
-              <details className="mb-6 group">
-                <summary className="flex justify-between items-center cursor-pointer">
-                  <div className="flex items-center gap-2">
-                    <div className="w-[34px] h-[34px] bg-secondary/10 rounded-full flex items-center justify-center">
-                      <CheckCircle2 className="w-5 h-5 text-secondary" />
-                    </div>
-                    <div>
-                      <p className="text-neutral-950 font-medium">Browse Mavens</p>
-                      <p className="text-neutral-500 text-sm">Find the perfect Maven for your needs</p>
-                    </div>
-                  </div>
-                  <ChevronDown className="text-neutral-400 group-open:rotate-180 transition-transform" />
-                </summary>
-                <div className="pl-12 pr-4 mt-4">
-                  <p className="text-neutral-500 text-sm mb-4">Explore our marketplace of skilled Mavens ready to help</p>
-                  <div className="flex gap-4">
-                    <button 
-                      onClick={() => navigate("/dashboard/marketplace")}
-                      className="bg-secondary text-white rounded-md py-2 px-4 hover:bg-secondary/90 transition-colors"
-                    >
-                      View Marketplace
-                    </button>
-                  </div>
-                </div>
-              </details>
-
-              <details className="mb-6 group">
-                <summary className="flex justify-between items-center cursor-pointer">
-                  <div className="flex items-center gap-2">
-                    <div className="w-[34px] h-[34px] bg-secondary/10 rounded-full flex items-center justify-center">
-                      <CheckCircle2 className="w-5 h-5 text-secondary" />
-                    </div>
-                    <div>
-                      <p className="text-neutral-950 font-medium">Set Up Integrations</p>
-                      <p className="text-neutral-500 text-sm">Connect your favorite tools</p>
-                    </div>
-                  </div>
-                  <ChevronDown className="text-neutral-400 group-open:rotate-180 transition-transform" />
-                </summary>
-                <div className="pl-12 pr-4 mt-4">
-                  <p className="text-neutral-500 text-sm mb-4">Connect tools like Slack and Jira to streamline your workflow</p>
-                  <div className="flex gap-4">
-                    <button 
-                      onClick={() => navigate("/dashboard/integrations")}
-                      className="bg-secondary text-white rounded-md py-2 px-4 hover:bg-secondary/90 transition-colors"
-                    >
-                      Set Up Integrations
-                    </button>
-                  </div>
-                </div>
-              </details>
+                <GettingStartedTask
+                  value="integrations"
+                  title="Set Up Integrations"
+                  description="Connect your favorite tools"
+                  isCompleted={false}
+                  buttonText="Set Up Integrations"
+                  onAction={() => navigate("/dashboard/integrations")}
+                />
+              </Accordion>
 
               <div className="text-center text-neutral-500 text-xs mt-8">
                 <p>Powered by Maven</p>
