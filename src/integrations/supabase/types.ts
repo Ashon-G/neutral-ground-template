@@ -138,6 +138,7 @@ export type Database = {
           created_at: string
           description: string
           documents: Json | null
+          figma_files: Json | null
           founder_id: string
           goals: string[] | null
           id: string
@@ -152,6 +153,7 @@ export type Database = {
           created_at?: string
           description: string
           documents?: Json | null
+          figma_files?: Json | null
           founder_id: string
           goals?: string[] | null
           id?: string
@@ -166,6 +168,7 @@ export type Database = {
           created_at?: string
           description?: string
           documents?: Json | null
+          figma_files?: Json | null
           founder_id?: string
           goals?: string[] | null
           id?: string

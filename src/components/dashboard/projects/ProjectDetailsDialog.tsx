@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { Profile } from "@/integrations/supabase/types/profile";
 import { parseBusinessInfo } from "@/utils/typeConversions";
 import { useToast } from "@/components/ui/use-toast";
+import { FigmaEmbed } from "@/components/projects/FigmaEmbed";
 import {
   Select,
   SelectContent,
@@ -172,6 +173,17 @@ export const ProjectDetailsDialog = ({ project, open, onOpenChange }: ProjectDet
                           <span className="font-medium capitalize">{key.replace(/_/g, ' ')}: </span>
                           <span className="text-gray-700">{value}</span>
                         </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {project.figma_files && project.figma_files.length > 0 && (
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold">Figma Files</h3>
+                    <div className="space-y-6">
+                      {project.figma_files.map((file: { url: string; title: string }, index: number) => (
+                        <FigmaEmbed key={index} url={file.url} title={file.title} />
                       ))}
                     </div>
                   </div>

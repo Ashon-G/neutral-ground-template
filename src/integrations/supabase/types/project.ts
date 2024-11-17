@@ -11,4 +11,7 @@ export interface Project {
   target_audience: string | null;
   timeline: string | null;
   budget: string | null;
+  image_url: string | null;
+  documents: string[] | null;
+  figma_files: { url: string; title: string }[] | null;
 }

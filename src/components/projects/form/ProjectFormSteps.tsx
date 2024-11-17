@@ -2,6 +2,7 @@ import { ProjectBasicFields } from "./ProjectBasicFields";
 import { ProjectGoals } from "./ProjectGoals";
 import { ProjectImageUpload } from "./ProjectImageUpload";
 import { ProjectFileUpload } from "./ProjectFileUpload";
+import { ProjectFigmaFiles } from "./ProjectFigmaFiles";
 
 interface ProjectFormStepsProps {
   currentStep: number;
@@ -62,6 +63,10 @@ export const ProjectFormSteps = ({
             <ProjectFileUpload
               onFileUploaded={(urls) => onChange('documents', urls)}
               existingFiles={formData.documents}
+            />
+            <ProjectFigmaFiles
+              figmaFiles={formData.figma_files || []}
+              onChange={(files) => onChange('figma_files', files)}
             />
           </div>
         </div>
