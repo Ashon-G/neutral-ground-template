@@ -1,5 +1,5 @@
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { Project } from "@/integrations/supabase/types/project";
+import { Project, ProjectStatus } from "@/integrations/supabase/types/project";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Loader2, Calendar, Users, Target, Coins } from "lucide-react";
@@ -52,7 +52,7 @@ export const ProjectDetailsDialog = ({ project, open, onOpenChange }: ProjectDet
   });
 
   const updateProjectStatus = useMutation({
-    mutationFn: async (status: string) => {
+    mutationFn: async (status: ProjectStatus) => {
       const { error } = await supabase
         .from("founder_projects")
         .update({ status })
@@ -82,7 +82,7 @@ export const ProjectDetailsDialog = ({ project, open, onOpenChange }: ProjectDet
     onOpenChange(false);
   };
 
-  const projectStatuses = [
+  const projectStatuses: { value: ProjectStatus; label: string }[] = [
     { value: "active", label: "Active" },
     { value: "draft", label: "Not Active" },
     { value: "completed", label: "Completed" },
@@ -107,7 +107,7 @@ export const ProjectDetailsDialog = ({ project, open, onOpenChange }: ProjectDet
                 {isFounder ? (
                   <Select
                     value={project.status}
-                    onValueChange={(value) => updateProjectStatus.mutate(value)}
+                    onValueChange={(value: ProjectStatus) => updateProjectStatus.mutate(value)}
                   >
                     <SelectTrigger className="w-[140px]">
                       <SelectValue />
