@@ -3,14 +3,19 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { MessageList } from "./chat/MessageList";
-import { MessageInput } from "./chat/MessageInput";
-import { UserList } from "./chat/UserList";
+import { MessageInput } from "./MessageInput";
+import { UserList } from "./UserList";
 import { Loader2, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAvailableUsers } from "./chat/hooks/useAvailableUsers";
 import { useMessages } from "./chat/hooks/useMessages";
 import { useSendMessage } from "./chat/hooks/useSendMessage";
 import { FirstChatModal } from "./chat/FirstChatModal";
+
+interface UserSettings {
+  has_browsed_mavens?: boolean;
+  [key: string]: any;
+}
 
 export const Chat = () => {
   const [message, setMessage] = useState("");
@@ -42,11 +47,12 @@ export const Chat = () => {
   // Update user settings when first message is sent to a maven
   const updateUserSettings = useMutation({
     mutationFn: async () => {
+      const currentSettings = (userProfile?.settings || {}) as UserSettings;
       const { error } = await supabase
         .from("profiles")
         .update({
           settings: {
-            ...userProfile?.settings,
+            ...currentSettings,
             has_browsed_mavens: true
           }
         })
@@ -69,11 +75,12 @@ export const Chat = () => {
     await sendMessage.mutate(messageContent);
     setMessage("");
 
+    const settings = (userProfile?.settings || {}) as UserSettings;
     // If this is a founder sending a message to a maven for the first time
     if (
       userProfile?.user_type === 'founder' &&
       availableUsers?.find(user => user.id === selectedUser)?.user_type === 'maven' &&
-      !userProfile?.settings?.has_browsed_mavens
+      !settings.has_browsed_mavens
     ) {
       updateUserSettings.mutate();
     }
