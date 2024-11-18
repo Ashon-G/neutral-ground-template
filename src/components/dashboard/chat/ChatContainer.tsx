@@ -41,7 +41,6 @@ export const ChatContainer = () => {
       if (!userProfile?.user_type) return [];
 
       if (userProfile.user_type === 'admin') {
-        // Admins can see all founders and mavens
         const { data: users } = await supabase
           .from("profiles")
           .select("id, full_name, user_type, avatar_url")
@@ -49,14 +48,12 @@ export const ChatContainer = () => {
           .neq("id", session?.user.id);
         return users || [];
       } else if (userProfile.user_type === 'founder') {
-        // Founders can see all mavens
         const { data: users } = await supabase
           .from("profiles")
           .select("id, full_name, user_type, avatar_url")
           .eq("user_type", "maven");
         return users || [];
       } else if (userProfile.user_type === 'maven') {
-        // Mavens can see all founders
         const { data: users } = await supabase
           .from("profiles")
           .select("id, full_name, user_type, avatar_url")
@@ -81,8 +78,13 @@ export const ChatContainer = () => {
           created_at,
           sender_id,
           receiver_id,
-          sender:profiles!sender_id(full_name),
-          receiver:profiles!receiver_id(full_name)
+          sender:profiles!sender_id(
+            full_name,
+            avatar_url
+          ),
+          receiver:profiles!receiver_id(
+            full_name
+          )
         `)
         .or(`and(sender_id.eq.${session?.user.id},receiver_id.eq.${selectedUser}),and(sender_id.eq.${selectedUser},receiver_id.eq.${session?.user.id})`)
         .order("created_at", { ascending: true });
@@ -109,7 +111,6 @@ export const ChatContainer = () => {
 
       if (messageError) throw messageError;
 
-      // Send notification
       const { error: notificationError } = await supabase.functions.invoke("send-message-notification", {
         body: {
           to: selectedUser,
