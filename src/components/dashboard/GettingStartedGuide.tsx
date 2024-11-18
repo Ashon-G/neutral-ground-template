@@ -48,9 +48,44 @@ export const GettingStartedGuide = () => {
     },
   });
 
+  const { data: integrations } = useQuery({
+    queryKey: ["integrations"],
+    queryFn: async () => {
+      const [{ data: figma }, { data: slack }, { data: jira }] = await Promise.all([
+        supabase
+          .from("figma_integrations")
+          .select("*")
+          .eq("user_id", session?.user.id),
+        supabase
+          .from("slack_integrations")
+          .select("*")
+          .eq("user_id", session?.user.id),
+        supabase
+          .from("jira_integrations")
+          .select("*")
+          .eq("user_id", session?.user.id)
+      ]);
+      
+      return {
+        hasIntegrations: Boolean(
+          (figma && figma.length > 0) || 
+          (slack && slack.length > 0) || 
+          (jira && jira.length > 0)
+        )
+      };
+    },
+    enabled: !!session?.user.id
+  });
+
   const isProfileComplete = profile?.business && Object.values(profile.business).some(value => value !== null && value !== '');
   const hasCreatedProject = projects && projects.length > 0;
-  const progress = [isProfileComplete, hasCreatedProject].filter(Boolean).length * 25;
+  const hasSetupIntegrations = integrations?.hasIntegrations;
+  
+  const progress = [
+    isProfileComplete, 
+    hasCreatedProject, 
+    hasSetupIntegrations
+  ].filter(Boolean).length * 25;
 
   if (!isOpen) return null;
 
@@ -118,7 +153,7 @@ export const GettingStartedGuide = () => {
                   value="integrations"
                   title="Set Up Integrations"
                   description="Connect your favorite tools"
-                  isCompleted={false}
+                  isCompleted={hasSetupIntegrations}
                   buttonText="Set Up Integrations"
                   onAction={() => navigate("/dashboard/integrations")}
                 />
