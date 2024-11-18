@@ -5,13 +5,14 @@ import { useAuth } from "@/components/auth/AuthProvider";
 import { MessageList } from "./chat/MessageList";
 import { MessageInput } from "./chat/MessageInput";
 import { UserList } from "./chat/UserList";
-import { Loader2 } from "lucide-react";
+import { Loader2, ArrowLeft, FileText } from "lucide-react";
 import { useAvailableUsers } from "./chat/hooks/useAvailableUsers";
 import { useMessages } from "./chat/hooks/useMessages";
 import { useSendMessage } from "./chat/hooks/useSendMessage";
 import { FirstChatModal } from "./chat/FirstChatModal";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { OpportunityKnocksAccoladeAgreement } from "./chat/OpportunityKnocksAccoladeAgreement";
+import { Button } from "@/components/ui/button";
 
 interface UserSettings {
   has_browsed_mavens?: boolean;
@@ -46,7 +47,6 @@ export const Chat = () => {
   const { data: messages, isLoading } = useMessages(selectedUser, session?.user.id);
   const sendMessage = useSendMessage(session?.user.id, selectedUser, userProfile);
 
-  // Update user settings when first message is sent to a maven
   const updateUserSettings = useMutation({
     mutationFn: async () => {
       const currentSettings = (userProfile?.settings || {}) as UserSettings;
@@ -87,8 +87,7 @@ export const Chat = () => {
     }
   };
 
-  const handleSendAgreement = (userId: string) => {
-    setSelectedUser(userId);
+  const handleSendAgreement = () => {
     setShowAgreementDialog(true);
   };
 
@@ -101,6 +100,7 @@ export const Chat = () => {
   }
 
   const selectedChatUser = availableUsers?.find(user => user.id === selectedUser);
+  const isFounderChattingWithMaven = userProfile?.user_type === 'founder' && selectedChatUser?.user_type === 'maven';
 
   return (
     <div className="flex h-[calc(100vh-12rem)] border rounded-lg overflow-hidden">
@@ -112,12 +112,30 @@ export const Chat = () => {
             setSelectedUser(userId);
             setShowUserList(false);
           }}
-          onSendAgreement={userProfile?.user_type === 'founder' ? handleSendAgreement : undefined}
         />
       </div>
       <div className={`flex-1 flex flex-col ${!showUserList ? 'block' : 'hidden md:block'}`}>
         {selectedUser ? (
           <>
+            <div className="p-4 border-b flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Button variant="ghost" size="icon" onClick={() => setShowUserList(true)} className="md:hidden">
+                  <ArrowLeft className="h-4 w-4" />
+                </Button>
+                <span className="font-medium">{selectedChatUser?.full_name}</span>
+              </div>
+              {isFounderChattingWithMaven && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleSendAgreement}
+                  className="flex items-center gap-2"
+                >
+                  <FileText className="h-4 w-4" />
+                  Send Agreement
+                </Button>
+              )}
+            </div>
             <MessageList
               messages={messages || []}
               currentUserId={session?.user.id || ""}
