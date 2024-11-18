@@ -48,9 +48,9 @@ const MyProjects = () => {
       id: 2,
       title: "Not Active",
       status: "draft",
-      color: "bg-yellow-500",
-      borderColor: "border-yellow-500",
-      textColor: "text-yellow-500",
+      color: "bg-red-500",
+      borderColor: "border-red-500",
+      textColor: "text-red-500",
     },
     {
       id: 3,
