@@ -42,6 +42,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         .single();
 
       if (fetchError || !profile) {
+        // Profile doesn't exist, create it
         const { error: insertError } = await supabase
           .from('profiles')
           .insert([{ 
@@ -51,6 +52,26 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
         if (insertError) {
           console.error('Error creating profile:', insertError);
+          toast({
+            title: "Error",
+            description: "Failed to create user profile",
+            variant: "destructive",
+          });
+        }
+      } else if (profile.username !== email) {
+        // Update username if it doesn't match email
+        const { error: updateError } = await supabase
+          .from('profiles')
+          .update({ username: email })
+          .eq('id', userId);
+
+        if (updateError) {
+          console.error('Error updating profile:', updateError);
+          toast({
+            title: "Error",
+            description: "Failed to update profile email",
+            variant: "destructive",
+          });
         }
       }
     } catch (error) {
@@ -59,24 +80,19 @@ export function AuthProvider({ children }: AuthProviderProps) {
   };
 
   useEffect(() => {
-    let mounted = true;
-
-    const initAuth = async () => {
+    async function initAuth() {
       try {
         const { data: { session: initialSession } } = await supabase.auth.getSession();
         
-        if (!mounted) return;
-
         if (initialSession?.user) {
           await ensureProfile(initialSession.user.id, initialSession.user.email || '');
-          setSession(initialSession);
         }
         
-        setLoading(false);
+        setSession(initialSession);
 
         if (!initialSession && location.pathname.startsWith('/dashboard')) {
           navigate("/login", { replace: true });
-        } else if (initialSession?.user) {
+        } else if (initialSession) {
           const userType = initialSession.user.user_metadata.user_type;
           if (location.pathname === '/login' || location.pathname === '/') {
             const defaultPath = userType === 'founder' ? '/dashboard/marketplace' : '/dashboard/tasks';
@@ -85,29 +101,25 @@ export function AuthProvider({ children }: AuthProviderProps) {
         }
       } catch (error) {
         console.error('Error initializing auth:', error);
-        if (mounted) {
-          setLoading(false);
-        }
+      } finally {
+        setLoading(false);
       }
-    };
+    }
 
     initAuth();
 
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (_event, session) => {
-      if (!mounted) return;
-
       if (session?.user) {
         await ensureProfile(session.user.id, session.user.email || '');
-        setSession(session);
-      } else {
-        setSession(null);
       }
-
+      
+      setSession(session);
+      
       if (!session && location.pathname.startsWith('/dashboard')) {
         navigate("/login", { replace: true });
-      } else if (session?.user) {
+      } else if (session) {
         const userType = session.user.user_metadata.user_type;
         if (location.pathname === '/login' || location.pathname === '/') {
           const defaultPath = userType === 'founder' ? '/dashboard/marketplace' : '/dashboard/tasks';
@@ -116,16 +128,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
       }
     });
 
-    return () => {
-      mounted = false;
-      subscription.unsubscribe();
-    };
+    return () => subscription.unsubscribe();
   }, [navigate, location.pathname]);
 
+  const value = {
+    session,
+    loading
+  };
+
   return (
-    <AuthContext.Provider value={{ session, loading }}>
+    <AuthContext.Provider value={value}>
       {loading ? (
-        <div className="min-h-screen flex items-center justify-center bg-white">
+        <div className="min-h-screen flex items-center justify-center">
           <LoadingAnimation />
         </div>
       ) : (
