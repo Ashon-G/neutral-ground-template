@@ -7,4 +7,7 @@ export interface BusinessInfo {
   taxId?: string;
   address: string;
   description: string;
+  company_name?: string;
+  banner_image?: string;
+  company_icon?: string;
 }
