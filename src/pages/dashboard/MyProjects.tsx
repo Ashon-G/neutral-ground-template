@@ -6,12 +6,12 @@ import { ProjectCard } from "@/components/dashboard/projects/ProjectCard";
 import { ProjectDetailsDialog } from "@/components/dashboard/projects/ProjectDetailsDialog";
 import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Loader2 } from "lucide-react";
 
 const MyProjects = () => {
   const { session } = useAuth();
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [selectedTab, setSelectedTab] = useState(1);
 
   const { data: projects, isLoading } = useQuery({
     queryKey: ["my-projects", session?.user?.id],
@@ -35,6 +35,56 @@ const MyProjects = () => {
     archived: projects?.filter((p) => p.status === "archived") || [],
   };
 
+  const TAB_DATA = [
+    {
+      id: 1,
+      title: "Active",
+      status: "active",
+    },
+    {
+      id: 2,
+      title: "Not Active",
+      status: "draft",
+    },
+    {
+      id: 3,
+      title: "Completed",
+      status: "completed",
+    },
+    {
+      id: 4,
+      title: "Archived",
+      status: "archived",
+    },
+  ];
+
+  const ToggleButton = ({
+    children,
+    id,
+  }: {
+    children: string;
+    id: number;
+  }) => {
+    return (
+      <div
+        className={`rounded-lg transition-colors ${
+          selectedTab === id ? "bg-indigo-600" : "bg-zinc-900"
+        }`}
+      >
+        <button
+          onClick={() => setSelectedTab(id)}
+          className={`w-full origin-top-left rounded-lg border py-3 text-xs font-medium transition-all md:text-base ${
+            selectedTab === id
+              ? "-translate-y-1 border-indigo-600 bg-white text-indigo-600"
+              : "border-zinc-900 bg-white text-zinc-900 hover:-rotate-2"
+          }`}
+        >
+          {children}
+        </button>
+      </div>
+    );
+  };
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
@@ -42,6 +92,9 @@ const MyProjects = () => {
       </div>
     );
   }
+
+  const currentTab = TAB_DATA.find((tab) => tab.id === selectedTab);
+  const currentProjects = projectsByStatus[currentTab?.status as keyof typeof projectsByStatus] || [];
 
   return (
     <div className="space-y-8">
@@ -52,34 +105,33 @@ const MyProjects = () => {
         </Badge>
       </div>
 
-      <Tabs defaultValue="active" className="w-full">
-        <TabsList className="grid w-full grid-cols-4 lg:w-[400px]">
-          <TabsTrigger value="active">Active</TabsTrigger>
-          <TabsTrigger value="draft">Not Active</TabsTrigger>
-          <TabsTrigger value="completed">Completed</TabsTrigger>
-          <TabsTrigger value="archived">Archived</TabsTrigger>
-        </TabsList>
+      <div className="bg-zinc-50">
+        <div className="mx-auto grid max-w-4xl grid-cols-2 gap-4 px-8 py-12 lg:grid-cols-4">
+          {TAB_DATA.map((tab) => (
+            <ToggleButton key={tab.id} id={tab.id}>
+              {tab.title}
+            </ToggleButton>
+          ))}
+        </div>
+      </div>
 
-        {Object.entries(projectsByStatus).map(([status, statusProjects]) => (
-          <TabsContent key={status} value={status}>
-            {statusProjects.length === 0 ? (
-              <div className="text-center py-8 text-muted-foreground">
-                No {status} projects found
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {statusProjects.map((project) => (
-                  <ProjectCard
-                    key={project.id}
-                    project={project}
-                    onProjectClick={() => setSelectedProject(project)}
-                  />
-                ))}
-              </div>
-            )}
-          </TabsContent>
-        ))}
-      </Tabs>
+      <div className="mt-8">
+        {currentProjects.length === 0 ? (
+          <div className="text-center py-8 text-muted-foreground">
+            No {currentTab?.status} projects found
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {currentProjects.map((project) => (
+              <ProjectCard
+                key={project.id}
+                project={project}
+                onProjectClick={() => setSelectedProject(project)}
+              />
+            ))}
+          </div>
+        )}
+      </div>
 
       {selectedProject && (
         <ProjectDetailsDialog
