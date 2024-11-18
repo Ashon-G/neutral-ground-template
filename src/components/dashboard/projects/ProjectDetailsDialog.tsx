@@ -33,6 +33,22 @@ export const ProjectDetailsDialog = ({ project, open, onOpenChange }: ProjectDet
   const [editedTargetAudience, setEditedTargetAudience] = useState(project.target_audience || "");
   const [editedTimeline, setEditedTimeline] = useState(project.timeline || "");
   const [editedBudget, setEditedBudget] = useState(project.budget || "");
+  const [editedImageUrl, setEditedImageUrl] = useState(project.image_url);
+  const [editedDocuments, setEditedDocuments] = useState(project.documents || []);
+  const [editedFigmaFiles, setEditedFigmaFiles] = useState(project.figma_files || []);
+
+  const handleSave = () => {
+    updateProject.mutate({
+      title: editedTitle,
+      description: editedDescription,
+      target_audience: editedTargetAudience,
+      timeline: editedTimeline,
+      budget: editedBudget,
+      image_url: editedImageUrl,
+      documents: editedDocuments,
+      figma_files: editedFigmaFiles,
+    });
+  };
 
   const { data: founder, isLoading: loadingFounder } = useQuery({
     queryKey: ["founder", project.founder_id],
@@ -85,20 +101,6 @@ export const ProjectDetailsDialog = ({ project, open, onOpenChange }: ProjectDet
     onOpenChange(false);
   };
 
-  const handleSave = () => {
-    updateProject.mutate({
-      title: editedTitle,
-      description: editedDescription,
-      target_audience: editedTargetAudience,
-      timeline: editedTimeline,
-      budget: editedBudget,
-    });
-  };
-
-  const handleStatusChange = (status: ProjectStatus) => {
-    updateProject.mutate({ status });
-  };
-
   if (loadingFounder) {
     return (
       <div className="flex justify-center py-8">
@@ -133,6 +135,9 @@ export const ProjectDetailsDialog = ({ project, open, onOpenChange }: ProjectDet
               onTargetAudienceChange={setEditedTargetAudience}
               onTimelineChange={setEditedTimeline}
               onBudgetChange={setEditedBudget}
+              onImageChange={setEditedImageUrl}
+              onDocumentsChange={setEditedDocuments}
+              onFigmaFilesChange={setEditedFigmaFiles}
             />
 
             {isFounder ? (
