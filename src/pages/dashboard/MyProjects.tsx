@@ -111,8 +111,7 @@ const MyProjects = () => {
 
   return (
     <div className="space-y-8">
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">My Projects</h1>
+      <div className="flex items-center justify-end">
         <Badge variant="outline" className="px-3 py-1">
           {projects?.length || 0} Total Projects
         </Badge>
