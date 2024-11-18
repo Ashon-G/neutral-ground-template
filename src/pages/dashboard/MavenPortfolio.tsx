@@ -1,11 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/components/auth/AuthProvider";
-import { Card } from "@/components/ui/card";
+import { 
+  Card,
+  Button,
+} from "@/components/ui/card";
 import { calculateRating } from "@/utils/calculateRating";
 import { format } from "date-fns";
 import { Project } from "@/integrations/supabase/types/project";
 import { Task } from "@/integrations/supabase/types/task";
+import { Trophy } from "lucide-react";
 
 interface ProjectWithTasksAndRatings extends Omit<Project, 'documents' | 'figma_files'> {
   documents: string[];
@@ -21,6 +25,33 @@ interface ProjectWithTasksAndRatings extends Omit<Project, 'documents' | 'figma_
     feedback: string | null;
   }>;
 }
+
+const CertificationCard = () => {
+  return (
+    <Card className="max-w-[340px] mb-6">
+      <div className="p-6 pb-0">
+        <Trophy className="w-12 h-12 text-primary mb-4" />
+        <h3 className="text-xl font-semibold">
+          Maven Excellence Certificate
+        </h3>
+      </div>
+      <div className="p-6">
+        <p className="text-muted-foreground mt-2">
+          Each completed project earns you a Maven Excellence Certificate. Add it to your LinkedIn 
+          profile or resume to showcase your verified expertise and successful project deliveries.
+        </p>
+        <div className="mt-4">
+          <Button
+            variant="outline"
+            className="h-12 px-6 rounded-xl hover:bg-primary/5"
+          >
+            View Sample Certificate
+          </Button>
+        </div>
+      </div>
+    </Card>
+  );
+};
 
 const MavenPortfolio = () => {
   const { session } = useAuth();
@@ -97,7 +128,10 @@ const MavenPortfolio = () => {
 
   return (
     <div className="space-y-8">
-      <h1 className="text-3xl font-bold">Your Portfolio</h1>
+      <div className="flex justify-between items-start">
+        <h1 className="text-3xl font-bold">Your Portfolio</h1>
+        <CertificationCard />
+      </div>
       
       <div className="grid gap-6">
         {projects.map((project) => {
