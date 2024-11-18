@@ -26,6 +26,12 @@ self.addEventListener('fetch', (event) => {
         if (response) {
           return response;
         }
+
+        // For navigation requests, serve index.html for client-side routing
+        if (event.request.mode === 'navigate') {
+          return caches.match('/index.html');
+        }
+
         return fetch(event.request)
           .then((response) => {
             if (!response || response.status !== 200 || response.type !== 'basic') {
