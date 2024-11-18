@@ -24,6 +24,7 @@ export const Chat = () => {
   const [selectedUser, setSelectedUser] = useState("");
   const [showUserList, setShowUserList] = useState(true);
   const [showFirstChatModal, setShowFirstChatModal] = useState(false);
+  const [showAgreementDialog, setShowAgreementDialog] = useState(false);
   const { session } = useAuth();
   const queryClient = useQueryClient();
 
@@ -122,7 +123,7 @@ export const Chat = () => {
                 <span className="font-medium">{selectedChatUser?.full_name}</span>
               </div>
               {isFounder && isMaven && (
-                <Dialog>
+                <Dialog open={showAgreementDialog} onOpenChange={setShowAgreementDialog}>
                   <DialogTrigger asChild>
                     <Button variant="outline" size="sm" className="ml-auto">
                       <FileText className="h-4 w-4 mr-2" />
@@ -133,6 +134,7 @@ export const Chat = () => {
                     <OpportunityKnocksAccoladeAgreement 
                       mavenName={selectedChatUser?.full_name || ""}
                       maestroName={userProfile?.full_name || ""}
+                      onClose={() => setShowAgreementDialog(false)}
                     />
                   </DialogContent>
                 </Dialog>
