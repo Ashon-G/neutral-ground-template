@@ -73,7 +73,7 @@ export const MessageList = ({ messages, currentUserId }: MessageListProps) => {
               })}
             >
               <Avatar className="h-8 w-8">
-                <AvatarImage src={message.sender?.avatar_url} />
+                <AvatarImage src={message.sender?.avatar_url || ""} />
                 <AvatarFallback>
                   {message.sender?.full_name?.[0]?.toUpperCase()}
                 </AvatarFallback>

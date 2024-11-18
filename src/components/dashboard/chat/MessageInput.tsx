@@ -64,10 +64,7 @@ export const MessageInput = ({
         .from('chat-attachments')
         .getPublicUrl(filePath);
 
-      // Add file info to message
-      setMessage(prev => 
-        prev + `\n[File: ${file.name}](${publicUrl})`
-      );
+      setMessage(message + `\n[File: ${file.name}](${publicUrl})`);
 
       toast({
         title: "Success",

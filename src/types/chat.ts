@@ -6,6 +6,7 @@ export type Message = {
   receiver_id: string;
   sender: {
     full_name: string | null;
+    avatar_url: string | null;
   } | null;
   receiver: {
     full_name: string | null;
