@@ -100,7 +100,9 @@ export const Chat = () => {
   }
 
   const selectedChatUser = availableUsers?.find(user => user.id === selectedUser);
-  const isFounderChattingWithMaven = userProfile?.user_type === 'founder' && selectedChatUser?.user_type === 'maven';
+  const isFounderChattingWithMaven = 
+    userProfile?.user_type === 'founder' && 
+    selectedChatUser?.user_type === 'maven';
 
   return (
     <div className="flex h-[calc(100vh-12rem)] border rounded-lg overflow-hidden bg-white">

@@ -32,7 +32,7 @@ export const MessageInput = ({
           }
         }}
       />
-      {showAgreementButton && (
+      {showAgreementButton && onSendAgreement && (
         <Button 
           variant="outline" 
           size="icon"
