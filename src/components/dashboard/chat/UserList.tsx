@@ -5,6 +5,7 @@ import { useAuth } from "@/components/auth/AuthProvider";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { FileText } from "lucide-react";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 type UserListProps = {
   users: ChatUser[];
