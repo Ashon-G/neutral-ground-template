@@ -34,48 +34,42 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const location = useLocation();
 
   const ensureProfile = async (userId: string, email: string) => {
-    try {
-      const { data: profile, error: fetchError } = await supabase
+    const { data: profile, error: fetchError } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', userId)
+      .single();
+
+    if (fetchError || !profile) {
+      // Profile doesn't exist, create it
+      const { error: insertError } = await supabase
         .from('profiles')
-        .select('*')
-        .eq('id', userId)
-        .single();
+        .insert([{ 
+          id: userId,
+          username: email
+        }]);
 
-      if (fetchError || !profile) {
-        // Profile doesn't exist, create it
-        const { error: insertError } = await supabase
-          .from('profiles')
-          .insert([{ 
-            id: userId,
-            username: email
-          }]);
-
-        if (insertError) {
-          console.error('Error creating profile:', insertError);
-          toast({
-            title: "Error",
-            description: "Failed to create user profile",
-            variant: "destructive",
-          });
-        }
-      } else if (profile.username !== email) {
-        // Update username if it doesn't match email
-        const { error: updateError } = await supabase
-          .from('profiles')
-          .update({ username: email })
-          .eq('id', userId);
-
-        if (updateError) {
-          console.error('Error updating profile:', updateError);
-          toast({
-            title: "Error",
-            description: "Failed to update profile email",
-            variant: "destructive",
-          });
-        }
+      if (insertError) {
+        toast({
+          title: "Error",
+          description: "Failed to create user profile",
+          variant: "destructive",
+        });
       }
-    } catch (error) {
-      console.error('Error in ensureProfile:', error);
+    } else if (profile.username !== email) {
+      // Update username if it doesn't match email
+      const { error: updateError } = await supabase
+        .from('profiles')
+        .update({ username: email })
+        .eq('id', userId);
+
+      if (updateError) {
+        toast({
+          title: "Error",
+          description: "Failed to update profile email",
+          variant: "destructive",
+        });
+      }
     }
   };
 
