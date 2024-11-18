@@ -5,7 +5,7 @@ import { useAuth } from "@/components/auth/AuthProvider";
 import { MessageList } from "./chat/MessageList";
 import { MessageInput } from "./chat/MessageInput";
 import { UserList } from "./chat/UserList";
-import { Loader2, ArrowLeft, FileText } from "lucide-react";
+import { Loader2, ArrowLeft } from "lucide-react";
 import { useAvailableUsers } from "./chat/hooks/useAvailableUsers";
 import { useMessages } from "./chat/hooks/useMessages";
 import { useSendMessage } from "./chat/hooks/useSendMessage";
@@ -124,17 +124,6 @@ export const Chat = () => {
                 </Button>
                 <span className="font-medium">{selectedChatUser?.full_name}</span>
               </div>
-              {isFounderChattingWithMaven && (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={handleSendAgreement}
-                  className="flex items-center gap-2"
-                >
-                  <FileText className="h-4 w-4" />
-                  Send Agreement
-                </Button>
-              )}
             </div>
             <MessageList
               messages={messages || []}
@@ -145,6 +134,8 @@ export const Chat = () => {
               setMessage={setMessage}
               onSend={() => handleSendMessage(message)}
               isPending={sendMessage.isPending}
+              showAgreementButton={isFounderChattingWithMaven}
+              onSendAgreement={handleSendAgreement}
             />
           </>
         ) : (
