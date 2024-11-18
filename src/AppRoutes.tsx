@@ -80,9 +80,16 @@ const AppRoutes = () => {
         <Route path="getting-started" element={<GettingStarted />} />
         <Route path="tasks" element={<Tasks />} />
         <Route path="chat" element={<Chat />} />
-        <Route path="marketplace" element={<Marketplace />} />
+        <Route path="marketplace" element={
+          userType === 'founder' ? <Marketplace /> : <Navigate to="/dashboard/project-marketplace" replace />
+        } />
         <Route path="project-marketplace" element={<ProjectMarketplace />} />
-        <Route path="integrations" element={<Integrations />} />
+        <Route path="integrations" element={
+          userType === 'founder' ? <Integrations /> : <Navigate to="/dashboard" replace />
+        } />
+        <Route path="portfolio" element={
+          userType === 'maven' ? <MavenPortfolio /> : <Navigate to="/dashboard" replace />
+        } />
         <Route path="profile" element={<Profile />} />
         <Route path="create-project" element={<CreateProject />} />
         <Route path="my-projects" element={<MyProjects />} />

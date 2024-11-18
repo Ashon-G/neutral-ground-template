@@ -11,6 +11,8 @@ import { UserAvatar } from "@/components/dashboard/sidebar/UserAvatar";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { Navigation } from "@/components/dashboard/Navigation";
 import { GettingStartedGuide } from "@/components/dashboard/GettingStartedGuide";
+import { MavenGettingStartedGuide } from "@/components/dashboard/getting-started/MavenGettingStartedGuide";
+import MavenPortfolio from "@/pages/dashboard/MavenPortfolio";
 
 const DashboardContent = () => {
   const { session } = useAuth();
@@ -19,6 +21,7 @@ const DashboardContent = () => {
   const appMetadataType = session?.user?.app_metadata?.user_type;
   const isAdmin = userMetadataType === 'admin' || appMetadataType === 'admin';
   const isFounder = userMetadataType === 'founder' || appMetadataType === 'founder';
+  const isMaven = userMetadataType === 'maven' || appMetadataType === 'maven';
   const isMobile = useMediaQuery("(max-width: 768px)");
 
   const navItems = [
@@ -35,8 +38,17 @@ const DashboardContent = () => {
       ]
     },
     { label: "Chat", href: "/dashboard/chat", icon: <MessageSquare className="h-5 w-5" /> },
-    { label: "Marketplace", href: "/dashboard/marketplace", icon: <Wallet className="h-5 w-5" /> },
-    { label: "Integrations", href: "/dashboard/integrations", icon: <LinkIcon className="h-5 w-5" />, badge: "Early Alpha" },
+    ...(isFounder ? [
+      { label: "Marketplace", href: "/dashboard/marketplace", icon: <Wallet className="h-5 w-5" /> }
+    ] : [
+      { label: "Projects", href: "/dashboard/project-marketplace", icon: <Wallet className="h-5 w-5" /> }
+    ]),
+    ...(isFounder ? [
+      { label: "Integrations", href: "/dashboard/integrations", icon: <LinkIcon className="h-5 w-5" />, badge: "Early Alpha" }
+    ] : []),
+    ...(isMaven ? [
+      { label: "Portfolio", href: "/dashboard/portfolio", icon: <Archive className="h-5 w-5" /> }
+    ] : []),
     ...(isAdmin ? [{ label: "Admin", href: "/dashboard/admin", icon: <SettingsIcon className="h-5 w-5" /> }] : []),
   ];
 
@@ -78,6 +90,7 @@ const DashboardContent = () => {
       <InstallPrompt />
 
       {isFounder && <GettingStartedGuide />}
+      {isMaven && <MavenGettingStartedGuide />}
 
       <motion.main 
         className={`pt-12 pb-24 transition-all duration-300 ${
