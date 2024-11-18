@@ -4,14 +4,28 @@ import { useAuth } from "@/components/auth/AuthProvider";
 import { Card } from "@/components/ui/card";
 import { calculateRating } from "@/utils/calculateRating";
 import { format } from "date-fns";
+import { Project } from "@/integrations/supabase/types/project";
+import { Task } from "@/integrations/supabase/types/task";
+
+interface ProjectWithTasksAndRatings extends Project {
+  tasks: (Task & {
+    ratings: {
+      rating: number;
+      feedback: string | null;
+    }[];
+  })[];
+  ratings: {
+    rating: number;
+    feedback: string | null;
+  }[];
+}
 
 const MavenPortfolio = () => {
   const { session } = useAuth();
 
-  const { data: projects } = useQuery({
+  const { data: projects } = useQuery<ProjectWithTasksAndRatings[]>({
     queryKey: ["maven-portfolio"],
     queryFn: async () => {
-      // Get all tasks assigned to the maven
       const { data: tasks, error: tasksError } = await supabase
         .from("tasks")
         .select(`
@@ -25,7 +39,8 @@ const MavenPortfolio = () => {
       if (tasksError) throw tasksError;
 
       // Group tasks by project
-      const projectMap = new Map();
+      const projectMap = new Map<string, ProjectWithTasksAndRatings>();
+      
       tasks?.forEach((task) => {
         if (!task.project) return;
         
@@ -38,9 +53,11 @@ const MavenPortfolio = () => {
         }
         
         const project = projectMap.get(task.project.id);
-        project.tasks.push(task);
-        if (task.ratings) {
-          project.ratings.push(...task.ratings);
+        if (project) {
+          project.tasks.push(task);
+          if (task.ratings) {
+            project.ratings.push(...task.ratings);
+          }
         }
       });
 

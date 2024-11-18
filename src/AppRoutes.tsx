@@ -21,6 +21,7 @@ import HelpCenter from "./pages/HelpCenter";
 import GettingStarted from "./pages/dashboard/GettingStarted";
 import CreateProject from "./pages/dashboard/CreateProject";
 import MyProjects from "./pages/dashboard/MyProjects";
+import MavenPortfolio from "./pages/dashboard/MavenPortfolio";
 
 const ProtectedRoute = ({ children, adminOnly = false }: { children: React.ReactNode, adminOnly?: boolean }) => {
   const { session, loading } = useAuth();

@@ -26,7 +26,7 @@ export const MavenGettingStartedGuide = () => {
         .single();
 
       if (error) throw error;
-      return data as Profile;
+      return data as unknown as Profile;
     },
   });
 
@@ -44,10 +44,12 @@ export const MavenGettingStartedGuide = () => {
     },
   });
 
-  const isProfileComplete = profile?.bio && 
+  const isProfileComplete = Boolean(
+    profile?.bio && 
     profile?.location && 
     profile?.linkedin_profile && 
-    profile?.maven_skillset;
+    profile?.maven_skillset
+  );
 
   const progress = [isProfileComplete, hasReachedOut].filter(Boolean).length * 50;
 
