@@ -5,13 +5,12 @@ import { useAuth } from "@/components/auth/AuthProvider";
 import { MessageList } from "./chat/MessageList";
 import { MessageInput } from "./chat/MessageInput";
 import { UserList } from "./chat/UserList";
-import { Loader2, ArrowLeft, FileText } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
 import { useAvailableUsers } from "./chat/hooks/useAvailableUsers";
 import { useMessages } from "./chat/hooks/useMessages";
 import { useSendMessage } from "./chat/hooks/useSendMessage";
 import { FirstChatModal } from "./chat/FirstChatModal";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { OpportunityKnocksAccoladeAgreement } from "./chat/OpportunityKnocksAccoladeAgreement";
 
 interface UserSettings {
@@ -88,6 +87,11 @@ export const Chat = () => {
     }
   };
 
+  const handleSendAgreement = (userId: string) => {
+    setSelectedUser(userId);
+    setShowAgreementDialog(true);
+  };
+
   if (isLoading || isProfileLoading) {
     return (
       <div className="flex justify-center items-center h-64">
@@ -97,8 +101,6 @@ export const Chat = () => {
   }
 
   const selectedChatUser = availableUsers?.find(user => user.id === selectedUser);
-  const isFounder = userProfile?.user_type === 'founder';
-  const isMaven = selectedChatUser?.user_type === 'maven';
 
   return (
     <div className="flex h-[calc(100vh-12rem)] border rounded-lg overflow-hidden">
@@ -110,36 +112,12 @@ export const Chat = () => {
             setSelectedUser(userId);
             setShowUserList(false);
           }}
+          onSendAgreement={userProfile?.user_type === 'founder' ? handleSendAgreement : undefined}
         />
       </div>
       <div className={`flex-1 flex flex-col ${!showUserList ? 'block' : 'hidden md:block'}`}>
         {selectedUser ? (
           <>
-            <div className="p-4 border-b flex items-center justify-between gap-2">
-              <div className="flex items-center gap-2 md:hidden">
-                <Button variant="ghost" size="icon" onClick={() => setShowUserList(true)}>
-                  <ArrowLeft className="h-4 w-4" />
-                </Button>
-                <span className="font-medium">{selectedChatUser?.full_name}</span>
-              </div>
-              {isFounder && isMaven && (
-                <Dialog open={showAgreementDialog} onOpenChange={setShowAgreementDialog}>
-                  <DialogTrigger asChild>
-                    <Button variant="outline" size="sm" className="ml-auto">
-                      <FileText className="h-4 w-4 mr-2" />
-                      Send Agreement
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-                    <OpportunityKnocksAccoladeAgreement 
-                      mavenName={selectedChatUser?.full_name || ""}
-                      maestroName={userProfile?.full_name || ""}
-                      onClose={() => setShowAgreementDialog(false)}
-                    />
-                  </DialogContent>
-                </Dialog>
-              )}
-            </div>
             <MessageList
               messages={messages || []}
               currentUserId={session?.user.id || ""}
@@ -161,6 +139,15 @@ export const Chat = () => {
         open={showFirstChatModal} 
         onClose={() => setShowFirstChatModal(false)} 
       />
+      <Dialog open={showAgreementDialog} onOpenChange={setShowAgreementDialog}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <OpportunityKnocksAccoladeAgreement 
+            mavenName={selectedChatUser?.full_name || ""}
+            maestroName={userProfile?.full_name || ""}
+            onClose={() => setShowAgreementDialog(false)}
+          />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
