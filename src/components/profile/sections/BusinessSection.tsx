@@ -68,17 +68,12 @@ export const BusinessSection = ({ register }: Props) => {
         </div>
 
         <div className="space-y-2">
-          <Label>EIN/Tax ID (Optional)</Label>
-          <Input {...register("business.taxId")} />
-        </div>
-
-        <div className="space-y-2">
-          <Label>Address</Label>
-          <Input {...register("business.address")} />
+          <Label>Size</Label>
+          <Input {...register("business.size")} />
         </div>
 
         <div className="space-y-2 md:col-span-2">
-          <Label>Business Description</Label>
+          <Label>Description</Label>
           <Textarea {...register("business.description")} />
         </div>
       </div>

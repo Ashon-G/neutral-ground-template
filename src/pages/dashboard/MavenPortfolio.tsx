@@ -9,15 +9,15 @@ import { Task } from "@/integrations/supabase/types/task";
 
 interface ProjectWithTasksAndRatings extends Project {
   tasks: (Task & {
-    ratings: {
+    ratings: Array<{
       rating: number;
       feedback: string | null;
-    }[];
+    }>;
   })[];
-  ratings: {
+  ratings: Array<{
     rating: number;
     feedback: string | null;
-  }[];
+  }>;
 }
 
 const MavenPortfolio = () => {
@@ -42,21 +42,25 @@ const MavenPortfolio = () => {
       const projectMap = new Map<string, ProjectWithTasksAndRatings>();
       
       tasks?.forEach((task) => {
-        if (!task.project) return;
+        if (!task.project?.[0]) return;
+        const project = task.project[0];
         
-        if (!projectMap.has(task.project.id)) {
-          projectMap.set(task.project.id, {
-            ...task.project,
+        if (!projectMap.has(project.id)) {
+          projectMap.set(project.id, {
+            ...project,
             tasks: [],
             ratings: [],
           });
         }
         
-        const project = projectMap.get(task.project.id);
-        if (project) {
-          project.tasks.push(task);
-          if (task.ratings) {
-            project.ratings.push(...task.ratings);
+        const projectWithTasks = projectMap.get(project.id);
+        if (projectWithTasks) {
+          projectWithTasks.tasks.push({
+            ...task,
+            ratings: Array.isArray(task.ratings) ? task.ratings : []
+          });
+          if (Array.isArray(task.ratings)) {
+            projectWithTasks.ratings.push(...task.ratings);
           }
         }
       });
