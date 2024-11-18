@@ -94,7 +94,7 @@ export const Chat = () => {
   if (isLoading || isProfileLoading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <Loader2 className="h-8 w-8 animate-spin" />
+        <Loader2 className="h-8 w-8 animate-spin text-secondary" />
       </div>
     );
   }
@@ -105,8 +105,8 @@ export const Chat = () => {
     selectedChatUser?.user_type === 'maven';
 
   return (
-    <div className="flex h-[calc(100vh-12rem)] border rounded-lg overflow-hidden bg-white">
-      <div className={`md:block ${showUserList ? 'block w-full md:w-[280px]' : 'hidden'} border-r bg-white`}>
+    <div className="flex h-[calc(100vh-12rem)] rounded-xl overflow-hidden bg-white shadow-lg border border-border/5">
+      <div className={`md:block ${showUserList ? 'block w-full md:w-[320px]' : 'hidden'} border-r border-border/10 bg-white`}>
         <UserList
           users={availableUsers || []}
           selectedUser={selectedUser}
@@ -119,12 +119,12 @@ export const Chat = () => {
       <div className={`flex-1 flex flex-col ${!showUserList ? 'block' : 'hidden md:block'}`}>
         {selectedUser ? (
           <>
-            <div className="p-4 border-b flex items-center justify-between bg-white">
-              <div className="flex items-center gap-2">
+            <div className="p-4 border-b border-border/10 flex items-center justify-between bg-white/50 backdrop-blur supports-[backdrop-filter]:bg-white/50">
+              <div className="flex items-center gap-3">
                 <Button variant="ghost" size="icon" onClick={() => setShowUserList(true)} className="md:hidden">
                   <ArrowLeft className="h-4 w-4" />
                 </Button>
-                <span className="font-medium text-gray-900">{selectedChatUser?.full_name}</span>
+                <span className="font-medium text-foreground">{selectedChatUser?.full_name}</span>
               </div>
             </div>
             <MessageList
@@ -141,7 +141,7 @@ export const Chat = () => {
             />
           </>
         ) : (
-          <div className="flex-1 flex items-center justify-center text-gray-500 bg-white">
+          <div className="flex-1 flex items-center justify-center text-muted-foreground bg-white">
             Select a user to start chatting
           </div>
         )}

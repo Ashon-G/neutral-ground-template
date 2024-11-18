@@ -9,8 +9,8 @@ type MessageListProps = {
 
 export const MessageList = ({ messages, currentUserId }: MessageListProps) => {
   return (
-    <ScrollArea className="flex-1 p-4">
-      <div className="space-y-4">
+    <ScrollArea className="flex-1 p-6">
+      <div className="space-y-6">
         {messages?.map((msg) => (
           <div
             key={msg.id}
@@ -19,19 +19,19 @@ export const MessageList = ({ messages, currentUserId }: MessageListProps) => {
             }`}
           >
             <div
-              className={`max-w-[80%] p-3 rounded-lg ${
+              className={`max-w-[80%] p-4 rounded-2xl shadow-sm ${
                 msg.sender_id === currentUserId
                   ? "bg-secondary text-secondary-foreground"
-                  : "bg-muted"
+                  : "bg-muted/50"
               }`}
             >
-              <div className="flex items-center gap-2 mb-1">
+              <div className="flex items-center gap-2 mb-1.5">
                 <p className="text-sm font-medium">{msg.sender?.full_name}</p>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-xs text-muted-foreground/75">
                   {format(new Date(msg.created_at), "MMM d, h:mm a")}
                 </p>
               </div>
-              <p className="break-words">{msg.content}</p>
+              <p className="break-words text-sm leading-relaxed">{msg.content}</p>
             </div>
           </div>
         ))}
