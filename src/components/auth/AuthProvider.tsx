@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 import { LoadingAnimation } from "@/components/ui/loading-animation";
+import { toast } from "@/components/ui/use-toast";
 
 interface AuthContextType {
   session: Session | null;
@@ -32,10 +33,55 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const ensureProfile = async (userId: string, email: string) => {
+    const { data: profile, error: fetchError } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', userId)
+      .single();
+
+    if (fetchError || !profile) {
+      // Profile doesn't exist, create it
+      const { error: insertError } = await supabase
+        .from('profiles')
+        .insert([{ 
+          id: userId,
+          username: email
+        }]);
+
+      if (insertError) {
+        toast({
+          title: "Error",
+          description: "Failed to create user profile",
+          variant: "destructive",
+        });
+      }
+    } else if (profile.username !== email) {
+      // Update username if it doesn't match email
+      const { error: updateError } = await supabase
+        .from('profiles')
+        .update({ username: email })
+        .eq('id', userId);
+
+      if (updateError) {
+        toast({
+          title: "Error",
+          description: "Failed to update profile email",
+          variant: "destructive",
+        });
+      }
+    }
+  };
+
   useEffect(() => {
     async function initAuth() {
       try {
         const { data: { session: initialSession } } = await supabase.auth.getSession();
+        
+        if (initialSession?.user) {
+          await ensureProfile(initialSession.user.id, initialSession.user.email || '');
+        }
+        
         setSession(initialSession);
 
         if (!initialSession && location.pathname.startsWith('/dashboard')) {
@@ -58,7 +104,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
+    } = supabase.auth.onAuthStateChange(async (_event, session) => {
+      if (session?.user) {
+        await ensureProfile(session.user.id, session.user.email || '');
+      }
+      
       setSession(session);
       
       if (!session && location.pathname.startsWith('/dashboard')) {
