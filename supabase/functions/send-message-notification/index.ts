@@ -65,7 +65,7 @@ const handler = async (req: Request): Promise<Response> => {
         Authorization: `Bearer ${RESEND_API_KEY}`,
       },
       body: JSON.stringify({
-        from: "Maven <notifications@maven.dev>",
+        from: "Maven <notifications@updates.itscoop.com>",
         to: [recipientData.email],
         subject: `New message from ${senderName}`,
         html: `
