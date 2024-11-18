@@ -19,7 +19,7 @@ export const useSendMessage = (sessionUserId: string | undefined, selectedUser: 
       if (messageError) throw messageError;
 
       // Send notification
-      const { error: notificationError } = await supabase.functions.invoke("send-message-notification", {
+      const { data: notificationData, error: notificationError } = await supabase.functions.invoke("send-message-notification", {
         body: {
           to: selectedUser,
           senderName: userProfile?.full_name || "Someone",
@@ -29,14 +29,18 @@ export const useSendMessage = (sessionUserId: string | undefined, selectedUser: 
 
       if (notificationError) {
         console.error("Error sending notification:", notificationError);
+        throw notificationError;
       }
+
+      console.log("Notification response:", notificationData);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["messages"] });
     },
     onError: (error) => {
+      console.error("Error in useSendMessage:", error);
       toast({
-        title: "Error",
+        title: "Error sending message",
         description: error.message,
         variant: "destructive",
       });

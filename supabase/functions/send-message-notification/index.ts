@@ -1,6 +1,9 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
+const SUPABASE_URL = Deno.env.get('SUPABASE_URL');
+const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -21,9 +24,29 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
+    const supabase = createClient(SUPABASE_URL!, SUPABASE_SERVICE_ROLE_KEY!);
     const { to, senderName, messageContent }: EmailRequest = await req.json();
 
-    console.log(`Sending email notification to ${to} about message from ${senderName}`);
+    console.log(`Attempting to send notification to user ID: ${to}`);
+
+    // Get the recipient's email from profiles
+    const { data: recipientData, error: recipientError } = await supabase
+      .from('profiles')
+      .select('email')
+      .eq('id', to)
+      .single();
+
+    if (recipientError) {
+      console.error("Error fetching recipient data:", recipientError);
+      throw recipientError;
+    }
+
+    if (!recipientData?.email) {
+      console.error("No email found for recipient");
+      throw new Error("Recipient email not found");
+    }
+
+    console.log(`Sending email to: ${recipientData.email}`);
 
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
@@ -33,7 +56,7 @@ const handler = async (req: Request): Promise<Response> => {
       },
       body: JSON.stringify({
         from: "Maven <notifications@maven.dev>",
-        to: [to],
+        to: [recipientData.email],
         subject: `New message from ${senderName}`,
         html: `
           <div>
@@ -51,16 +74,15 @@ const handler = async (req: Request): Promise<Response> => {
       }),
     });
 
+    const resData = await res.json();
+    console.log("Resend API response:", resData);
+
     if (!res.ok) {
-      const error = await res.text();
-      console.error("Error sending email:", error);
-      throw new Error(`Failed to send email: ${error}`);
+      console.error("Error from Resend API:", resData);
+      throw new Error(`Failed to send email: ${JSON.stringify(resData)}`);
     }
 
-    const data = await res.json();
-    console.log("Email sent successfully:", data);
-
-    return new Response(JSON.stringify(data), {
+    return new Response(JSON.stringify(resData), {
       status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
