@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "@/components/auth/AuthProvider";
 import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 import AppRoutes from "./AppRoutes";
 import "./App.css";
 
@@ -21,6 +22,7 @@ const App = () => {
             <Sonner />
             <AppRoutes />
             <Analytics />
+            <SpeedInsights />
           </TooltipProvider>
         </AuthProvider>
       </QueryClientProvider>
