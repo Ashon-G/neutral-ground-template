@@ -51,25 +51,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
         if (insertError) {
           console.error('Error creating profile:', insertError);
-          toast({
-            title: "Error",
-            description: "Failed to create user profile",
-            variant: "destructive",
-          });
-        }
-      } else if (profile.username !== email) {
-        const { error: updateError } = await supabase
-          .from('profiles')
-          .update({ username: email })
-          .eq('id', userId);
-
-        if (updateError) {
-          console.error('Error updating profile:', updateError);
-          toast({
-            title: "Error",
-            description: "Failed to update profile email",
-            variant: "destructive",
-          });
         }
       }
     } catch (error) {
@@ -80,26 +61,26 @@ export function AuthProvider({ children }: AuthProviderProps) {
   useEffect(() => {
     let mounted = true;
 
-    async function initAuth() {
+    const initAuth = async () => {
       try {
         const { data: { session: initialSession } } = await supabase.auth.getSession();
         
-        if (mounted) {
-          if (initialSession?.user) {
-            await ensureProfile(initialSession.user.id, initialSession.user.email || '');
-          }
-          
-          setSession(initialSession);
-          setLoading(false);
+        if (!mounted) return;
 
-          if (!initialSession && location.pathname.startsWith('/dashboard')) {
-            navigate("/login", { replace: true });
-          } else if (initialSession) {
-            const userType = initialSession.user.user_metadata.user_type;
-            if (location.pathname === '/login' || location.pathname === '/') {
-              const defaultPath = userType === 'founder' ? '/dashboard/marketplace' : '/dashboard/tasks';
-              navigate(defaultPath, { replace: true });
-            }
+        if (initialSession?.user) {
+          await ensureProfile(initialSession.user.id, initialSession.user.email || '');
+          setSession(initialSession);
+        }
+        
+        setLoading(false);
+
+        if (!initialSession && location.pathname.startsWith('/dashboard')) {
+          navigate("/login", { replace: true });
+        } else if (initialSession?.user) {
+          const userType = initialSession.user.user_metadata.user_type;
+          if (location.pathname === '/login' || location.pathname === '/') {
+            const defaultPath = userType === 'founder' ? '/dashboard/marketplace' : '/dashboard/tasks';
+            navigate(defaultPath, { replace: true });
           }
         }
       } catch (error) {
@@ -108,28 +89,29 @@ export function AuthProvider({ children }: AuthProviderProps) {
           setLoading(false);
         }
       }
-    }
+    };
 
     initAuth();
 
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (_event, session) => {
-      if (mounted) {
-        if (session?.user) {
-          await ensureProfile(session.user.id, session.user.email || '');
-        }
-        
+      if (!mounted) return;
+
+      if (session?.user) {
+        await ensureProfile(session.user.id, session.user.email || '');
         setSession(session);
-        
-        if (!session && location.pathname.startsWith('/dashboard')) {
-          navigate("/login", { replace: true });
-        } else if (session) {
-          const userType = session.user.user_metadata.user_type;
-          if (location.pathname === '/login' || location.pathname === '/') {
-            const defaultPath = userType === 'founder' ? '/dashboard/marketplace' : '/dashboard/tasks';
-            navigate(defaultPath, { replace: true });
-          }
+      } else {
+        setSession(null);
+      }
+
+      if (!session && location.pathname.startsWith('/dashboard')) {
+        navigate("/login", { replace: true });
+      } else if (session?.user) {
+        const userType = session.user.user_metadata.user_type;
+        if (location.pathname === '/login' || location.pathname === '/') {
+          const defaultPath = userType === 'founder' ? '/dashboard/marketplace' : '/dashboard/tasks';
+          navigate(defaultPath, { replace: true });
         }
       }
     });
