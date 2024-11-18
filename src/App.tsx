@@ -1,32 +1,20 @@
-import React from "react";
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter } from "react-router-dom";
-import { AuthProvider } from "@/components/auth/AuthProvider";
-import { SplashScreen } from "@/components/ui/splash-screen";
-import AppRoutes from "./AppRoutes";
+import { useEffect } from "react";
+import { AppRoutes } from "./AppRoutes";
+import { useAuth } from "@/components/auth/AuthProvider";
+import { useNavigate } from "react-router-dom";
+import "./App.css";
 
-const queryClient = new QueryClient();
+function App() {
+  const { session } = useAuth();
+  const navigate = useNavigate();
 
-const App = () => {
-  return (
-    <React.StrictMode>
-      <BrowserRouter>
-        <QueryClientProvider client={queryClient}>
-          <AuthProvider>
-            <TooltipProvider delayDuration={0}>
-              <SplashScreen />
-              <Toaster />
-              <Sonner />
-              <AppRoutes />
-            </TooltipProvider>
-          </AuthProvider>
-        </QueryClientProvider>
-      </BrowserRouter>
-    </React.StrictMode>
-  );
-};
+  useEffect(() => {
+    if (session) {
+      navigate("/dashboard");
+    }
+  }, [session, navigate]);
+
+  return <AppRoutes />;
+}
 
 export default App;
