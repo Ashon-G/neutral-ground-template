@@ -20,7 +20,7 @@ export const MessageInput = ({
   onSendAgreement,
 }: MessageInputProps) => {
   return (
-    <div className="flex gap-2 p-4 border-t">
+    <div className="flex gap-2 p-4 border-t bg-white">
       <Input
         value={message}
         onChange={(e) => setMessage(e.target.value)}
@@ -31,7 +31,7 @@ export const MessageInput = ({
           }
         }}
       />
-      {showAgreementButton && (
+      {showAgreementButton && onSendAgreement && (
         <Button 
           variant="outline" 
           size="icon"
