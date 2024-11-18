@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { MessageList } from "./chat/MessageList";
@@ -18,6 +18,7 @@ export const Chat = () => {
   const [showUserList, setShowUserList] = useState(true);
   const [showFirstChatModal, setShowFirstChatModal] = useState(false);
   const { session } = useAuth();
+  const queryClient = useQueryClient();
 
   const { data: userProfile, isLoading: isProfileLoading } = useQuery({
     queryKey: ["userProfile"],
@@ -38,11 +39,45 @@ export const Chat = () => {
   const { data: messages, isLoading } = useMessages(selectedUser, session?.user.id);
   const sendMessage = useSendMessage(session?.user.id, selectedUser, userProfile);
 
+  // Update user settings when first message is sent to a maven
+  const updateUserSettings = useMutation({
+    mutationFn: async () => {
+      const { error } = await supabase
+        .from("profiles")
+        .update({
+          settings: {
+            ...userProfile?.settings,
+            has_browsed_mavens: true
+          }
+        })
+        .eq("id", session?.user.id);
+
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["userProfile"] });
+    }
+  });
+
   useEffect(() => {
     if (!isProfileLoading && userProfile?.user_type === 'founder') {
       setShowFirstChatModal(true);
     }
   }, [userProfile?.user_type, isProfileLoading]);
+
+  const handleSendMessage = async (messageContent: string) => {
+    await sendMessage.mutate(messageContent);
+    setMessage("");
+
+    // If this is a founder sending a message to a maven for the first time
+    if (
+      userProfile?.user_type === 'founder' &&
+      availableUsers?.find(user => user.id === selectedUser)?.user_type === 'maven' &&
+      !userProfile?.settings?.has_browsed_mavens
+    ) {
+      updateUserSettings.mutate();
+    }
+  };
 
   if (isLoading || isProfileLoading) {
     return (
@@ -82,10 +117,7 @@ export const Chat = () => {
             <MessageInput
               message={message}
               setMessage={setMessage}
-              onSend={() => {
-                sendMessage.mutate(message);
-                setMessage("");
-              }}
+              onSend={() => handleSendMessage(message)}
               isPending={sendMessage.isPending}
             />
           </>
