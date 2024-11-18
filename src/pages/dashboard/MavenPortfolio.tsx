@@ -50,8 +50,18 @@ const MavenPortfolio = () => {
         if (!projectMap.has(project.id)) {
           projectMap.set(project.id, {
             ...project,
-            documents: Array.isArray(project.documents) ? project.documents : [],
-            figma_files: Array.isArray(project.figma_files) ? project.figma_files : [],
+            documents: Array.isArray(project.documents) ? project.documents.map(doc => String(doc)) : [],
+            figma_files: Array.isArray(project.figma_files) 
+              ? project.figma_files.map(file => {
+                  if (typeof file === 'object' && file !== null) {
+                    return {
+                      url: String(file.url || ''),
+                      title: String(file.title || '')
+                    };
+                  }
+                  return { url: '', title: '' };
+                })
+              : [],
             tasks: [],
             ratings: [],
           });
