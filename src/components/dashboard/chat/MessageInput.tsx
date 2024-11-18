@@ -25,6 +25,7 @@ export const MessageInput = ({
         value={message}
         onChange={(e) => setMessage(e.target.value)}
         placeholder="Type your message..."
+        className="flex-1"
         onKeyDown={(e) => {
           if (e.key === "Enter" && message) {
             onSend();
@@ -37,11 +38,17 @@ export const MessageInput = ({
           size="icon"
           onClick={onSendAgreement}
           title="Send Agreement"
+          className="bg-white hover:bg-gray-100"
         >
-          <FileText className="h-4 w-4" />
+          <FileText className="h-4 w-4 text-gray-600" />
         </Button>
       )}
-      <Button onClick={onSend} disabled={!message || isPending} size="icon">
+      <Button 
+        onClick={onSend} 
+        disabled={!message || isPending} 
+        size="icon"
+        className="bg-primary hover:bg-primary/90"
+      >
         {isPending ? (
           <Loader2 className="h-4 w-4 animate-spin" />
         ) : (

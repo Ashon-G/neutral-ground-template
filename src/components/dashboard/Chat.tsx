@@ -103,8 +103,8 @@ export const Chat = () => {
   const isFounderChattingWithMaven = userProfile?.user_type === 'founder' && selectedChatUser?.user_type === 'maven';
 
   return (
-    <div className="flex h-[calc(100vh-12rem)] border rounded-lg overflow-hidden">
-      <div className={`md:block ${showUserList ? 'block w-full md:w-[280px]' : 'hidden'} border-r`}>
+    <div className="flex h-[calc(100vh-12rem)] border rounded-lg overflow-hidden bg-white">
+      <div className={`md:block ${showUserList ? 'block w-full md:w-[280px]' : 'hidden'} border-r bg-white`}>
         <UserList
           users={availableUsers || []}
           selectedUser={selectedUser}
@@ -117,12 +117,12 @@ export const Chat = () => {
       <div className={`flex-1 flex flex-col ${!showUserList ? 'block' : 'hidden md:block'}`}>
         {selectedUser ? (
           <>
-            <div className="p-4 border-b flex items-center justify-between">
+            <div className="p-4 border-b flex items-center justify-between bg-white">
               <div className="flex items-center gap-2">
                 <Button variant="ghost" size="icon" onClick={() => setShowUserList(true)} className="md:hidden">
                   <ArrowLeft className="h-4 w-4" />
                 </Button>
-                <span className="font-medium">{selectedChatUser?.full_name}</span>
+                <span className="font-medium text-gray-900">{selectedChatUser?.full_name}</span>
               </div>
             </div>
             <MessageList
@@ -139,7 +139,7 @@ export const Chat = () => {
             />
           </>
         ) : (
-          <div className="flex-1 flex items-center justify-center text-gray-500">
+          <div className="flex-1 flex items-center justify-center text-gray-500 bg-white">
             Select a user to start chatting
           </div>
         )}
@@ -149,7 +149,7 @@ export const Chat = () => {
         onClose={() => setShowFirstChatModal(false)} 
       />
       <Dialog open={showAgreementDialog} onOpenChange={setShowAgreementDialog}>
-        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-white">
           <OpportunityKnocksAccoladeAgreement 
             mavenName={selectedChatUser?.full_name || ""}
             maestroName={userProfile?.full_name || ""}
