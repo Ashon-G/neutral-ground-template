@@ -111,12 +111,6 @@ const MyProjects = () => {
 
   return (
     <div className="space-y-8">
-      <div className="flex items-center justify-end">
-        <Badge variant="outline" className="px-3 py-1">
-          {projects?.length || 0} Total Projects
-        </Badge>
-      </div>
-
       <div className="bg-zinc-50">
         <div className="mx-auto grid max-w-4xl grid-cols-2 gap-4 px-8 py-12 lg:grid-cols-4">
           {TAB_DATA.map((tab) => (
@@ -127,7 +121,13 @@ const MyProjects = () => {
         </div>
       </div>
 
-      <div className="mt-8">
+      <div className="flex justify-end">
+        <Badge variant="outline" className="px-3 py-1">
+          {projects?.length || 0} Total Projects
+        </Badge>
+      </div>
+
+      <div>
         {currentProjects.length === 0 ? (
           <div className="text-center py-8 text-muted-foreground">
             No {currentTab?.status} projects found
