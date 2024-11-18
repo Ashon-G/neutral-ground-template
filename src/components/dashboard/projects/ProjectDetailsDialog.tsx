@@ -50,6 +50,11 @@ export const ProjectDetailsDialog = ({ project, open, onOpenChange }: ProjectDet
     });
   };
 
+  const handleStatusChange = (newStatus: ProjectStatus) => {
+    if (newStatus === project.status) return;
+    updateProject.mutate({ status: newStatus });
+  };
+
   const { data: founder, isLoading: loadingFounder } = useQuery({
     queryKey: ["founder", project.founder_id],
     queryFn: async () => {
