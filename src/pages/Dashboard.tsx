@@ -42,9 +42,21 @@ const DashboardContent = () => {
 
   return (
     <div className="min-h-screen bg-gray-50/50 no-scrollbar">
+      <nav className="fixed top-0 left-0 right-0 z-50 mb-8 bg-white p-4 border-b border-black/5 shadow-[0_2px_4px_rgba(0,0,0,0.02)]">
+        <div className="mx-auto max-w-7xl">
+          <div className="flex items-center justify-between gap-2">
+            {isAdmin && (
+              <div className="hidden md:block">
+                <ImpersonateUser />
+              </div>
+            )}
+          </div>
+        </div>
+      </nav>
+
       {!isMobile && (
         <Sidebar>
-          <SidebarBody className="pt-4 fixed left-0">
+          <SidebarBody className="pt-24 fixed left-0">
             <div className="flex flex-col h-full">
               <div className="flex flex-col gap-2">
                 {navItems.map((item) => (
@@ -68,7 +80,7 @@ const DashboardContent = () => {
       {isFounder && <GettingStartedGuide />}
 
       <motion.main 
-        className={`pb-24 transition-all duration-300 ${
+        className={`pt-24 pb-24 transition-all duration-300 ${
           isMobile ? "" : "md:pb-20 md:ml-[300px]"
         }`}
         animate={{
