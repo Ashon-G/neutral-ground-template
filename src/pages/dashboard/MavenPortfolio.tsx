@@ -53,7 +53,7 @@ const MavenPortfolio = () => {
             documents: Array.isArray(project.documents) ? project.documents.map(doc => String(doc)) : [],
             figma_files: Array.isArray(project.figma_files) 
               ? project.figma_files.map(file => {
-                  if (typeof file === 'object' && file !== null) {
+                  if (typeof file === 'object' && file !== null && 'url' in file && 'title' in file) {
                     return {
                       url: String(file.url || ''),
                       title: String(file.title || '')
