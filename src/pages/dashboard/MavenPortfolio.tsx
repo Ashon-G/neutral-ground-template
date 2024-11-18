@@ -7,7 +7,9 @@ import { format } from "date-fns";
 import { Project } from "@/integrations/supabase/types/project";
 import { Task } from "@/integrations/supabase/types/task";
 
-interface ProjectWithTasksAndRatings extends Project {
+interface ProjectWithTasksAndRatings extends Omit<Project, 'documents' | 'figma_files'> {
+  documents: string[];
+  figma_files: { url: string; title: string }[];
   tasks: (Task & {
     ratings: Array<{
       rating: number;
@@ -48,6 +50,8 @@ const MavenPortfolio = () => {
         if (!projectMap.has(project.id)) {
           projectMap.set(project.id, {
             ...project,
+            documents: Array.isArray(project.documents) ? project.documents : [],
+            figma_files: Array.isArray(project.figma_files) ? project.figma_files : [],
             tasks: [],
             ratings: [],
           });
