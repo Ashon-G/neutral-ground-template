@@ -96,7 +96,7 @@ const MavenPortfolio = () => {
 
   return (
     <div className="space-y-8">
-      <div className="flex justify-between items-start">
+      <div className="flex flex-col md:flex-row justify-between items-start gap-6">
         <h1 className="text-3xl font-bold">Your Portfolio</h1>
         <CertificationCard />
       </div>
