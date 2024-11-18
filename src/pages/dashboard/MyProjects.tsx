@@ -40,21 +40,33 @@ const MyProjects = () => {
       id: 1,
       title: "Active",
       status: "active",
+      color: "bg-green-600",
+      borderColor: "border-green-600",
+      textColor: "text-green-600",
     },
     {
       id: 2,
       title: "Not Active",
       status: "draft",
+      color: "bg-yellow-500",
+      borderColor: "border-yellow-500",
+      textColor: "text-yellow-500",
     },
     {
       id: 3,
       title: "Completed",
       status: "completed",
+      color: "bg-blue-600",
+      borderColor: "border-blue-600",
+      textColor: "text-blue-600",
     },
     {
       id: 4,
       title: "Archived",
       status: "archived",
+      color: "bg-gray-500",
+      borderColor: "border-gray-500",
+      textColor: "text-gray-500",
     },
   ];
 
@@ -65,17 +77,18 @@ const MyProjects = () => {
     children: string;
     id: number;
   }) => {
+    const tab = TAB_DATA.find((t) => t.id === id);
     return (
       <div
         className={`rounded-lg transition-colors ${
-          selectedTab === id ? "bg-indigo-600" : "bg-zinc-900"
+          selectedTab === id ? tab?.color : "bg-zinc-900"
         }`}
       >
         <button
           onClick={() => setSelectedTab(id)}
           className={`w-full origin-top-left rounded-lg border py-3 text-xs font-medium transition-all md:text-base ${
             selectedTab === id
-              ? "-translate-y-1 border-indigo-600 bg-white text-indigo-600"
+              ? `-translate-y-1 ${tab?.borderColor} bg-white ${tab?.textColor}`
               : "border-zinc-900 bg-white text-zinc-900 hover:-rotate-2"
           }`}
         >
