@@ -36,11 +36,12 @@ export const MessageInput = ({
           variant="outline" 
           size="icon"
           onClick={onSendAgreement}
+          title="Send Agreement"
         >
           <FileText className="h-4 w-4" />
         </Button>
       )}
-      <Button onClick={onSend} disabled={!message || isPending}>
+      <Button onClick={onSend} disabled={!message || isPending} size="icon">
         {isPending ? (
           <Loader2 className="h-4 w-4 animate-spin" />
         ) : (
