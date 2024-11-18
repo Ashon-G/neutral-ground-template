@@ -131,7 +131,7 @@ export const Chat = () => {
                   </DialogTrigger>
                   <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
                     <OpportunityKnocksAccoladeAgreement 
-                      mavenName={selectedChatUser?.full_name || ""}
+                      mavenName={`${selectedChatUser?.first_name} ${selectedChatUser?.last_name}`}
                       maestroName={userProfile?.full_name || ""}
                     />
                   </DialogContent>
