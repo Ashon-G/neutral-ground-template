@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Profile, MavenSkillset } from "@/integrations/supabase/types/profile";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
-import { MavenGrid } from "./sections/MavenGrid";
+import { MavenCarousel } from "./MavenCarousel";
 
 export const MavenMarketplace = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -19,7 +19,6 @@ export const MavenMarketplace = () => {
 
       if (error) throw error;
       
-      // Parse the business JSON into BusinessInfo type for each maven
       return (data as any[]).map(maven => ({
         ...maven,
         business: maven.business as Profile['business']
@@ -60,15 +59,15 @@ export const MavenMarketplace = () => {
               placeholder="Search for any service..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-12 py-6 text-lg rounded-lg border-0 shadow-lg"
+              className="pl-12 py-6 text-lg rounded-lg border-0 shadow-lg bg-white"
             />
           </div>
         </div>
       </div>
 
-      <div className="space-y-16">
+      <div className="space-y-16 px-4 md:px-8">
         {Object.entries(groupedMavens).map(([skillset, mavens]) => (
-          <MavenGrid 
+          <MavenCarousel 
             key={skillset}
             title={`${skillset} Mavens`}
             mavens={mavens}
