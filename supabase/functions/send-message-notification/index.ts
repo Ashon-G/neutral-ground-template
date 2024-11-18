@@ -24,6 +24,10 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
+    if (!RESEND_API_KEY) {
+      throw new Error("RESEND_API_KEY is not configured");
+    }
+
     const supabase = createClient(SUPABASE_URL!, SUPABASE_SERVICE_ROLE_KEY!);
     const { to, senderName, messageContent }: EmailRequest = await req.json();
 
@@ -38,17 +42,23 @@ const handler = async (req: Request): Promise<Response> => {
 
     if (recipientError) {
       console.error("Error fetching recipient data:", recipientError);
-      throw recipientError;
+      return new Response(JSON.stringify({ error: recipientError.message }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
 
     if (!recipientData?.email) {
       console.error("No email found for recipient");
-      throw new Error("Recipient email not found");
+      return new Response(JSON.stringify({ error: "Recipient email not found" }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
 
     console.log(`Sending email to: ${recipientData.email}`);
 
-    const res = await fetch("https://api.resend.com/emails", {
+    const emailResponse = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -74,12 +84,15 @@ const handler = async (req: Request): Promise<Response> => {
       }),
     });
 
-    const resData = await res.json();
+    const resData = await emailResponse.json();
     console.log("Resend API response:", resData);
 
-    if (!res.ok) {
+    if (!emailResponse.ok) {
       console.error("Error from Resend API:", resData);
-      throw new Error(`Failed to send email: ${JSON.stringify(resData)}`);
+      return new Response(JSON.stringify({ error: resData.message || "Failed to send email" }), {
+        status: emailResponse.status,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
 
     return new Response(JSON.stringify(resData), {
