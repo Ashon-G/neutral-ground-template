@@ -33,10 +33,10 @@ const handler = async (req: Request): Promise<Response> => {
 
     console.log(`Attempting to send notification to user ID: ${to}`);
 
-    // Get the recipient's email from profiles
+    // Get the recipient's email from profiles using username column
     const { data: recipientData, error: recipientError } = await supabase
       .from('profiles')
-      .select('email')
+      .select('username')
       .eq('id', to)
       .single();
 
@@ -48,7 +48,7 @@ const handler = async (req: Request): Promise<Response> => {
       });
     }
 
-    if (!recipientData?.email) {
+    if (!recipientData?.username) {
       console.error("No email found for recipient");
       return new Response(JSON.stringify({ error: "Recipient email not found" }), {
         status: 400,
@@ -56,7 +56,7 @@ const handler = async (req: Request): Promise<Response> => {
       });
     }
 
-    console.log(`Sending email to: ${recipientData.email}`);
+    console.log(`Sending email to: ${recipientData.username}`);
 
     const emailResponse = await fetch("https://api.resend.com/emails", {
       method: "POST",
@@ -66,7 +66,7 @@ const handler = async (req: Request): Promise<Response> => {
       },
       body: JSON.stringify({
         from: "Maven <notifications@updates.itscoop.com>",
-        to: [recipientData.email],
+        to: [recipientData.username],
         subject: `New message from ${senderName}`,
         html: `
           <div>
