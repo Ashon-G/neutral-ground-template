@@ -45,7 +45,7 @@ const GettingStarted = () => {
   ];
 
   return (
-    <div>
+    <div className="-m-8">
       <CompanyHeader />
       <div className="p-8">
         <div className="flex items-center justify-between mb-8">
