@@ -140,6 +140,7 @@ const MyProjects = () => {
                 key={project.id}
                 project={project}
                 onProjectClick={() => setSelectedProject(project)}
+                isMyProject={true}
               />
             ))}
           </div>

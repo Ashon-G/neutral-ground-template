@@ -6,14 +6,14 @@ import { MessageSquare, Calendar } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/components/auth/AuthProvider";
-import { format } from "date-fns";
 
 interface ProjectCardProps {
   project: Project;
   onProjectClick: () => void;
+  isMyProject?: boolean;
 }
 
-export const ProjectCard = ({ project, onProjectClick }: ProjectCardProps) => {
+export const ProjectCard = ({ project, onProjectClick, isMyProject }: ProjectCardProps) => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { session } = useAuth();
@@ -68,15 +68,17 @@ export const ProjectCard = ({ project, onProjectClick }: ProjectCardProps) => {
           )}
         </div>
 
-        <Button 
-          onClick={handleChatClick}
-          variant="secondary" 
-          size="sm" 
-          className="w-full mt-4"
-        >
-          <MessageSquare className="w-4 h-4 mr-2" />
-          Chat with Founder
-        </Button>
+        {!isMyProject && (
+          <Button 
+            onClick={handleChatClick}
+            variant="secondary" 
+            size="sm" 
+            className="w-full mt-4"
+          >
+            <MessageSquare className="w-4 h-4 mr-2" />
+            Chat with Founder
+          </Button>
+        )}
       </CardContent>
     </Card>
   );
