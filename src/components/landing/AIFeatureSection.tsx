@@ -10,14 +10,23 @@ export function AIFeatureSection() {
       const scrollPosition = window.scrollY;
       const elementPosition = textRef.current.offsetTop;
       const viewportHeight = window.innerHeight;
+      const elementHeight = textRef.current.offsetHeight;
       
-      // Calculate how far through the section we've scrolled (0 to 1)
+      // Calculate progress for both entering and leaving viewport
       const progress = Math.max(0, Math.min(1, 
         (scrollPosition - elementPosition + viewportHeight) / viewportHeight
       ));
 
-      // Apply the clip-path based on scroll progress
-      textRef.current.style.clipPath = `inset(0 ${100 - (progress * 100)}% 0 0)`;
+      // Calculate exit progress (1 when fully visible, 0 when scrolled away)
+      const exitProgress = Math.max(0, Math.min(1,
+        (elementPosition + elementHeight - scrollPosition) / viewportHeight
+      ));
+
+      // Combine both progress values
+      const finalProgress = Math.min(progress, exitProgress);
+
+      // Apply the clip-path based on combined progress
+      textRef.current.style.clipPath = `inset(0 ${100 - (finalProgress * 100)}% 0 0)`;
     };
 
     window.addEventListener('scroll', handleScroll);
