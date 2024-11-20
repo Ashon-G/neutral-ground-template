@@ -27,7 +27,7 @@
   }
 
   html, body {
-    @apply no-scrollbar overflow-x-hidden text-left bg-[#0A0118];
+    @apply no-scrollbar overflow-x-hidden text-left bg-black;
   }
 }
 
