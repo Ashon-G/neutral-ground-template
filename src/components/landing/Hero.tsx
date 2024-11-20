@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 
 export const VelocityHero = () => {
   return (
-    <div className="relative min-h-screen bg-[#0A0118]">
+    <section className="relative w-full min-h-screen bg-[#0A0118]">
       {/* Background glow effects */}
       <div className="absolute left-1/4 top-1/4 h-96 w-96 -translate-x-1/2 -translate-y-1/2 rounded-full bg-purple-500/20 blur-3xl" />
       <div className="absolute right-1/4 top-3/4 h-96 w-96 -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-500/20 blur-3xl" />
@@ -26,12 +26,12 @@ export const VelocityHero = () => {
       </nav>
 
       {/* Hero Content */}
-      <div className="relative z-10 mx-auto mt-24 text-center">
+      <div className="flex flex-col items-center justify-center min-h-[calc(100vh-80px)]">
         <motion.h1 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="mx-auto mb-6 max-w-4xl bg-gradient-to-r from-[#9b87f5] to-[#D6BCFA] bg-clip-text text-5xl font-black text-transparent sm:text-7xl"
+          className="mx-auto mb-6 max-w-4xl px-6 bg-gradient-to-r from-[#9b87f5] to-[#D6BCFA] bg-clip-text text-5xl font-black text-transparent sm:text-7xl text-center"
         >
           Build Your Next Big Thing with Student Talent
         </motion.h1>
@@ -40,7 +40,7 @@ export const VelocityHero = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="mx-auto mb-12 max-w-2xl text-lg text-white/60"
+          className="mx-auto mb-12 max-w-2xl px-6 text-lg text-white/60 text-center"
         >
           Access ambitious student developers and marketers ready to help build and launch your product. 
           Get high-quality work at student-friendly rates.
@@ -50,7 +50,7 @@ export const VelocityHero = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
-          className="flex justify-center gap-4"
+          className="flex flex-wrap justify-center gap-4 px-6"
         >
           <Button asChild size="lg" className="bg-[#9b87f5] hover:bg-[#7E69AB]">
             <Link to="/signup/founder">Start Building</Link>
@@ -59,25 +59,8 @@ export const VelocityHero = () => {
             <Link to="/signup/maven">Join as Student</Link>
           </Button>
         </motion.div>
-
-        {/* Scroll Indicator */}
-        <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1, duration: 1 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2"
-        >
-          <div className="flex flex-col items-center gap-2 text-white/40">
-            <span className="text-sm">Scroll to explore</span>
-            <motion.div
-              animate={{ y: [0, 10, 0] }}
-              transition={{ repeat: Infinity, duration: 1.5 }}
-              className="h-12 w-0.5 bg-gradient-to-b from-white/40 to-transparent"
-            />
-          </div>
-        </motion.div>
       </div>
-    </div>
+    </section>
   );
 };
 
