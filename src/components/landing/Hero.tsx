@@ -25,7 +25,7 @@ export const VelocityHero = () => {
   const x = useSpring(xRaw, { mass: 3, stiffness: 400, damping: 50 });
 
   return (
-    <section ref={targetRef} className="h-[500vh] bg-primary text-white">
+    <section ref={targetRef} className="h-[500vh] bg-primary">
       <div className="sticky top-0 flex h-screen flex-col justify-between overflow-hidden">
         <Nav isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
         <CenterCopy />
@@ -108,8 +108,8 @@ const Links = ({ setIsMenuOpen }: { setIsMenuOpen: (value: boolean) => void }) =
 const CenterCopy = () => {
   return (
     <div className="flex items-center justify-center px-4 text-center">
-      <div className="max-w-4xl">
-        <h1 className="mb-6 text-4xl font-bold sm:text-6xl md:text-7xl">
+      <div>
+        <h1 className="mb-6 text-4xl font-bold text-white sm:text-6xl md:text-7xl">
           Connect with Student Talent to{" "}
           <span className="gradient-text font-black">Build Your Next Big Thing</span>
         </h1>
