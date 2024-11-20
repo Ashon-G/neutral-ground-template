@@ -15,8 +15,9 @@ self.addEventListener('install', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-  // Skip chrome-extension URLs
-  if (event.request.url.startsWith('chrome-extension://')) {
+  // Skip chrome-extension URLs and manifest.json
+  if (event.request.url.startsWith('chrome-extension://') || 
+      event.request.url.endsWith('manifest.json')) {
     return;
   }
 
@@ -46,6 +47,16 @@ self.addEventListener('fetch', (event) => {
                 }
               });
             return response;
+          })
+          .catch(() => {
+            // If the network request fails, try to serve the cached index.html
+            if (event.request.mode === 'navigate') {
+              return caches.match('/index.html');
+            }
+            return new Response('Network error occurred', {
+              status: 408,
+              headers: { 'Content-Type': 'text/plain' },
+            });
           });
       })
   );
