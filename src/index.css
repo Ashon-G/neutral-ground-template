@@ -27,17 +27,17 @@
   }
 
   html, body {
-    @apply no-scrollbar overflow-x-hidden text-left bg-black;
+    @apply no-scrollbar overflow-x-hidden;
   }
 }
 
 @layer components {
   body {
-    @apply text-foreground antialiased;
+    @apply bg-background text-foreground antialiased;
   }
 
   .gradient-text {
-    @apply bg-gradient-to-r from-[#9b87f5] to-[#D6BCFA] bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-secondary to-accent bg-clip-text text-transparent;
   }
 
   /* Modern Card Styles */
