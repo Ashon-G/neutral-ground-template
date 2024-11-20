@@ -27,7 +27,7 @@
   }
 
   html, body {
-    @apply no-scrollbar overflow-x-hidden;
+    @apply no-scrollbar overflow-x-hidden text-left;
   }
 }
 
@@ -37,7 +37,7 @@
   }
 
   .gradient-text {
-    @apply bg-gradient-to-r from-secondary to-accent bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-[#9b87f5] to-[#D6BCFA] bg-clip-text text-transparent;
   }
 
   /* Modern Card Styles */
