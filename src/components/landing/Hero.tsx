@@ -1,114 +1,83 @@
-import {
-  motion,
-  useScroll,
-  useVelocity,
-  useTransform,
-  useSpring,
-} from "framer-motion";
-import React, { useRef, useState } from "react";
-import { FiArrowDown, FiLogIn, FiUserPlus } from "react-icons/fi";
+import React from "react";
 import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
 
 export const VelocityHero = () => {
-  const targetRef = useRef(null);
-
-  const { scrollYProgress } = useScroll({
-    target: targetRef,
-    offset: ["start start", "end start"],
-  });
-
-  const scrollVelocity = useVelocity(scrollYProgress);
-  const skewXRaw = useTransform(scrollVelocity, [-1, 1], ["45deg", "-45deg"]);
-  const skewX = useSpring(skewXRaw, { mass: 3, stiffness: 400, damping: 50 });
-  const xRaw = useTransform(scrollYProgress, [0, 1], [0, -3000]);
-  const x = useSpring(xRaw, { mass: 3, stiffness: 400, damping: 50 });
-
   return (
-    <section ref={targetRef} className="min-h-screen bg-[#1A1F2C] text-white">
-      <div className="sticky top-0 flex h-screen flex-col justify-between overflow-hidden">
-        <Nav />
-        <CenterCopy />
+    <div className="relative min-h-screen overflow-hidden bg-[#0A0118] px-4">
+      {/* Background glow effects */}
+      <div className="absolute left-1/4 top-1/4 h-96 w-96 -translate-x-1/2 -translate-y-1/2 rounded-full bg-purple-500/20 blur-3xl" />
+      <div className="absolute right-1/4 top-3/4 h-96 w-96 -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-500/20 blur-3xl" />
+      
+      {/* Navigation */}
+      <nav className="relative z-10 flex items-center justify-between p-6">
+        <div className="text-2xl font-bold text-white">
+          Maven<span className="text-[#9b87f5]">.</span>
+        </div>
+        <div className="flex items-center gap-4">
+          <Link to="/login" className="text-sm text-white/80 hover:text-white">
+            Login
+          </Link>
+          <Button asChild variant="secondary" className="bg-[#9b87f5] hover:bg-[#7E69AB]">
+            <Link to="/signup">Get Started</Link>
+          </Button>
+        </div>
+      </nav>
+
+      {/* Hero Content */}
+      <div className="relative z-10 mx-auto mt-24 max-w-7xl text-center">
+        <motion.h1 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="mx-auto mb-6 max-w-4xl bg-gradient-to-r from-[#9b87f5] to-[#D6BCFA] bg-clip-text text-5xl font-black text-transparent sm:text-7xl"
+        >
+          Build Your Next Big Thing with Student Talent
+        </motion.h1>
+        
         <motion.p
-          style={{ skewX, x }}
-          className="origin-bottom-left whitespace-nowrap text-7xl font-black uppercase leading-[0.85] text-[#6E59A5]/20 md:text-9xl md:leading-[0.85]"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="mx-auto mb-12 max-w-2xl text-lg text-white/60"
         >
-          Connect with student talent. Build innovative products. Launch faster than ever before.
-        </motion.p>
-        <ScrollArrow />
-      </div>
-    </section>
-  );
-};
-
-const Nav = () => {
-  return (
-    <div className="relative mb-1 flex w-full justify-between p-6">
-      <Logo />
-      <div className="flex items-center gap-4">
-        <Link
-          to="/login"
-          className="flex items-center gap-2 rounded-lg border border-white/20 px-4 py-2 text-sm font-medium text-white transition-all hover:border-white/40 hover:text-[#9b87f5]"
-        >
-          <FiLogIn className="h-4 w-4" />
-          Login
-        </Link>
-        <Link
-          to="/signup"
-          className="flex items-center gap-2 rounded-lg bg-[#9b87f5] px-4 py-2 text-sm font-medium text-white transition-all hover:bg-[#7E69AB]"
-        >
-          <FiUserPlus className="h-4 w-4" />
-          Sign Up
-        </Link>
-      </div>
-    </div>
-  );
-};
-
-const Logo = () => {
-  return (
-    <div className="text-2xl font-bold text-white">
-      Maven<span className="text-[#9b87f5]">.</span>
-    </div>
-  );
-};
-
-const CenterCopy = () => {
-  return (
-    <div className="flex items-center justify-center px-4 text-center">
-      <div className="max-w-4xl">
-        <h1 className="mb-6 text-4xl font-bold sm:text-6xl md:text-7xl">
-          Build Your Next Big Thing with{" "}
-          <span className="bg-gradient-to-r from-[#9b87f5] to-[#D6BCFA] bg-clip-text font-black text-transparent">
-            Student Talent
-          </span>
-        </h1>
-        <p className="mb-8 text-lg text-white/60 md:text-xl">
           Access ambitious student developers and marketers ready to help build and launch your product. 
           Get high-quality work at student-friendly rates.
-        </p>
-        <Link
-          to="/signup"
-          className="inline-block rounded-full bg-[#9b87f5] px-8 py-4 font-semibold text-white transition-all hover:bg-[#7E69AB]"
+        </motion.p>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+          className="flex justify-center gap-4"
         >
-          Start Building Today
-        </Link>
+          <Button asChild size="lg" className="bg-[#9b87f5] hover:bg-[#7E69AB]">
+            <Link to="/signup/founder">Start Building</Link>
+          </Button>
+          <Button asChild size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10">
+            <Link to="/signup/maven">Join as Student</Link>
+          </Button>
+        </motion.div>
+
+        {/* Scroll Indicator */}
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1, duration: 1 }}
+          className="absolute bottom-8 left-1/2 -translate-x-1/2"
+        >
+          <div className="flex flex-col items-center gap-2 text-white/40">
+            <span className="text-sm">Scroll to explore</span>
+            <motion.div
+              animate={{ y: [0, 10, 0] }}
+              transition={{ repeat: Infinity, duration: 1.5 }}
+              className="h-12 w-0.5 bg-gradient-to-b from-white/40 to-transparent"
+            />
+          </div>
+        </motion.div>
       </div>
     </div>
-  );
-};
-
-const ScrollArrow = () => {
-  return (
-    <>
-      <div className="absolute left-4 top-1/2 hidden -translate-y-1/2 text-xs text-white/40 lg:block">
-        <span style={{ writingMode: "vertical-lr" }}>SCROLL</span>
-        <FiArrowDown className="mx-auto mt-2" />
-      </div>
-      <div className="absolute right-4 top-1/2 hidden -translate-y-1/2 text-xs text-white/40 lg:block">
-        <span style={{ writingMode: "vertical-lr" }}>SCROLL</span>
-        <FiArrowDown className="mx-auto mt-2" />
-      </div>
-    </>
   );
 };
 

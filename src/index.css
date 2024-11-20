@@ -27,13 +27,13 @@
   }
 
   html, body {
-    @apply no-scrollbar overflow-x-hidden text-left;
+    @apply no-scrollbar overflow-x-hidden text-left bg-[#0A0118];
   }
 }
 
 @layer components {
   body {
-    @apply bg-background text-foreground antialiased;
+    @apply text-foreground antialiased;
   }
 
   .gradient-text {
