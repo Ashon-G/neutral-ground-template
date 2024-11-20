@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 
 export const VelocityHero = () => {
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#0A0118] px-4">
+    <div className="relative min-h-screen bg-[#0A0118]">
       {/* Background glow effects */}
       <div className="absolute left-1/4 top-1/4 h-96 w-96 -translate-x-1/2 -translate-y-1/2 rounded-full bg-purple-500/20 blur-3xl" />
       <div className="absolute right-1/4 top-3/4 h-96 w-96 -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-500/20 blur-3xl" />
@@ -26,7 +26,7 @@ export const VelocityHero = () => {
       </nav>
 
       {/* Hero Content */}
-      <div className="relative z-10 mx-auto mt-24 max-w-7xl text-center">
+      <div className="relative z-10 mx-auto mt-24 text-center">
         <motion.h1 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
